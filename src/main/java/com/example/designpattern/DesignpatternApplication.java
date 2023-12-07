@@ -16,7 +16,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import java.io.File;
+import java.util.List;
+
 import org.springframework.boot.SpringApplication;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -43,6 +44,11 @@ public class DesignpatternApplication extends Application {
 	public static void main(String[] args) {
 		//System.out.println(System.getProperty("java.runtime.version"));
 		SpringApplication.run(DesignpatternApplication.class, args);
-		launch(args);
+//		launch(args);
+		DatabaseConnection dbConnect = new DatabaseConnection();
+		dbConnect.connect();
+		List<String> schemaNames = dbConnect.getSchemaList();
+	    System.out.println("Schema Names: " + schemaNames);
+	    dbConnect.close();
 	}
 }
