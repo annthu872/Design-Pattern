@@ -1,17 +1,19 @@
 package com.example.designpattern;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.List;
 import java.util.ArrayList;
 
 public class DatabaseConnection {
-	static String url = "jdbc:mysql://localhost:3306/mydatabase";
+	static String url = "jdbc:mysql://localhost:3306/advanced_web_programming_website";
 	static String user = "root";
-	static String password = "";
+	static String password = "root";
     static Connection connection;
 	public void connect() {
         try {
@@ -63,5 +65,63 @@ public class DatabaseConnection {
 	            }
 	        } catch (SQLException e) {
 	            e.printStackTrace();
-	        }	}
+	        }	
+	}
+	public List<String> getTableList(String databaseName) {
+	    List<String> tableList = new ArrayList<>();
+	    try {
+	        DatabaseMetaData metaData = connection.getMetaData();
+	        ResultSet tables = metaData.getTables(databaseName, null, "%", new String[] { "TABLE" });
+	        while (tables.next()) {
+	            tableList.add(tables.getString("TABLE_NAME"));
+	        }
+	        return tableList;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
+	public List<List<Object>> getColumnNamesAndTypes(String databaseName, String tableName) {
+	    List<List<Object>> columnInfo = new ArrayList<>();
+	    try {
+	        DatabaseMetaData metaData = connection.getMetaData();
+	        ResultSet columns = metaData.getColumns(databaseName, null, tableName, null);
+
+	        while (columns.next()) {
+	            List<Object> columnData = new ArrayList<>();
+	            String columnName = columns.getString("COLUMN_NAME");
+	            String dataType = columns.getString("TYPE_NAME");
+
+	            columnData.add(columnName);
+	            columnData.add(dataType);
+	            columnInfo.add(columnData);
+	        }
+	        return columnInfo;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
+	public List<List<Object>> getColumnData(String databaseName, String tableName) {
+	    List<List<Object>> columnData = new ArrayList<>();
+	    try {
+	        Statement stmt = connection.createStatement();
+	        ResultSet rs = stmt.executeQuery("SELECT * FROM " + tableName);
+	        ResultSetMetaData metaData = rs.getMetaData();
+	        
+	        int columnCount = metaData.getColumnCount();
+	        while (rs.next()) {
+	            List<Object> rowData = new ArrayList<>();
+	            for (int i = 1; i <= columnCount; i++) {
+	                Object value = rs.getObject(i);
+	                rowData.add(value);
+	            }
+	            columnData.add(rowData);
+	        }
+	        return columnData;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
 }
