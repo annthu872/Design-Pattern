@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class DatabaseConnection {
-	static String url = "jdbc:mysql://localhost:3306/advanced_web_programming_website";
+	static String url = "jdbc:mysql://localhost:3306/mydatabase";
 	static String user = "root";
-	static String password = "root";
+	static String password = "";
     static Connection connection;
 	public void connect() {
         try {

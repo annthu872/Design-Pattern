@@ -51,38 +51,10 @@ public class DesignpatternApplication extends Application {
 
 	    // Get table list of the first database
 	    if (schemaNames != null && !schemaNames.isEmpty()) {
-	        String firstDatabase = schemaNames.get(0);
+//	        String firstDatabase = schemaNames.get(1);
+	    	String firstDatabase = "mydatabase";
 	        List<String> tableNames = dbConnect.getTableList(firstDatabase);
 	        System.out.println("Tables in " + firstDatabase + ": " + tableNames);
-
-	        // Get column names and data types of the specified table
-	        if (tableNames != null && !tableNames.isEmpty()) {
-	            String firstTable = "users"; // Specify the table name here
-	            List<List<Object>> columnInfo = dbConnect.getColumnNamesAndTypes(firstDatabase, firstTable);
-	            List<List<Object>> columnData = dbConnect.getColumnData(firstDatabase, firstTable);
-
-	            // Printing column names and data types
-	            System.out.println("Column Names and Data Types for table " + firstTable + ":");
-	            if (columnInfo != null) {
-	                for (List<Object> column : columnInfo) {
-	                    System.out.println("Column Name: " + column.get(0) + ", Data Type: " + column.get(1));
-	                }
-	            } else {
-	                System.out.println("No column information found for " + firstTable);
-	            }
-
-	            // Printing data rows
-	            System.out.println("\nData from " + firstTable + ":");
-	            if (columnData != null) {
-	                for (List<Object> row : columnData) {
-	                    System.out.println(row);
-	                }
-	            } else {
-	                System.out.println("No data found for " + firstTable);
-	            }
-	        } else {
-	            System.out.println("No tables found in " + firstDatabase);
-	        }
 	    } else {
 	        System.out.println("No schemas found");
 	    }
