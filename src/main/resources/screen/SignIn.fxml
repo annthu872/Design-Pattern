@@ -80,7 +80,7 @@
                <bottom>
                   <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button maxHeight="60.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="60.0" style="-fx-background-color: #7B66FF; -fx-text-fill: white; -fx-border-radius: 10;" text="Login">
+                        <Button maxHeight="60.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="60.0" style="-fx-background-color: #7B66FF; -fx-text-fill: white; -fx-border-radius: 10; -fx-font-weight: bold;" styleClass="button-primary" text="Login">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -88,7 +88,7 @@
                               <Insets bottom="10.0" top="10.0" />
                            </VBox.margin>
                         </Button>
-                        <Button maxHeight="60.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="60.0" style="-fx-text-fill: #7B66FF; -fx-background-color: white; -fx-border-color: #7B66FF; -fx-border-width: 2; -fx-border-radius: 10;" text="Sign Up">
+                        <Button maxHeight="60.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="60.0" style="-fx-text-fill: #7B66FF; -fx-background-color: white; -fx-border-color: #7B66FF; -fx-border-width: 2; -fx-border-radius: 10; -fx-font-weight: bold; -fx-background-radius: 10;" styleClass="button-normal" text="Sign Up">
                            <font>
                               <Font size="24.0" />
                            </font>
