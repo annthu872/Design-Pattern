@@ -10,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
+import javafx.scene.Node;
 import javafx.scene.control.Button; 
 public class TableListController implements Initializable {
 
@@ -21,9 +22,9 @@ public class TableListController implements Initializable {
     public TableListController(List<String> tableList) {
         this.tableList = new ArrayList<>(tableList);
     }
+    private List<Button> tableListButton = new ArrayList<Button>();
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
 		for ( int i =0; i< tableList.size(); i++) {
 			Button button = new Button();
 			button.setText(tableList.get(i));
@@ -32,15 +33,21 @@ public class TableListController implements Initializable {
 				button.getStyleClass().add("table-button-not-choosen");
 			else 
 				button.getStyleClass().add("table-button-choosen");
-			
-			button.setOnAction(event -> {
-				
+			tableListButton.add(button);
+			tablelistpane.getChildren().add(button);
+			button.setOnAction(event -> {				
 				choosenTablePos = tableList.indexOf(button.getText()); // Update choosenPos when the button is clicked
                 System.out.println("Button clicked! choosenPos: " + choosenTablePos);
+                for( int j =0; j< tableListButton.size(); j++) {
+                	tableListButton.get(j).getStyleClass().remove("table-button-choosen");
+                	tableListButton.get(j).getStyleClass().add("table-button-not-choosen");
+
+                }
+                button.getStyleClass().add("table-button-choosen");
             });
-			tablelistpane.getChildren().add(button);
 		}
 	}
+	
 //	public List<String> getTables(){
 //		List<String> tableList = new ArrayList<>();
 //		tableList.add("Cao Nguyên");

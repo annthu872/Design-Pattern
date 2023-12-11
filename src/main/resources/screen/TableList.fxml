@@ -58,7 +58,7 @@
             </ScrollPane>
          </center>
          <bottom>
-            <Button id="button-primary" maxHeight="40.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: #7B66FF; -fx-text-fill: white; -fx-border-radius: 2; -fx-font-weight: bold; -fx-background-radius: 2;" styleClass="button-primary" text="Add new table" textAlignment="CENTER" BorderPane.alignment="CENTER">
+            <Button id="button-primary" maxHeight="40.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="button-primary" text="Add new table" textAlignment="CENTER" BorderPane.alignment="CENTER">
                <font>
                   <Font size="16.0" />
                </font>

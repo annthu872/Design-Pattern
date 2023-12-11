@@ -31,8 +31,6 @@ public class DesignpatternApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			
-
 			List<String> tableList = new ArrayList<>();
 			tableList.add("Cao Nguyên");
 			tableList.add("Nguyễn Duy");
@@ -50,7 +48,6 @@ public class DesignpatternApplication extends Application {
 			tableList.add("Thư 1231");
 			tableList.add("Thảo 532");
 			TableListController controller = new TableListController(tableList);
-
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/TableList.fxml"));
 			loader.setController(controller);
 			Parent root = loader.load();
