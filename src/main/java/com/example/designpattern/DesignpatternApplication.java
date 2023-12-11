@@ -28,10 +28,10 @@ public class DesignpatternApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/screen/SignIn.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/TableDB/TableUI.fxml"));
 			Scene scene = new Scene(root);
-			String css = this.getClass().getResource("/css/application.css").toExternalForm();
-			scene.getStylesheets().add(css);
+			//String css = this.getClass().getResource("/css/application.css").toExternalForm();
+			//scene.getStylesheets().add(css);
 			
 			primaryStage.setScene(scene);
 			primaryStage.show();
