@@ -17,9 +17,13 @@ public class TableListController implements Initializable {
     private VBox tablelistpane;
     
     private int choosenTablePos = 0;
+    private List<String> tableList;
+    public TableListController(List<String> tableList) {
+        this.tableList = new ArrayList<>(tableList);
+    }
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		List<String> tableList = new ArrayList<>(getTables());
+		
 		for ( int i =0; i< tableList.size(); i++) {
 			Button button = new Button();
 			button.setText(tableList.get(i));
@@ -37,25 +41,25 @@ public class TableListController implements Initializable {
 			tablelistpane.getChildren().add(button);
 		}
 	}
-	public List<String> getTables(){
-		List<String> tableList = new ArrayList<>();
-		tableList.add("Cao Nguyên");
-		tableList.add("Nguyễn Duy");
-		tableList.add("TRương toàn thịnh");
-		tableList.add("Thư");
-		tableList.add("Thảo");
-		tableList.add("Cao Nguyên 1");
-		tableList.add("Nguyễn Duy 2");
-		tableList.add("TRương toàn thịnh 3");
-		tableList.add("Thư 4");
-		tableList.add("Thảo 5");
-		tableList.add("Cao Nguyên 2");
-		tableList.add("Nguyễn Duy 12");
-		tableList.add("TRương toàn thịnh TRương toàn thịnh");
-		tableList.add("Thư 1231");
-		tableList.add("Thảo 532");
-
-		return tableList;
-	}
+//	public List<String> getTables(){
+//		List<String> tableList = new ArrayList<>();
+//		tableList.add("Cao Nguyên");
+//		tableList.add("Nguyễn Duy");
+//		tableList.add("TRương toàn thịnh");
+//		tableList.add("Thư");
+//		tableList.add("Thảo");
+//		tableList.add("Cao Nguyên 1");
+//		tableList.add("Nguyễn Duy 2");
+//		tableList.add("TRương toàn thịnh 3");
+//		tableList.add("Thư 4");
+//		tableList.add("Thảo 5");
+//		tableList.add("Cao Nguyên 2");
+//		tableList.add("Nguyễn Duy 12");
+//		tableList.add("TRương toàn thịnh TRương toàn thịnh");
+//		tableList.add("Thư 1231");
+//		tableList.add("Thảo 532");
+//
+//		return tableList;
+//	}
 
 }

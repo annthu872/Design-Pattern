@@ -16,12 +16,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.boot.SpringApplication;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+import com.example.designpattern.Controller.*;
 @SpringBootApplication
 
 
@@ -29,9 +31,31 @@ public class DesignpatternApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/screen/TableList.fxml"));
-			Scene scene = new Scene(root);
+			
+
+			List<String> tableList = new ArrayList<>();
+			tableList.add("Cao Nguyên");
+			tableList.add("Nguyễn Duy");
+			tableList.add("TRương toàn thịnh");
+			tableList.add("Thư");
+			tableList.add("Thảo");
+			tableList.add("Cao Nguyên 1");
+			tableList.add("Nguyễn Duy 2");
+			tableList.add("TRương toàn thịnh 3");
+			tableList.add("Thư 4");
+			tableList.add("Thảo 5");
+			tableList.add("Cao Nguyên 2");
+			tableList.add("Nguyễn Duy 12");
+			tableList.add("TRương toàn thịnh TRương toàn thịnh");
+			tableList.add("Thư 1231");
+			tableList.add("Thảo 532");
+			TableListController controller = new TableListController(tableList);
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/TableList.fxml"));
+			loader.setController(controller);
+			Parent root = loader.load();
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
+			Scene scene = new Scene(root);
 			scene.getStylesheets().add(css);
 			
 			primaryStage.setScene(scene);
