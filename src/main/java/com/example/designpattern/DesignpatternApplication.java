@@ -14,13 +14,19 @@ package com.example.designpattern;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import table.Table;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.boot.SpringApplication;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import column.Column;
+import database.DatabaseConnector;
 
 @SpringBootApplication
 
@@ -42,53 +48,25 @@ public class DesignpatternApplication extends Application {
 	}
 	
 	public static void main(String[] args) {
-	    DatabaseConnection dbConnect = new DatabaseConnection();
-	    dbConnect.connect();
+		String url = "jdbc:mysql://localhost:3306/";
+		String user = "root";
+		String password = "root";
+		
+		DatabaseConnector db = new DatabaseConnector(url, user, password, "advanced_web_programming_website");
+		db.connect();
+		
+		//get all table data
+		List<Table> data = new ArrayList<>();
+		List<String> tableNames = db.getTableList("advanced_web_programming_website");
 
-	    // Get schema list
-	    List<String> schemaNames = dbConnect.getSchemaList();
-	    System.out.println("Schema Names: " + schemaNames);
-
-	    // Get table list of the first database
-	    if (schemaNames != null && !schemaNames.isEmpty()) {
-	        String firstDatabase = schemaNames.get(0);
-	        List<String> tableNames = dbConnect.getTableList(firstDatabase);
-	        System.out.println("Tables in " + firstDatabase + ": " + tableNames);
-
-	        // Get column names and data types of the specified table
-	        if (tableNames != null && !tableNames.isEmpty()) {
-	            String firstTable = "users"; // Specify the table name here
-	            List<List<Object>> columnInfo = dbConnect.getColumnNamesAndTypes(firstDatabase, firstTable);
-	            List<List<Object>> columnData = dbConnect.getColumnData(firstDatabase, firstTable);
-
-	            // Printing column names and data types
-	            System.out.println("Column Names and Data Types for table " + firstTable + ":");
-	            if (columnInfo != null) {
-	                for (List<Object> column : columnInfo) {
-	                    System.out.println("Column Name: " + column.get(0) + ", Data Type: " + column.get(1));
-	                }
-	            } else {
-	                System.out.println("No column information found for " + firstTable);
-	            }
-
-	            // Printing data rows
-	            System.out.println("\nData from " + firstTable + ":");
-	            if (columnData != null) {
-	                for (List<Object> row : columnData) {
-	                    System.out.println(row);
-	                }
-	            } else {
-	                System.out.println("No data found for " + firstTable);
-	            }
-	        } else {
-	            System.out.println("No tables found in " + firstDatabase);
+	    if (tableNames != null) {
+	        for (String tableName : tableNames) {
+	            Table table = new Table(tableName, db);
+	            table.fetchData();
+	            data.add(table);
 	        }
-	    } else {
-	        System.out.println("No schemas found");
 	    }
-
-	    dbConnect.close();
+		
+		db.close();
 	}
-
-
 }
