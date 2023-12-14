@@ -3,19 +3,27 @@ package TableDB;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.value.ObservableValue;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
+import javafx.beans.Observable;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class TableUIController implements Initializable {
 	@FXML
-	private TableView myTable;
+	private TableView<ObservableList<String>> myTable;
 	
 	private class Column {
 		String name;
@@ -35,13 +43,15 @@ public class TableUIController implements Initializable {
 		public List<String> getData() {
             return data;
         }
-		
+		public ObservableList<String> getdata(){
+			return FXCollections.observableList(data);
+		}
 	}
 	
 	private List<Column> colList = new ArrayList<Column>();
-	private List<List<String>> tableData = new ArrayList<List<String>>();
 	
 	public void initialize(URL url, ResourceBundle rb) {
+		
 		colList.add(new Column("dfggfyugusghuhfuhau"));
 		colList.add(new Column("def"));
 		int colIndex = 1;
@@ -49,19 +59,15 @@ public class TableUIController implements Initializable {
 		for(Column column : colList) {
 			final int columnIndex = colIndex;
 			TableColumn<Column, String> columnTable = new TableColumn<>(column.getName());
-			tableData.add(column.getData());
-			/*columnTable.setCellValueFactory(data -> {
-				List<String> rowValues = data.getValue().getData();
-                String cellValue = (columnIndex < rowValues.size()) ? rowValues.get(columnIndex) : "";
-                return new ReadOnlyStringWrapper(cellValue);
-            });*/
-			myTable.getColumns().add(columnTable);
+			//myTable.getColumns().add(columnTable);
 			colIndex +=1;
 		}
-		myTable.getItems().add(tableData);
 		autoResizeColumns(myTable);
 		
 	}
+	
+	
+	
 	
 	public static void autoResizeColumns( TableView<?> table )
 	{
