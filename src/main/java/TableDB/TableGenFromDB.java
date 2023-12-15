@@ -15,6 +15,7 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.util.Callback;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.input.MouseEvent;
 
 public class TableGenFromDB {
 	private static final String DB_URL = "jdbc:mysql://localhost:3306/sakila";
@@ -52,7 +53,7 @@ public class TableGenFromDB {
 	            	final int j = i;
 	            	TableColumn<ObservableList<String>, String> col = new TableColumn<>(rs.getMetaData().getColumnName(i + 1));
 	            	col.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().get(j)));
-
+	            	col.setSortable(false);
 	                myTable.getColumns().add(col);
 
 	            }
@@ -66,7 +67,14 @@ public class TableGenFromDB {
 	                myTable.getItems().addAll(row);
 	            }
 
-	            //FINALLY ADDED TO TableView
+	            for (ObservableList<?> outerList : data) {
+	                for (Object item : outerList) {
+	                    System.out.print(item + " ");
+	                }
+	                System.out.println();  // Move to the next line after printing each inner list
+	            }
+	            
+	            
 	            
 	            
 
@@ -74,8 +82,20 @@ public class TableGenFromDB {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-            
-            
         
+            myTable.setOnMouseClicked((MouseEvent event) -> {
+                // Get the selected row and column index
+                int rowIndex = myTable.getSelectionModel().getSelectedIndex();
+                int colIndex = myTable.getSelectionModel().getSelectedCells().get(0).getColumn();
+
+                // Get the data in the selected cell
+                String cellData = myTable.getItems().get(rowIndex).get(colIndex);
+
+                // Print or use the information as needed
+                System.out.println("Selected Cell Data: " + cellData);
+                System.out.println("Selected Row Index: " + rowIndex);
+                System.out.println("Selected Column Index: " + colIndex);
+            });
     }
+    
 }
