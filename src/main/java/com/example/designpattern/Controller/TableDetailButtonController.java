@@ -18,8 +18,4 @@ public class TableDetailButtonController implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
 		btnAdd.setOnAction(e -> PopupWindow.display("Hello, this is a popup!"));
 	}
-    
-    
-
-
 }

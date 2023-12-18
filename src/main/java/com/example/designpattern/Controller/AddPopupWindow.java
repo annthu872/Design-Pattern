@@ -4,8 +4,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.*;
-import javafx.scene.control.Button;
-public class PopupWindow {
+public class AddPopupWindow {
 
     public static void display(String message) {
         Stage popupStage = new Stage();
@@ -13,15 +12,11 @@ public class PopupWindow {
 
         StackPane popupLayout = new StackPane();
         popupLayout.getChildren().add(new Label(message));
-        Button button= new Button();
-        popupLayout.getChildren().add(button);
-        button.setOnAction(e-> AddPopupWindow.display("hehe"));
+
         Scene popupScene = new Scene(popupLayout, 300, 200);
         popupStage.setScene(popupScene);
 
         popupStage.setTitle("Popup Window");
-        
-        
         popupStage.showAndWait();
     }
 }

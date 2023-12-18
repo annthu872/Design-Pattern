@@ -12,9 +12,7 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <AnchorPane id="aaa" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="280.0" styleClass="border">
-         <children>
+     <children>
             <BorderPane>
                <top>
                   <VBox maxHeight="600.0" prefWidth="260.0" BorderPane.alignment="CENTER">
@@ -23,12 +21,12 @@
                            <children>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Schema:">
                                  <font>
-                                    <Font name="System Bold" size="16.0" />
+                                    <Font name="System Bold" size="18.0" />
                                  </font>
                               </Text>
                               <Label text="LabelLabelLabelLabelLabelLabelLabel">
                                  <font>
-                                    <Font size="16.0" />
+                                    <Font size="18.0" />
                                  </font>
                                  <HBox.margin>
                                     <Insets left="5.0" />
@@ -38,7 +36,7 @@
                         </HBox>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Table(s):">
                            <font>
-                              <Font name="System Bold" size="16.0" />
+                              <Font name="System Bold" size="18.0" />
                            </font>
                         </Text>
                      </children>
@@ -71,6 +69,4 @@
                </bottom>
             </BorderPane>
          </children>
-      </AnchorPane>
-   </children>
 </AnchorPane>

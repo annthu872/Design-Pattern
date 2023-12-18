@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1080.0"  xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AnchorPane id="aaa" fx:id="aaa" maxHeight="115.0" maxWidth="1080.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="106.0" prefWidth="1080.0" styleClass="border">
+      <AnchorPane id="aaa" fx:id="aaa" maxHeight="115.0" maxWidth="1080.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="115.0" prefWidth="1080.0" styleClass="border">
          <children>
-            <Label styleClass="heading-label" text="SEP Application">
+            <Label alignment="CENTER" styleClass="heading-label" text="SEP Application">
                <font>
                   <Font size="60.0" />
                </font>
+               <padding>
+                  <Insets left="30.0" top="20.0" />
+               </padding>
             </Label>
          </children></AnchorPane>
    </children>
