@@ -50,8 +50,10 @@ public class DesignpatternApplication extends Application {
 //			tableList.add("Thư 1231");
 //			tableList.add("Thảo 532");
 //			TableListController controller = new TableListController(tableList);
-//			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/TableList.fxml"));
+//			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/FieldnameLine.fxml"));
 //			loader.setController(controller);TableListUIUnit
+//			Parent root = loader.load();
+			
 			Parent root = new HeadingUIUnit(new TableListUIUnit( new TableDetailButton(new TableDetailUIUnit()))).getUI();
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
 			Scene scene = new Scene(root);
@@ -62,6 +64,7 @@ public class DesignpatternApplication extends Application {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 	
 	public static void main(String[] args) {

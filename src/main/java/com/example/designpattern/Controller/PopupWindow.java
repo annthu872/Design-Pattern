@@ -15,7 +15,7 @@ public class PopupWindow {
         popupLayout.getChildren().add(new Label(message));
         Button button= new Button();
         popupLayout.getChildren().add(button);
-        button.setOnAction(e-> AddPopupWindow.display("hehe"));
+//        button.setOnAction(e-> AddPopupWindow.display());
         Scene popupScene = new Scene(popupLayout, 300, 200);
         popupStage.setScene(popupScene);
 
