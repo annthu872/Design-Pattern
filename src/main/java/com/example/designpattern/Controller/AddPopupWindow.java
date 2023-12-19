@@ -16,7 +16,7 @@ public class AddPopupWindow {
         popupStage.initModality(Modality.APPLICATION_MODAL);
         Parent root;
 		try {
-			AddingFormPopupController controller = new AddingFormPopupController(fieldname);
+			AddingFormPopupController controller = new AddingFormPopupController(popupStage, fieldname);
 			FXMLLoader loader = new FXMLLoader(DesignpatternApplication.class.getResource("/screen/AddForm.fxml"));
 			loader.setController(controller);
 			root = loader.load();

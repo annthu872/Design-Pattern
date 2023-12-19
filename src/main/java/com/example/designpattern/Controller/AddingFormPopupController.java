@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button; 
@@ -21,9 +22,13 @@ public class AddingFormPopupController implements Initializable {
 
     @FXML
     private VBox addingPane;
+    @FXML
+    private Button btnCancel;
+    private Stage stage;
     private List<String> fieldnameList;
-    public AddingFormPopupController(List<String> fieldnameList) {
+    public AddingFormPopupController(Stage stage, List<String> fieldnameList) {
         this.fieldnameList = new ArrayList<>(fieldnameList);
+        this.stage = stage;
     }
     private List<Button> tableListButton = new ArrayList<Button>();
 	@Override
@@ -41,9 +46,10 @@ public class AddingFormPopupController implements Initializable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
 		}
+		btnCancel.setOnAction(e ->{
+			this.stage.close();
+		});
 	}
 	
 //	public List<String> getTables(){

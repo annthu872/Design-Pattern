@@ -42,7 +42,7 @@
             <HBox alignment="CENTER_RIGHT" prefWidth="200.0" spacing="30.0" BorderPane.alignment="CENTER">
                <children>
                   <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="button-primary" text="Add" />
-                  <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="button-normal" text="Cancel" />
+                  <Button id="btnCancel" fx:id="btnCancel" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="button-normal" text="Cancel" />
                </children>
                <BorderPane.margin>
                   <Insets />
