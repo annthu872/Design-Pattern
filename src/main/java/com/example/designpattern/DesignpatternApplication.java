@@ -31,7 +31,6 @@ import com.example.tablehandler.TableGenFromDB;
 
 
 public class DesignpatternApplication extends Application {
-	public static String database = "mydatabase";
 	
 	@Override
 	public void start(Stage primaryStage) {

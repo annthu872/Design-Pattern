@@ -11,10 +11,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class DatabaseConnection {
-	public static String url = "jdbc:mysql://localhost:3306/" + SharedVariableHolder.database;
-	public static String user = "root";
-	public static String password = "192002";
-    public static Connection connection;
+    static Connection connection;
+
 	public void connect() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -23,7 +21,7 @@ public class DatabaseConnection {
             return;
         }
 		try {
-			connection = DriverManager.getConnection(url, user, password);
+			connection = DriverManager.getConnection(SharedVariableHolder.url +SharedVariableHolder.database , SharedVariableHolder.user, SharedVariableHolder.password);
 			if (connection != null) {
                 System.out.println("Connected to the database!");
 
