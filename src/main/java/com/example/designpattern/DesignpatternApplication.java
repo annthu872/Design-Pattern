@@ -68,26 +68,6 @@ public class DesignpatternApplication extends Application {
 	}
 	
 	public static void main(String[] args) {
-//	    DatabaseConnection dbConnect = new DatabaseConnection();
-//	    dbConnect.connect();
-//
-//	    // Get schema list
-//	    List<String> schemaNames = dbConnect.getSchemaList();
-//	    System.out.println("Schema Names: " + schemaNames);
-//
-//	    // Get table list of the first database
-//	    if (schemaNames != null && !schemaNames.isEmpty()) {
-////	        String firstDatabase = schemaNames.get(1);
-//	    	String firstDatabase = "mydatabase";
-//	        List<String> tableNames = dbConnect.getTableList(firstDatabase);
-//	        System.out.println("Tables in " + firstDatabase + ": " + tableNames);
-//	        
-//	    } else {
-//	        System.out.println("No schemas found");
-//	    }
-//
-//	    dbConnect.close();
-//	}
 		SpringApplication.run(DesignpatternApplication.class, args);
 		launch(args);
 	}
