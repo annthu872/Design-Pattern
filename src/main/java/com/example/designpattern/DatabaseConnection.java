@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class DatabaseConnection {
 	static String url = "jdbc:mysql://localhost:3306/" + SharedVariableHolder.database;
 	static String user = "root";
-	static String password = "192002";
+	static String password = "";
     static Connection connection;
 	public void connect() {
         try {

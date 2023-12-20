@@ -13,9 +13,11 @@ public class TableDetailUIUnit implements IScreenUnit {
     public Parent getUI() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/TableUI.fxml"));
 		AnchorPane a = new AnchorPane();
+		TableGenFromDB table = TableGenFromDB.getInstance();
+		loader.setController(table);
 		mScreen.getChildren().add(loader.load());
-		TableGenFromDB table = loader.getController();
-		table.setTableName("inventory");
+
+//		table.setTableName("hs_hr_employee");
 		return mScreen;
     }
 }

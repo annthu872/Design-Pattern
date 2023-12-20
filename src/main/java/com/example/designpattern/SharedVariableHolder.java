@@ -2,5 +2,5 @@ package com.example.designpattern;
 
 public class SharedVariableHolder {
     // Public static variable
-    public static String database = "sakila";
+    public static String database = "orangehrm_mysql";
 }

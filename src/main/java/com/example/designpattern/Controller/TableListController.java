@@ -1,10 +1,12 @@
 package com.example.designpattern.Controller;
-
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-
+import javafx.fxml.FXMLLoader;
+import com.example.designpattern.decorator.IScreenUnit;
+import com.example.tablehandler.TableGenFromDB;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -12,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
 import javafx.scene.Node;
 import javafx.scene.control.Button; 
+import javafx.scene.layout.AnchorPane;
 public class TableListController implements Initializable {
 
     @FXML
@@ -37,13 +40,20 @@ public class TableListController implements Initializable {
 			tablelistpane.getChildren().add(button);
 			button.setOnAction(event -> {				
 				choosenTablePos = tableList.indexOf(button.getText()); // Update choosenPos when the button is clicked
-                System.out.println("Button clicked! choosenPos: " + choosenTablePos);
+                System.out.println("Button clicked! choosenPos:" + button.getText()+ ":");
                 for( int j =0; j< tableListButton.size(); j++) {
                 	tableListButton.get(j).getStyleClass().remove("table-button-choosen");
                 	tableListButton.get(j).getStyleClass().add("table-button-not-choosen");
-
                 }
                 button.getStyleClass().add("table-button-choosen");
+                
+               
+//                TableGenFromDB controller = new TableGenFromDB();
+                TableGenFromDB.getInstance().setTableName(button.getText());
+//        		table.setTableName( button.getText()); 
+//        		IScreenUnit.mScreen.setController(table);
+                
+//              MyController controller = new MyController();
             });
 		}
 	}

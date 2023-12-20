@@ -1,16 +1,19 @@
 package com.example.tablehandler;
 
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
@@ -18,18 +21,18 @@ import javafx.util.Callback;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.input.MouseEvent;
 
-public class TableGenFromDB {
-	private static final String DB_URL = "jdbc:mysql://localhost:3306/sakila";
+public class TableGenFromDB implements Initializable{
+	private static final String DB_URL = "jdbc:mysql://localhost:3306/orangehrm_mysql";
     //  Database credentials
     static final String USER = "root";
-    static final String PASS = "192002";
+    static final String PASS = "";
     
     public static Connection conn = null;
     @FXML
     private TableView<ObservableList<String>> myTable;
     private ObservableList<ObservableList> data = FXCollections.observableArrayList();
     
-    private String tableName = "";
+    private String tableName = "hs_hr_employee";
     
     public void setTableName(String table) {
     	tableName = table;
@@ -40,8 +43,14 @@ public class TableGenFromDB {
     	newData = FXCollections.observableArrayList();
     	myTable.getItems().add(newData);
     }
-
-    // Public static ObservableList<COA> getAllCOA(){
+    private static TableGenFromDB instance;
+    public static synchronized TableGenFromDB getInstance() {
+        if (instance == null) {
+            instance = new TableGenFromDB();
+        }
+        return instance;
+    }
+//     Public static ObservableList<COA> getAllCOA(){
     public void getData() {
         Statement st = null;
         ResultSet rs;
@@ -103,5 +112,9 @@ public class TableGenFromDB {
                 System.out.println("Selected Cell Data: " + cellData);
             });
     }
-    
+
+@Override
+public void initialize(URL location, ResourceBundle resources) {
+	getData();
+}   
 }
