@@ -14,18 +14,29 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.*;
 public class TableDetailButtonController implements Initializable{
-	@FXML
+
+    @FXML
     private Button btnAdd;
+
+    @FXML
     private Button btnDelete;
+
+    @FXML
     private Button btnEdit;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		List<String> tableList = new ArrayList<>();
-		tableList.add("Cao Nguyên");
-		tableList.add("Nguyễn Duy");
-		tableList.add("TRương toàn thịnh");
+		List<String> colList = new ArrayList<>();
+		colList.add("Cao Nguyên");
+		colList.add("Nguyễn Duy");
+		colList.add("TRương toàn thịnh");
+		List<String> dataList = new ArrayList<>();
+		dataList.add("Cao Nguyên");
+		dataList.add("Nguyễn Duy");
+		dataList.add("TRương toàn thịnh");
 		
-		
-		btnAdd.setOnAction(e -> AddPopupWindow.display(tableList));
+		btnAdd.setOnAction(e -> PopupWindow.display(colList));
+		btnEdit.setOnAction(e -> PopupWindow.display(colList,dataList));
+
+
 	}
 }

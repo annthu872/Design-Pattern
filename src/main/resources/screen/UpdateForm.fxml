@@ -14,7 +14,7 @@
    <children>
       <BorderPane layoutX="12.0" layoutY="10.0" maxHeight="600.0" maxWidth="900.0" prefWidth="900.0">
          <top>
-            <Label id="titleLabel" fx:id="titleLabel" styleClass="heading-label" text="Adding Form" BorderPane.alignment="CENTER">
+            <Label id="titleLabel" fx:id="titleLabel" styleClass="heading-label" text="Updating Form" BorderPane.alignment="CENTER">
                <font>
                   <Font name="System Bold" size="40.0" />
                </font>
@@ -41,7 +41,7 @@
          <bottom>
             <HBox alignment="CENTER_RIGHT" prefWidth="200.0" spacing="30.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button id="btnAdd" fx:id="btnAdd" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="button-primary" text="Add" />
+                  <Button id="btnUpdate" fx:id="btnUpdate" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="button-primary" text="Update" />
                   <Button id="btnCancel" fx:id="btnCancel" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="button-normal" text="Cancel" />
                </children>
                <BorderPane.margin>

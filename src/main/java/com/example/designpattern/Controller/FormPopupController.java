@@ -1,6 +1,7 @@
 package com.example.designpattern.Controller;
 
 import java.io.IOException;
+import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,19 +19,29 @@ import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button; 
-public class AddingFormPopupController implements Initializable {
+public class FormPopupController implements Initializable {
 
     @FXML
     private VBox addingPane;
+
+    @FXML
+    private Button btnAdd;
+
     @FXML
     private Button btnCancel;
+
+    @FXML
+    private Label titleLabel;
     private Stage stage;
+    private List<TextField> textfieldList;
     private List<String> fieldnameList;
-    public AddingFormPopupController(Stage stage, List<String> fieldnameList) {
+    private  List<String> data;
+    public FormPopupController(Stage stage, List<String> fieldnameList, List<String> data) {
         this.fieldnameList = new ArrayList<>(fieldnameList);
         this.stage = stage;
+        this.textfieldList = new ArrayList<TextField>();
+        this.data = data;
     }
-    private List<Button> tableListButton = new ArrayList<Button>();
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		for ( int i =0; i< fieldnameList.size(); i++) {
@@ -40,6 +51,7 @@ public class AddingFormPopupController implements Initializable {
 				String css = DesignpatternApplication.class.getResource("/css/style.css").toExternalForm();
 				root.getStylesheets().add(css);
 				Label label = (Label)root.lookup("Label");
+				textfieldList.add((TextField)root.lookup("TextField"));
 				label.setText(fieldnameList.get(i)+" :");
 				addingPane.getChildren().add(root);
 			} catch (IOException e) {
@@ -47,30 +59,13 @@ public class AddingFormPopupController implements Initializable {
 				e.printStackTrace();
 			}
 		}
+		if(data != null && data.size() == fieldnameList.size()) {
+			for ( int i =0; i< fieldnameList.size(); i++) {
+				textfieldList.get(i).setText(data.get(i));
+			}
+		}
 		btnCancel.setOnAction(e ->{
 			this.stage.close();
 		});
 	}
-	
-//	public List<String> getTables(){
-//		List<String> tableList = new ArrayList<>();
-//		tableList.add("Cao Nguyên");
-//		tableList.add("Nguyễn Duy");
-//		tableList.add("TRương toàn thịnh");
-//		tableList.add("Thư");
-//		tableList.add("Thảo");
-//		tableList.add("Cao Nguyên 1");
-//		tableList.add("Nguyễn Duy 2");
-//		tableList.add("TRương toàn thịnh 3");
-//		tableList.add("Thư 4");
-//		tableList.add("Thảo 5");
-//		tableList.add("Cao Nguyên 2");
-//		tableList.add("Nguyễn Duy 12");
-//		tableList.add("TRương toàn thịnh TRương toàn thịnh");
-//		tableList.add("Thư 1231");
-//		tableList.add("Thảo 532");
-//
-//		return tableList;
-//	}
-
 }
