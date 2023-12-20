@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -29,9 +30,14 @@ public class TableGenFromDB {
     private ObservableList<ObservableList> data = FXCollections.observableArrayList();
     
     private String tableName = "actor";
+    
+    public void addRow(ObservableList<String> newData) {
+    	newData = FXCollections.observableArrayList();
+    	myTable.getItems().add(newData);
+    }
 
     // Public static ObservableList<COA> getAllCOA(){
-    public void getAllstudentInfo() {
+    public void getData() {
         Statement st = null;
         ResultSet rs;
 
@@ -86,15 +92,9 @@ public class TableGenFromDB {
             myTable.setOnMouseClicked((MouseEvent event) -> {
                 // Get the selected row and column index
                 int rowIndex = myTable.getSelectionModel().getSelectedIndex();
-                int colIndex = myTable.getSelectionModel().getSelectedCells().get(0).getColumn();
-
-                // Get the data in the selected cell
-                String cellData = myTable.getItems().get(rowIndex).get(colIndex);
-
-                // Print or use the information as needed
+                ObservableList<String> cellData = myTable.getItems().get(rowIndex);
+                ArrayList<String> data = new ArrayList<>(cellData);
                 System.out.println("Selected Cell Data: " + cellData);
-                System.out.println("Selected Row Index: " + rowIndex);
-                System.out.println("Selected Column Index: " + colIndex);
             });
     }
     
