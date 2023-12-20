@@ -35,33 +35,15 @@ public class DesignpatternApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-//			List<String> tableList = new ArrayList<>();
-//			tableList.add("Cao Nguyên");
-//			tableList.add("Nguyễn Duy");
-//			tableList.add("TRương toàn thịnh");
-//			tableList.add("Thư");
-//			tableList.add("Thảo");
-//			tableList.add("Cao Nguyên 1");
-//			tableList.add("Nguyễn Duy 2");
-//			tableList.add("TRương toàn thịnh 3");
-//			tableList.add("Thư 4");
-//			tableList.add("Thảo 5");
-//			tableList.add("Cao Nguyên 2");
-//			tableList.add("Nguyễn Duy 12");
-//			tableList.add("TRương toàn thịnh TRương toàn thịnh");
-//			tableList.add("Thư 1231");
-//			tableList.add("Thảo 532");
-//			TableListController controller = new TableListController(tableList);
-//			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/FieldnameLine.fxml"));
-//			loader.setController(controller);TableListUIUnit
-//			Parent root = loader.load();
+
 			
 			Parent root = new HeadingUIUnit(new TableListUIUnit( new TableDetailButton(new TableDetailUIUnit()))).getUI();
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(css);
-			
+//			primaryStage.initStyle(StageStyle.UNDECORATED);
 			primaryStage.setScene(scene);
+			primaryStage.setResizable(false);
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
