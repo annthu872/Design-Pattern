@@ -15,6 +15,7 @@ public class TableDetailUIUnit implements IScreenUnit {
 		AnchorPane a = new AnchorPane();
 		mScreen.getChildren().add(loader.load());
 		TableGenFromDB table = loader.getController();
+		table.setTableName("inventory");
 		return mScreen;
     }
 }

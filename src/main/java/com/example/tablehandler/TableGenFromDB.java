@@ -29,7 +29,7 @@ public class TableGenFromDB {
     private TableView<ObservableList<String>> myTable;
     private ObservableList<ObservableList> data = FXCollections.observableArrayList();
     
-    private String tableName = "actor";
+    private String tableName = "";
     
     public void setTableName(String table) {
     	tableName = table;
@@ -45,7 +45,9 @@ public class TableGenFromDB {
     public void getData() {
         Statement st = null;
         ResultSet rs;
-
+        
+        myTable.getItems().clear();
+        myTable.getColumns().clear();
         
             try {
 				Class.forName("com.mysql.cj.jdbc.Driver");
@@ -66,7 +68,6 @@ public class TableGenFromDB {
 	            	col.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().get(j)));
 	            	col.setSortable(false);
 	                myTable.getColumns().add(col);
-
 	            }
 	            
 	            while(rs.next()){
