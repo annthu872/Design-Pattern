@@ -13,6 +13,7 @@ import com.example.designpattern.DatabaseConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
@@ -25,7 +26,7 @@ public class TableGenFromDB{
     private TableView<ObservableList<String>> myTable;
     private ObservableList<ObservableList> data = FXCollections.observableArrayList();
     
-    private String tableName = "";
+    private String tableName = "hs_hr_employee";
     
     public void setTableName(String table) {
     	tableName = table;
