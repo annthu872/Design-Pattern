@@ -1,30 +1,26 @@
 package com.example.tablehandler;
 
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
-import javafx.beans.value.ObservableValue;
+import com.example.designpattern.DatabaseConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
-import javafx.util.Callback;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.input.MouseEvent;
 
-public class TableGenFromDB {
-	private static final String DB_URL = "jdbc:mysql://localhost:3306/sakila";
-    //  Database credentials
-    static final String USER = "root";
-    static final String PASS = "192002";
-    
-    public static Connection conn = null;
+public class TableGenFromDB{
+    public static Connection conn = DatabaseConnection.connection;
     @FXML
     private TableView<ObservableList<String>> myTable;
     private ObservableList<ObservableList> data = FXCollections.observableArrayList();
@@ -40,8 +36,16 @@ public class TableGenFromDB {
     	newData = FXCollections.observableArrayList();
     	myTable.getItems().add(newData);
     }
-
-    // Public static ObservableList<COA> getAllCOA(){
+    private static TableGenFromDB instance;
+    public static synchronized TableGenFromDB getInstance() {
+        if (instance == null) {
+            instance = new TableGenFromDB();
+        }
+        return instance;
+    }
+    
+    private TableGenFromDB() {}
+//     Public static ObservableList<COA> getAllCOA(){
     public void getData() {
         Statement st = null;
         ResultSet rs;
@@ -56,7 +60,6 @@ public class TableGenFromDB {
 				e.printStackTrace();
 			}
             try {
-				conn = DriverManager.getConnection(DB_URL, USER, PASS);
 				st = conn.createStatement();
 	            String recordQuery = ("SELECT * FROM " + tableName);
 	            rs = st.executeQuery(recordQuery);
@@ -84,11 +87,7 @@ public class TableGenFromDB {
 	                    System.out.print(item + " ");
 	                }
 	                System.out.println();  // Move to the next line after printing each inner list
-	            }
-	            
-	            
-	            
-	            
+	            }     
 
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -103,5 +102,4 @@ public class TableGenFromDB {
                 System.out.println("Selected Cell Data: " + cellData);
             });
     }
-    
 }
