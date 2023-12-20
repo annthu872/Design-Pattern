@@ -16,21 +16,30 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import java.io.File;
+import javafx.scene.layout.AnchorPane;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.boot.SpringApplication;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+import com.example.designpattern.Controller.*;
+import com.example.designpattern.decorator.*;
+import com.example.designpattern.decorator.TableDetailButton;
 @SpringBootApplication
 
 
 public class DesignpatternApplication extends Application {
+	public static String database = "mydatabase";
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/TableDB/TableUI.fxml"));
+
+			
+			Parent root = new HeadingUIUnit(new TableListUIUnit( new TableDetailButton(new TableDetailUIUnit()))).getUI();
+			String css = this.getClass().getResource("/css/style.css").toExternalForm();
 			Scene scene = new Scene(root);
-			String css = this.getClass().getResource("/css/application.css").toExternalForm();
 			scene.getStylesheets().add(css);
 //			primaryStage.initStyle(StageStyle.UNDECORATED);
 			primaryStage.setScene(scene);
@@ -39,10 +48,10 @@ public class DesignpatternApplication extends Application {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 	
 	public static void main(String[] args) {
-		//System.out.println(System.getProperty("java.runtime.version"));
 		SpringApplication.run(DesignpatternApplication.class, args);
 		launch(args);
 	}
