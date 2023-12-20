@@ -30,10 +30,11 @@ public class DesignpatternApplication extends Application {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/TableDB/TableUI.fxml"));
 			Scene scene = new Scene(root);
-			//String css = this.getClass().getResource("/css/application.css").toExternalForm();
-			//scene.getStylesheets().add(css);
-			
+			String css = this.getClass().getResource("/css/application.css").toExternalForm();
+			scene.getStylesheets().add(css);
+//			primaryStage.initStyle(StageStyle.UNDECORATED);
 			primaryStage.setScene(scene);
+			primaryStage.setResizable(false);
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
