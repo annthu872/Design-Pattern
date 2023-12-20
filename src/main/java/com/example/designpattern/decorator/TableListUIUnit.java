@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.designpattern.DatabaseConnection;
+import com.example.designpattern.SharedVariableHolder;
 import com.example.designpattern.Controller.TableListController;
 
 import javafx.fxml.FXMLLoader;
@@ -27,13 +28,9 @@ public class TableListUIUnit extends ScreenUnitDecorator {
 	    dbConnect.connect();
 
 	    // Get schema list
-	    List<String> schemaNames = dbConnect.getSchemaList();
-	    System.out.println("Schema Names: " + schemaNames);
-
-	    // Get table list of the first database
-	    String firstDatabase = "mydatabase";
-        List<String> tableNames = dbConnect.getTableList(firstDatabase);
-        System.out.println("Tables in " + firstDatabase + ": " + tableNames);
+	    String database = SharedVariableHolder.database;
+        List<String> tableNames = dbConnect.getTableList(database);
+        System.out.println("Tables in " + database + ": " + tableNames);
 
 	    dbConnect.close();
 		TableListController controller = new TableListController(tableNames);
