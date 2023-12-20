@@ -16,7 +16,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import java.io.File;
 import org.springframework.boot.SpringApplication;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,6 +24,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 public class DesignpatternApplication extends Application {
+	private static Stage primaryStage;
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -45,4 +45,8 @@ public class DesignpatternApplication extends Application {
 		SpringApplication.run(DesignpatternApplication.class, args);
 		launch(args);
 	}
+	
+    public static Stage getPrimaryStage() {
+        return primaryStage;
+    }
 }
