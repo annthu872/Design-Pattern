@@ -30,7 +30,6 @@ import com.example.designpattern.decorator.TableDetailButton;
 
 
 public class DesignpatternApplication extends Application {
-	public static String database = "mydatabase";
 	
 	@Override
 	public void start(Stage primaryStage) {

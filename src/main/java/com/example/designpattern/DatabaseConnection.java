@@ -11,9 +11,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class DatabaseConnection {
-	static String url = "jdbc:mysql://localhost:3306/mydatabase";
-	static String user = "root";
-	static String password = "";
+
     static Connection connection;
 	public void connect() {
         try {
@@ -23,7 +21,7 @@ public class DatabaseConnection {
             return;
         }
 		try {
-			connection = DriverManager.getConnection(url, user, password);
+			connection = DriverManager.getConnection(SharedVariableHolder.url, SharedVariableHolder.user, SharedVariableHolder.password);
 			if (connection != null) {
                 System.out.println("Connected to the database!");
 
