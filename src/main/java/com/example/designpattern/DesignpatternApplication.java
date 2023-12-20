@@ -26,6 +26,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.example.designpattern.Controller.*;
 import com.example.designpattern.decorator.*;
 import com.example.designpattern.decorator.TableDetailButton;
+import com.example.tablehandler.TableGenFromDB;
 @SpringBootApplication
 
 
@@ -41,6 +42,7 @@ public class DesignpatternApplication extends Application {
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(css);
+			
 //			primaryStage.initStyle(StageStyle.UNDECORATED);
 			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);

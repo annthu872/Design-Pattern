@@ -3,8 +3,8 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tablehandler.TableGenFromDB">
    <children>
-      <TableView id="aaa" fx:id="myTable" layoutX="425.0" layoutY="312.0" prefHeight="395.0" prefWidth="650.0" />
+      <TableView fx:id="myTable" layoutX="285.0" layoutY="181.0" prefHeight="546.0" prefWidth="791.0" />
    </children>
 </AnchorPane>

@@ -1,4 +1,4 @@
-package TableDB;
+package com.example.tablehandler;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -30,6 +30,11 @@ public class TableGenFromDB {
     private ObservableList<ObservableList> data = FXCollections.observableArrayList();
     
     private String tableName = "actor";
+    
+    public void setTableName(String table) {
+    	tableName = table;
+    	getData();
+    }
     
     public void addRow(ObservableList<String> newData) {
     	newData = FXCollections.observableArrayList();
