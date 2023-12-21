@@ -53,6 +53,7 @@ public class TableListController implements Initializable {
 //                TableGenFromDB controller = new TableGenFromDB();
                 PersonForm pf = new PersonForm();
                 TableGenFromDB.getInstance().setcolumnNames(pf.getColumnNames());
+                TableGenFromDB.getInstance().setTableData(null);
                 TableGenFromDB.getInstance().getData();
 //        		table.setTableName( button.getText()); 
 //        		IScreenUnit.mScreen.setController(table);
