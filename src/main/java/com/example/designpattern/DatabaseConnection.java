@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class DatabaseConnection {
-    static Connection connection;
+	public static Connection connection;
 
 	public void connect() {
         try {
@@ -21,7 +21,7 @@ public class DatabaseConnection {
             return;
         }
 		try {
-			connection = DriverManager.getConnection(SharedVariableHolder.url +SharedVariableHolder.database , SharedVariableHolder.user, SharedVariableHolder.password);
+			connection = DriverManager.getConnection(SharedVariableHolder.url + SharedVariableHolder.database , SharedVariableHolder.user, SharedVariableHolder.password);
 			if (connection != null) {
                 System.out.println("Connected to the database!");
 

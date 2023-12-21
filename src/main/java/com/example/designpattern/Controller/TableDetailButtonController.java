@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.example.tablehandler.TableGenFromDB;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -25,18 +27,9 @@ public class TableDetailButtonController implements Initializable{
     private Button btnEdit;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		List<String> colList = new ArrayList<>();
-		colList.add("Cao Nguyên");
-		colList.add("Nguyễn Duy");
-		colList.add("TRương toàn thịnh");
-		List<String> dataList = new ArrayList<>();
-		dataList.add("Cao Nguyên");
-		dataList.add("Nguyễn Duy");
-		dataList.add("TRương toàn thịnh");
+//		List<String> dataList = TableGenFromDB.getInstance().getFieldname();
 		
-		btnAdd.setOnAction(e -> PopupWindow.display(colList));
-		btnEdit.setOnAction(e -> PopupWindow.display(colList,dataList));
-
-
+		btnAdd.setOnAction(e -> PopupWindow.display(TableGenFromDB.getInstance().getColumnNames()));
+		btnEdit.setOnAction(e -> PopupWindow.display(TableGenFromDB.getInstance().getColumnNames(),TableGenFromDB.getInstance().getFieldname()));
 	}
 }
