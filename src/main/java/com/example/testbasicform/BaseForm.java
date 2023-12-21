@@ -25,6 +25,7 @@ public class BaseForm<T> {
 	Connection conn = DatabaseConnection.connection;
 	String tableName = "";
 	private ArrayList<T> data;
+	
 	public void setArrayList(ArrayList<T> dt) {
 		data = dt;
 		setTableData(convertObjectListToObservableList(dt));
@@ -32,10 +33,6 @@ public class BaseForm<T> {
     public void setTableName(Class<?> clazz) {
         this.tableName = clazz.getSimpleName();
     }
-	
-	public BaseForm(){
-		
-	}
 	
     public void setColumnNames(ArrayList<String> col) {
     	columnNames = col;
@@ -115,5 +112,4 @@ public class BaseForm<T> {
 		String sql = "UPDATE " + tableName + " SET " + setClause + " WHERE " + condition;
 		//execute(sql.toString());
 	}
-	
 }

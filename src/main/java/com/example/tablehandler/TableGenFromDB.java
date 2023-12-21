@@ -86,12 +86,16 @@ public class TableGenFromDB{
             myTable.getItems().add(row);
         }
         
-        myTable.setOnMouseClicked((MouseEvent event) -> {
-            // Get the selected row and column index
-            int rowIndex = myTable.getSelectionModel().getSelectedIndex();
-            ObservableList<String> cellData = myTable.getItems().get(rowIndex);
-            data = new ArrayList<>(cellData);
-//                System.out.println("Selected Cell Data: " + cellData);
-        });
+        if(tabledata!=null) {
+            myTable.setOnMouseClicked((MouseEvent event) -> {
+                // Get the selected row and column index
+                int rowIndex = myTable.getSelectionModel().getSelectedIndex();
+                ObservableList<String> cellData = myTable.getItems().get(rowIndex);
+                data = new ArrayList<>(cellData);
+                System.out.println(data);
+//                    System.out.println("Selected Cell Data: " + cellData);
+            });
+        }
+
     }
 }
