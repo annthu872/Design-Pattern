@@ -44,6 +44,7 @@ public class FormPopupController implements Initializable {
     }
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		addingPane.getChildren().clear();
 		for ( int i =0; i< fieldnameList.size(); i++) {
 			Parent root;
 			try {
@@ -65,6 +66,8 @@ public class FormPopupController implements Initializable {
 			}
 		}
 		btnCancel.setOnAction(e ->{
+	        addingPane.getChildren().clear();
+
 			this.stage.close();
 		});
 	}
