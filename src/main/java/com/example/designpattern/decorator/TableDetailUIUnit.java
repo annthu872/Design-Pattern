@@ -1,11 +1,16 @@
 package com.example.designpattern.decorator;
-
+import com.example.testbasicform.*;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
+import com.example.designpattern.DatabaseConnection;
+import com.example.designpattern.SharedVariableHolder;
 import com.example.tablehandler.TableGenFromDB;
-import com.example.testbasicform.Actor;
-import com.example.testbasicform.ActorForm;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,14 +27,35 @@ public class TableDetailUIUnit implements IScreenUnit {
 		loader.setController(table);
 		mScreen.getChildren().add(loader.load());
 		
-		ArrayList<Actor> actlist = new ArrayList<Actor>();
-		Actor a1 = new Actor(3, "Charley", "Lala");
-		actlist.add(a1);
+		List<employees> employeesList = new ArrayList<>();
+		DatabaseConnection conn = new DatabaseConnection();
 		
-		ActorForm act = new ActorForm();
-		act.setArrayList(actlist);
-		ObservableList<ObservableList<String>> tableData = act.getTableData();
-		table.setcolumnNames(act.getColumnNames());
+		conn.connect();
+		Statement stmt;
+		try {
+			stmt = conn.connection.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM " + SharedVariableHolder.database +"."+"employees");
+	        ResultSetMetaData metaData = rs.getMetaData();
+
+	         int columnCount = metaData.getColumnCount();
+	         while (rs.next()) {
+	             int id = rs.getInt("id"); // Assuming "id" is the column name for employee ID
+	             String name = rs.getString("name");
+	             int age = rs.getInt("age");
+	             String department = rs.getString("department");
+	             employees employee = new employees(id, name, age, department);
+	             employeesList.add(employee);
+	         }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+        employeesForm ef = new employeesForm();
+		ef.setArrayList((ArrayList<employees>) employeesList);
+		ObservableList<ObservableList<String>> tableData = ef.getTableData();
+		table.setcolumnNames(ef.getColumnNames());
 		table.setTableData(tableData);
 
 		table.getData();
