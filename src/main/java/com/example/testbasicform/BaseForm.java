@@ -19,12 +19,16 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.beans.property.SimpleStringProperty;
 
-public class BaseForm {
+public class BaseForm<T> {
 	private ArrayList<String> columnNames = new ArrayList<String>();
 	private ObservableList<ObservableList<String>> tableData = FXCollections.observableArrayList();
 	Connection conn = DatabaseConnection.connection;
 	String tableName = "";
-	
+	private ArrayList<T> data;
+	public void setArrayList(ArrayList<T> dt) {
+		data = dt;
+		setTableData(convertObjectListToObservableList(dt));
+	}
     public void setTableName(Class<?> clazz) {
         this.tableName = clazz.getSimpleName();
     }
