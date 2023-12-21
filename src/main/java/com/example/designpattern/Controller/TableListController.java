@@ -7,6 +7,8 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXMLLoader;
 import com.example.designpattern.decorator.IScreenUnit;
 import com.example.tablehandler.TableGenFromDB;
+import com.example.testbasicform.PersonForm;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -49,7 +51,9 @@ public class TableListController implements Initializable {
                 
                
 //                TableGenFromDB controller = new TableGenFromDB();
-                TableGenFromDB.getInstance().setTableName(button.getText());
+                PersonForm pf = new PersonForm();
+                TableGenFromDB.getInstance().setcolumnNames(pf.getColumnNames());
+                TableGenFromDB.getInstance().getData();
 //        		table.setTableName( button.getText()); 
 //        		IScreenUnit.mScreen.setController(table);
                 
