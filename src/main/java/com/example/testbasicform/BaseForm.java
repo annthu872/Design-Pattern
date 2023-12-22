@@ -1,6 +1,7 @@
 package com.example.testbasicform;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import com.example.designpattern.DatabaseConnection;
-import com.example.tablehandler.TableGenFromDB;
+import com.example.tablehandler.TableUIHandle;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,11 +21,22 @@ import javafx.scene.control.TableView;
 import javafx.beans.property.SimpleStringProperty;
 
 public class BaseForm<T> {
+	Connection conn = DatabaseConnection.connection;
+	
+	TableUIHandle tableInstance = TableUIHandle.getInstance();
+	
 	private ArrayList<String> columnNames = new ArrayList<String>();
 	private ObservableList<ObservableList<String>> tableData = FXCollections.observableArrayList();
-	Connection conn = DatabaseConnection.connection;
 	String tableName = "";
 	private ArrayList<T> data;
+	
+    private Class<T> clazz;
+
+    public BaseForm(Class<T> clazz) {
+        this.clazz = clazz;
+		getAllAttributes(this.clazz);
+		setTableName(this.clazz);
+    }
 	
 	public void setArrayList(ArrayList<T> dt) {
 		data = dt;
@@ -112,4 +124,71 @@ public class BaseForm<T> {
 		String sql = "UPDATE " + tableName + " SET " + setClause + " WHERE " + condition;
 		//execute(sql.toString());
 	}
+	
+	public T parseResultSetToObject(ResultSet rs) throws SQLException {
+        try {
+            // Create an instance of the class T
+            T object = clazz.getDeclaredConstructor().newInstance();
+
+            // Iterate through the columns and set values in the object
+            for (String columnName : columnNames) {
+                try {
+                    Field field = clazz.getDeclaredField(columnName);
+                    field.setAccessible(true);
+                    Object value = rs.getObject(columnName);
+                    field.set(object, value);
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return object;
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            return null;
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+            return null;
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+	
+    public ArrayList<T> parseResultSetToObjectList(ResultSet rs) {
+        ArrayList<T> objectList = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                T object = parseResultSetToObject(rs);
+                objectList.add(object);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return objectList;
+    }
+    
+    public ArrayList<T> executeQueryAndParse(String sql) {
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            return parseResultSetToObjectList(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    public void read() {
+        String sql = "SELECT * FROM " + tableName;
+        data = executeQueryAndParse(sql);
+        setTableData(convertObjectListToObservableList(data));
+        tableInstance.setcolumnNames(this.getColumnNames());
+		tableInstance.setTableData(this.getTableData());
+		tableInstance.updateData();
+    }
+
 }

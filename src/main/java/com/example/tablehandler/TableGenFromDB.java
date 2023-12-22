@@ -21,13 +21,12 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.input.MouseEvent;
 
 public class TableGenFromDB{
+    public static Connection conn = DatabaseConnection.connection;
     @FXML
     private TableView<ObservableList<String>> myTable;    
     private String tableName = "";
     private ArrayList<String> data;
     private ArrayList<String> columnNames = new ArrayList<String>();
-    private ObservableList<ObservableList<String>> tabledata = FXCollections.observableArrayList();
-    
     public void setTableName(String table) {
     	tableName = table;
     	getData();
@@ -41,20 +40,10 @@ public class TableGenFromDB{
     public ArrayList<String> getColumnNames() {
     	return columnNames;
     }
-    public void setcolumnNames(ArrayList<String> col) {
-    	columnNames = col;
-    }
-    public void setTableData(ObservableList<ObservableList<String>> dt) {
-    	tabledata = dt;
-    }
-    public ObservableList<ObservableList<String>> getTableData() {
-    	return tabledata;
-    }
     public void addRow(ObservableList<String> newData) {
     	newData = FXCollections.observableArrayList();
     	myTable.getItems().add(newData);
     }
-    
     private static TableGenFromDB instance;
     public static synchronized TableGenFromDB getInstance() {
         if (instance == null) {
@@ -63,39 +52,55 @@ public class TableGenFromDB{
         return instance;
     }
     
-    protected TableGenFromDB() {}
-    
-    public void buildColumn(String colName) {
-    	TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
-    	col.setSortable(false);
-    	int colIndex = columnNames.indexOf(colName);
-    	col.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().get(colIndex)));
-    	myTable.getColumns().add(col);
-    }
+    private TableGenFromDB() {}
 //     Public static ObservableList<COA> getAllCOA(){
     public void getData() {
+        Statement st = null;
+        ResultSet rs;
         
         myTable.getItems().clear();
         myTable.getColumns().clear();
         
-        for(String colName : columnNames) {
-        	buildColumn(colName);
-        }
+            try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            try {
+				st = conn.createStatement();
+	            String recordQuery = ("SELECT * FROM " + tableName);
+	            rs = st.executeQuery(recordQuery);
+	            
+	            for(int i=0 ; i<rs.getMetaData().getColumnCount(); i++){
+	                //We are using non property style for making dynamic table
+	            	final int j = i;
+	            	TableColumn<ObservableList<String>, String> col = new TableColumn<>(rs.getMetaData().getColumnName(i + 1));
+	            	col.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().get(j)));
+	            	columnNames.add(rs.getMetaData().getColumnName(i + 1));
+	            	col.setSortable(false);
+	                myTable.getColumns().add(col);
+	            }
+	            
+	            while(rs.next()){
+	            	ObservableList<String> row = FXCollections.observableArrayList();
+	                for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+	                    row.add(rs.getString(i));
+	                }
+	                myTable.getItems().addAll(row);
+	            } 
+
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         
-        for (ObservableList<String> row : tabledata) {
-            myTable.getItems().add(row);
-        }
-        
-        if(tabledata!=null) {
             myTable.setOnMouseClicked((MouseEvent event) -> {
                 // Get the selected row and column index
                 int rowIndex = myTable.getSelectionModel().getSelectedIndex();
                 ObservableList<String> cellData = myTable.getItems().get(rowIndex);
                 data = new ArrayList<>(cellData);
-                System.out.println(data);
-//                    System.out.println("Selected Cell Data: " + cellData);
+//                System.out.println("Selected Cell Data: " + cellData);
             });
-        }
-
     }
 }

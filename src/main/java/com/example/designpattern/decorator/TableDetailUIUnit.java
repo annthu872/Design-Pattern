@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.example.designpattern.DatabaseConnection;
 import com.example.designpattern.SharedVariableHolder;
-import com.example.tablehandler.TableGenFromDB;
+import com.example.tablehandler.TableUIHandle;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,11 +23,11 @@ public class TableDetailUIUnit implements IScreenUnit {
     public Parent getUI() throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/TableUI.fxml"));
 		AnchorPane a = new AnchorPane();
-		TableGenFromDB table = TableGenFromDB.getInstance();
+		TableUIHandle table = TableUIHandle.getInstance();
 		loader.setController(table);
 		mScreen.getChildren().add(loader.load());
 		
-		List<employees> employeesList = new ArrayList<>();
+		/*List<employees> employeesList = new ArrayList<>();
 		DatabaseConnection conn = new DatabaseConnection();
 		
 		conn.connect();
@@ -58,7 +58,7 @@ public class TableDetailUIUnit implements IScreenUnit {
 		table.setcolumnNames(ef.getColumnNames());
 		table.setTableData(tableData);
 
-		table.getData();
+		table.getData();*/
 
 	    /*ArrayList<String> cars = new ArrayList<String>();
 	    cars.add("Volvo");
@@ -73,6 +73,12 @@ public class TableDetailUIUnit implements IScreenUnit {
 	    
 	    table.setcolumnNames(cars);
 	    table.getData();*/
+		
+		film_textForm f = new film_textForm();
+		f.read();
+		/*table.setcolumnNames(f.getColumnNames());
+		table.setTableData(f.getTableData());
+		table.getData();*/
 		return mScreen;
     }
 }

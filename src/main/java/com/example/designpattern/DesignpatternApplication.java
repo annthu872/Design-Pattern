@@ -37,6 +37,8 @@ public class DesignpatternApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			DatabaseConnection con = new DatabaseConnection();
+			con.connect();
 			
 			Parent root = new HeadingUIUnit(new TableListUIUnit( new TableDetailButton(new TableDetailUIUnit()))).getUI();
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
@@ -56,7 +58,5 @@ public class DesignpatternApplication extends Application {
 	public static void main(String[] args) {
 		SpringApplication.run(DesignpatternApplication.class, args);
 		launch(args);
-		ActorForm actform = new ActorForm();
-		actform.add("('ABC','ABC','ABC')");
 	}
 }
