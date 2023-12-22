@@ -79,8 +79,7 @@ public class FormPopupController implements Initializable {
 		        fieldValues.add(textField.getText());
 		    }
 
-		    DatabaseConnection con = new DatabaseConnection();
-		    con.connect();
+		    DatabaseConnection con = DatabaseConnection.getInstance();
 		    List<Table> tables = con.getTablesWithColumns();
 
 		    boolean isValid = false;
