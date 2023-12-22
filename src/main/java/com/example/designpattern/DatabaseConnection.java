@@ -11,9 +11,32 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class DatabaseConnection {
+	private static DatabaseConnection instance;
 	public static Connection connection;
+	private Thread connectionThread;
+	
+	private DatabaseConnection() {
+		initializeConnectionThread();
+	}
+	
+	public static DatabaseConnection getInstance() {
+	    if (instance == null) {
+	        synchronized (DatabaseConnection.class) {
+	            if (instance == null) {
+	                instance = new DatabaseConnection();
+	                instance.connect();
+	            }
+	        }
+	    }
+	    return instance;
+	}
+	
+	private void initializeConnectionThread() {
+	    connectionThread = new Thread(() -> {});
+	    connectionThread.start();
+	}
 
-	public void connect() {
+	private void connect() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {

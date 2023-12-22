@@ -35,8 +35,7 @@ public class DesignpatternApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			DatabaseConnection con = new DatabaseConnection();
-			con.connect();
+			DatabaseConnection con = DatabaseConnection.getInstance();
 			
 			Parent root = new HeadingUIUnit(new TableListUIUnit( new TableDetailButton(new TableDetailUIUnit()))).getUI();
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
