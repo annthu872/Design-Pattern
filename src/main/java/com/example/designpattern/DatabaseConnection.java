@@ -3,17 +3,52 @@ package com.example.designpattern;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.List;
+
+import com.example.designpattern.column.ColumnBuilder;
+import com.example.designpattern.table.Table;
+import com.example.designpattern.table.TableBuilder;
+
 import java.util.ArrayList;
 
 public class DatabaseConnection {
+	private static DatabaseConnection instance;
 	public static Connection connection;
+	private Thread connectionThread;
+	
+	private DatabaseConnection() {
+		initializeConnectionThread();
+	}
+	
+	public static DatabaseConnection getInstance() {
+	    if (instance == null) {
+	        synchronized (DatabaseConnection.class) {
+	            if (instance == null) {
+	                instance = new DatabaseConnection();
+	                instance.connect();
+	            }
+	        }
+	    }
+	    return instance;
+	}
+	
+	private void initializeConnectionThread() {
+	    connectionThread = new Thread(() -> {});
+	    connectionThread.start();
+	}
+	
+	private void ensureConnection() {
+        if (connection == null) {
+            connect();
+        }
+    }
 
-	public void connect() {
+	private void connect() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -35,12 +70,11 @@ public class DatabaseConnection {
             
         }
 	public List<String> getSchemaList() {
+		ensureConnection();
 		List<String> schemaList = new ArrayList<>();
 		try {
-			Statement stmt = connection.createStatement();
 			ResultSet rs = connection.getMetaData().getCatalogs();
 			 while (rs.next()) {
-//	            System.out.println("TABLE_CAT = " + rs.getString("TABLE_CAT") );
 	            schemaList.add(rs.getString("TABLE_CAT"));
 	        }
 	        return schemaList;
@@ -48,24 +82,19 @@ public class DatabaseConnection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//        ResultSet rs = stmt.executeQuery("select * from employees");
-//        // show data
-//        while (rs.next()) {
-//            System.out.println(rs.getInt(1) + "  " + rs.getString(2) 
-//                    + "  " + rs.getString(3)+ "  " + rs.getString(4));
-//        }
         return null;
 	}
 	public void close() {
-		 try {
-	            if (connection != null && !connection.isClosed()) {
-	                connection.close();
-	            }
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }	
+		try {
+			if (connection != null && !connection.isClosed()) {
+				connection.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
 	}
 	public List<String> getTableList(String databaseName) {
+		ensureConnection();
 	    List<String> tableList = new ArrayList<>();
 	    try {
 	        DatabaseMetaData metaData = connection.getMetaData();
@@ -80,6 +109,7 @@ public class DatabaseConnection {
 	    return null;
 	}
 	public List<List<Object>> getColumnNamesAndTypes(String databaseName, String tableName) {
+		ensureConnection();
 	    List<List<Object>> columnInfo = new ArrayList<>();
 	    try {
 	        DatabaseMetaData metaData = connection.getMetaData();
@@ -101,6 +131,7 @@ public class DatabaseConnection {
 	    return null;
 	}
 	public List<List<Object>> getColumnData(String databaseName, String tableName) {
+		ensureConnection();
 	    List<List<Object>> columnData = new ArrayList<>();
 	    try {
 	        Statement stmt = connection.createStatement();
@@ -122,4 +153,69 @@ public class DatabaseConnection {
 	    }
 	    return null;
 	}
+	
+	public List<Table> getTablesWithColumns() {
+		List<Table> tableList = new ArrayList<>();
+        try {
+            DatabaseMetaData metaData = connection.getMetaData();
+            ResultSet tablesResultSet = metaData.getTables(SharedVariableHolder.database, null, "%", new String[]{"TABLE"});
+            
+            while (tablesResultSet.next()) {
+                TableBuilder tableBuilder = new TableBuilder();
+                String tableName = tablesResultSet.getString("TABLE_NAME");
+                tableBuilder.setTableName(tableName);
+                
+                ResultSet primaryKeysResultSet = metaData.getPrimaryKeys(null, null, tableName);
+                List<String> primaryKeys = new ArrayList<>();
+                while (primaryKeysResultSet.next()) {
+                    primaryKeys.add(primaryKeysResultSet.getString("COLUMN_NAME"));
+                }
+                
+                ResultSet columnsResultSet = metaData.getColumns(SharedVariableHolder.database, null, tableName, null);
+                while (columnsResultSet.next()) {
+                    ColumnBuilder columnBuilder = new ColumnBuilder()
+                    		.setClassName(columnsResultSet.getString("TYPE_NAME"))
+                    		.setColumnName(columnsResultSet.getString("COLUMN_NAME"))
+                    		.setAutoIncrement("YES".equals(columnsResultSet.getString("IS_AUTOINCREMENT")))
+                    		.setNullable("YES".equals(columnsResultSet.getString("IS_NULLABLE")))
+                    		.setIsPrimaryKey(primaryKeys.contains(columnsResultSet.getString("COLUMN_NAME")));
+
+                    tableBuilder.addColumn(columnBuilder.build());
+                }
+
+                tableList.add(tableBuilder.build());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tableList;
+    }
+	
+	public boolean addRowToTable(String tableName, List<String> data) {
+        try {
+            StringBuilder queryBuilder = new StringBuilder("INSERT INTO ");
+            queryBuilder.append(tableName).append(" VALUES (");
+
+            for (int i = 0; i < data.size(); i++) {
+                queryBuilder.append("?");
+                if (i < data.size() - 1) {
+                    queryBuilder.append(",");
+                }
+            }
+            queryBuilder.append(")");
+
+            String query = queryBuilder.toString();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            for (int i = 0; i < data.size(); i++) {
+                preparedStatement.setObject(i + 1, data.get(i));
+            }
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

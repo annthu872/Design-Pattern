@@ -6,6 +6,6 @@ public class SharedVariableHolder {
     public static String database = "mydatabase";
 	public static String url = "jdbc:mysql://localhost:3306/";
 	public static String user = "root";
-	public static String password = "";
+	public static String password = "root";
 
 }

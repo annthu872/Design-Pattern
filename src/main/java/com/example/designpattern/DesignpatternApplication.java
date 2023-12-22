@@ -1,16 +1,5 @@
 package com.example.designpattern;
 
-//import org.springframework.boot.SpringApplication;
-//import org.springframework.boot.autoconfigure.SpringBootApplication;
-//
-//@SpringBootApplication
-//public class DesignpatternApplication {
-//
-//	public static void main(String[] args) {
-//		SpringApplication.run(DesignpatternApplication.class, args);
-//	}
-//
-//}
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -26,8 +15,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.example.designpattern.Controller.*;
 import com.example.designpattern.decorator.*;
 import com.example.designpattern.decorator.TableDetailButton;
+import com.example.designpattern.table.Table;
 import com.example.tablehandler.TableGenFromDB;
+
 import com.example.designpattern.Default.*;
+
+import com.example.testbasicform.Actor;
+import com.example.testbasicform.ActorForm;
+
 @SpringBootApplication
 
 
@@ -36,8 +31,7 @@ public class DesignpatternApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			DatabaseConnection con = new DatabaseConnection();
-			con.connect();
+			DatabaseConnection con = DatabaseConnection.getInstance();
 			
 			Parent root = new HeadingUIUnit(new TableListUIUnit( new TableDetailButton(new TableDetailUIUnit()))).getUI();
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
@@ -55,9 +49,9 @@ public class DesignpatternApplication extends Application {
 	}
 	
 	public static void main(String[] args) {
-//		SpringApplication.run(DesignpatternApplication.class, args);
-//		launch(args);
-		CreateDefaultTable tableCreator = new CreateDefaultTable();
+		SpringApplication.run(DesignpatternApplication.class, args);
+		launch(args);
+Authentication tableCreator = new Authentication();
 
 		// Create a table for User class
 		try {
@@ -65,6 +59,5 @@ public class DesignpatternApplication extends Application {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
 	}
 }
