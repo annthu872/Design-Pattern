@@ -51,6 +51,7 @@ public class Authentication {
 		        createTableStatement.append("id INT AUTO_INCREMENT PRIMARY KEY,");
 		        createTableStatement.append("username VARCHAR(255) NOT NULL,");
 		        createTableStatement.append("password VARCHAR(255) NOT NULL,");
+		        createTableStatement.append("active Boolean,");
 
 		        // Add fields specific to the given userClass
 		        Field[] fields = userClass.getDeclaredFields();
@@ -95,4 +96,10 @@ public class Authentication {
             return "";
         }
     }
+	public boolean SignUpAccount (String username, String password) {
+		String sql = "SELECT * FROM "+this.tableName+ " Where username = '"+ username;
+		
+		return false;
+		
+	}
 }
