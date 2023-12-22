@@ -27,6 +27,8 @@ import com.example.designpattern.Controller.*;
 import com.example.designpattern.decorator.*;
 import com.example.designpattern.decorator.TableDetailButton;
 import com.example.tablehandler.TableGenFromDB;
+import com.example.testbasicform.Actor;
+import com.example.testbasicform.ActorForm;
 @SpringBootApplication
 
 
