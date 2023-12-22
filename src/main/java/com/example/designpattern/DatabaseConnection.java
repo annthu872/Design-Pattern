@@ -17,9 +17,38 @@ import com.example.designpattern.table.TableBuilder;
 import java.util.ArrayList;
 
 public class DatabaseConnection {
+	private static DatabaseConnection instance;
 	public static Connection connection;
+	private Thread connectionThread;
+	
+	private DatabaseConnection() {
+		initializeConnectionThread();
+	}
+	
+	public static DatabaseConnection getInstance() {
+	    if (instance == null) {
+	        synchronized (DatabaseConnection.class) {
+	            if (instance == null) {
+	                instance = new DatabaseConnection();
+	                instance.connect();
+	            }
+	        }
+	    }
+	    return instance;
+	}
+	
+	private void initializeConnectionThread() {
+	    connectionThread = new Thread(() -> {});
+	    connectionThread.start();
+	}
+	
+	private void ensureConnection() {
+        if (connection == null) {
+            connect();
+        }
+    }
 
-	public void connect() {
+	private void connect() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -41,6 +70,7 @@ public class DatabaseConnection {
             
         }
 	public List<String> getSchemaList() {
+		ensureConnection();
 		List<String> schemaList = new ArrayList<>();
 		try {
 			ResultSet rs = connection.getMetaData().getCatalogs();
@@ -64,6 +94,7 @@ public class DatabaseConnection {
 		}	
 	}
 	public List<String> getTableList(String databaseName) {
+		ensureConnection();
 	    List<String> tableList = new ArrayList<>();
 	    try {
 	        DatabaseMetaData metaData = connection.getMetaData();
@@ -78,6 +109,7 @@ public class DatabaseConnection {
 	    return null;
 	}
 	public List<List<Object>> getColumnNamesAndTypes(String databaseName, String tableName) {
+		ensureConnection();
 	    List<List<Object>> columnInfo = new ArrayList<>();
 	    try {
 	        DatabaseMetaData metaData = connection.getMetaData();
@@ -99,6 +131,7 @@ public class DatabaseConnection {
 	    return null;
 	}
 	public List<List<Object>> getColumnData(String databaseName, String tableName) {
+		ensureConnection();
 	    List<List<Object>> columnData = new ArrayList<>();
 	    try {
 	        Statement stmt = connection.createStatement();
