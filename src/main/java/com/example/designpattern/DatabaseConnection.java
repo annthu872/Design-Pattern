@@ -35,6 +35,12 @@ public class DatabaseConnection {
 	    connectionThread = new Thread(() -> {});
 	    connectionThread.start();
 	}
+	
+	private void ensureConnection() {
+        if (connection == null) {
+            connect();
+        }
+    }
 
 	private void connect() {
         try {
@@ -58,6 +64,7 @@ public class DatabaseConnection {
             
         }
 	public List<String> getSchemaList() {
+		ensureConnection();
 		List<String> schemaList = new ArrayList<>();
 		try {
 			Statement stmt = connection.createStatement();
@@ -89,6 +96,7 @@ public class DatabaseConnection {
 	        }	
 	}
 	public List<String> getTableList(String databaseName) {
+		ensureConnection();
 	    List<String> tableList = new ArrayList<>();
 	    try {
 	        DatabaseMetaData metaData = connection.getMetaData();
@@ -103,6 +111,7 @@ public class DatabaseConnection {
 	    return null;
 	}
 	public List<List<Object>> getColumnNamesAndTypes(String databaseName, String tableName) {
+		ensureConnection();
 	    List<List<Object>> columnInfo = new ArrayList<>();
 	    try {
 	        DatabaseMetaData metaData = connection.getMetaData();
@@ -124,6 +133,7 @@ public class DatabaseConnection {
 	    return null;
 	}
 	public List<List<Object>> getColumnData(String databaseName, String tableName) {
+		ensureConnection();
 	    List<List<Object>> columnData = new ArrayList<>();
 	    try {
 	        Statement stmt = connection.createStatement();
