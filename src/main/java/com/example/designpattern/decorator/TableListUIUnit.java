@@ -24,15 +24,13 @@ public class TableListUIUnit extends ScreenUnitDecorator {
 	@Override
 	public Parent getownUI() throws IOException {
 //		FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/TableList.fxml"));
-	    DatabaseConnection dbConnect = new DatabaseConnection();
-	    dbConnect.connect();
+	    DatabaseConnection dbConnect = DatabaseConnection.getInstance();
 
 	    // Get schema list
 	    String database = SharedVariableHolder.database;
         List<String> tableNames = dbConnect.getTableList(database);
         System.out.println("Tables in " + database + ": " + tableNames);
 
-	    dbConnect.close();
 		TableListController controller = new TableListController(tableNames);
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/TableList.fxml"));
 		loader.setController(controller);
