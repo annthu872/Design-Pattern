@@ -1,16 +1,5 @@
 package com.example.designpattern;
 
-//import org.springframework.boot.SpringApplication;
-//import org.springframework.boot.autoconfigure.SpringBootApplication;
-//
-//@SpringBootApplication
-//public class DesignpatternApplication {
-//
-//	public static void main(String[] args) {
-//		SpringApplication.run(DesignpatternApplication.class, args);
-//	}
-//
-//}
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -20,12 +9,14 @@ import javafx.scene.layout.AnchorPane;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import org.springframework.boot.SpringApplication;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.example.designpattern.Controller.*;
 import com.example.designpattern.decorator.*;
 import com.example.designpattern.decorator.TableDetailButton;
+import com.example.designpattern.table.Table;
 import com.example.tablehandler.TableGenFromDB;
 import com.example.testbasicform.Actor;
 import com.example.testbasicform.ActorForm;
@@ -57,5 +48,13 @@ public class DesignpatternApplication extends Application {
 	public static void main(String[] args) {
 		SpringApplication.run(DesignpatternApplication.class, args);
 		launch(args);
+		
+//		DatabaseConnection con = new DatabaseConnection();
+//        con.connect();
+//        List<Table> tables = con.getTablesWithColumns();
+//        for (Table table : tables) {
+//            System.out.println(table.generateJavaClass());
+//        }
+//        con.close();
 	}
 }
