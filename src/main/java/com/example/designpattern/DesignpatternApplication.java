@@ -28,14 +28,15 @@ public class DesignpatternApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+
 			DatabaseConnection con = DatabaseConnection.getInstance();
 			
 			Parent root = new HeadingUIUnit(new TableListUIUnit( new TableDetailButton(new TableDetailUIUnit()))).getUI();
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
 			Scene scene = new Scene(root);
+			String css = this.getClass().getResource("/css/style.css").toExternalForm();
 			scene.getStylesheets().add(css);
-			
-//			primaryStage.initStyle(StageStyle.UNDECORATED);
+
 			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);
 			primaryStage.show();
