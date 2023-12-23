@@ -4,6 +4,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.example.designpattern.Default.Authentication;
+import com.example.designpattern.decorator.HeadingUIUnit;
+import com.example.designpattern.decorator.TableDetailButton;
+import com.example.designpattern.decorator.TableDetailUIUnit;
+import com.example.designpattern.decorator.TableListUIUnit;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -61,6 +67,43 @@ public class SignUpController implements Initializable {
 			System.out.println("txtPassword:"+txtPassword.getText());
 			System.out.println("txtQuestion:"+txtQuestion.getText());
 			System.out.println("txtAnswer:"+txtAnswer.getText());
+			
+			Authentication auth = Authentication.getInstance();
+			if(!auth.checkSignUpAccountExist(txtUsername.getText(), txtPassword.getText())) {
+				if(auth.createAccount(txtUsername.getText(), txtPassword.getText()))
+				try {
+					//chuyển screen
+					
+//					Parent root = new HeadingUIUnit(new TableListUIUnit( new TableDetailButton(new TableDetailUIUnit()))).getUI();
+//					Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
+//					Scene scene = new Scene(root);
+//					String css = this.getClass().getResource("/css/style.css").toExternalForm();
+//					scene.getStylesheets().add(css);
+//					stage.setScene(scene);
+					Parent root;
+					FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
+					SignInController controller = new SignInController();
+					loader.setController(controller);
+					root = loader.load();
+					Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
+					Scene scene = new Scene(root);
+					String css = this.getClass().getResource("/css/style.css").toExternalForm();
+					scene.getStylesheets().add(css);
+					stage.setScene(scene);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				else {
+					//Notification: tạo tài khoản bị lỗi
+					System.out.println("Create Account Error");
+					
+				}
+			}
+			else {
+				//Notification: tạo tài khoản đã tồn tại
+				System.out.println("Username already exist, please choose another username");
+			}
 
 		});		
 	}

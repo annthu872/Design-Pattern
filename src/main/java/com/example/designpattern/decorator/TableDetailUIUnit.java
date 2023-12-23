@@ -73,9 +73,9 @@ public class TableDetailUIUnit implements IScreenUnit {
 	    
 	    table.setcolumnNames(cars);
 	    table.getData();*/
-		
-		film_textForm f = new film_textForm();
-		f.read();
+//		
+//		film_textForm f = new film_textForm();
+//		f.read();
 		/*table.setcolumnNames(f.getColumnNames());
 		table.setTableData(f.getTableData());
 		table.getData();*/

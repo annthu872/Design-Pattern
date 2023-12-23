@@ -34,8 +34,10 @@ public class DesignpatternApplication extends Application {
 
 			DatabaseConnection con = DatabaseConnection.getInstance();
 			
-			Parent root = new HeadingUIUnit(new TableListUIUnit( new TableDetailButton(new TableDetailUIUnit()))).getUI();
-			String css = this.getClass().getResource("/css/style.css").toExternalForm();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
+			SignInController controller = new SignInController();
+			loader.setController(controller);
+			Parent root = loader.load();
 			Scene scene = new Scene(root);
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
 			scene.getStylesheets().add(css);
@@ -53,14 +55,6 @@ public class DesignpatternApplication extends Application {
 //		SpringApplication.run(DesignpatternApplication.class, args);
 //		launch(args);
 		
-		Authentication tableCreator =  Authentication.getInstance();
-
-		// Create a table for User class
-		try {
-			tableCreator.createTableToDatabaseWithTableName("hi",UserA.class);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Authentication.createTableToDatabase()
 	}
 }

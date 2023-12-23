@@ -10,6 +10,7 @@ public class Authentication {
 	private String tableName = "users";
 	private Class<? extends User> userClass;
 	private static Authentication instance;
+	DatabaseConnection conn = DatabaseConnection.getInstance();
     public static synchronized Authentication getInstance() {
         if (instance == null) {
             instance = new Authentication();
@@ -20,10 +21,9 @@ public class Authentication {
     
     
 	public void createTableToDatabase(Class<? extends User> userClass) throws SQLException {
-		DatabaseConnection conn = DatabaseConnection.getInstance();
 		this.tableName = tableName;
 		
-		Statement  stmt = conn.connection.createStatement();
+		Statement  stmt = this.conn.connection.createStatement();
 		StringBuilder createTableStatement = new StringBuilder("CREATE TABLE IF NOT EXISTS users (");
 
         // Add common fields
@@ -43,17 +43,27 @@ public class Authentication {
 
         createTableStatement.deleteCharAt(createTableStatement.length() - 1);
         createTableStatement.append(");");
+        
+        //create foreign table
+        createTableStatement.append("CREATE TABLE ResetPasswordTable (id INT  PRIMARY KEY, question VARCHAR(255), answer VARCHAR(255));\r\n"
+        		+ "ALTER TABLE ResetPasswordTable\r\n"
+        		+ "ADD CONSTRAINT FK_RPIUsers\r\n"
+        		+ "FOREIGN KEY (id) REFERENCES users(id);");
+        
         System.out.println(createTableStatement);
 
-        stmt.execute(createTableStatement.toString());
+//        stmt.execute(createTableStatement.toString());
+	}
+	public void createResetPasswordTable(String UserTableName, String primarykeyName) {
+		
+		
 	}
 	public void createTableToDatabaseWithTableName(String tableName,Class<? extends User> userClass) throws SQLException {
-		DatabaseConnection conn = DatabaseConnection.getInstance();
 		this.tableName = tableName;
 
 		Statement  stmt = null;
 		try {
-			 stmt = conn.connection.createStatement();
+			 stmt = this.conn.connection.createStatement();
 			 StringBuilder createTableStatement = new StringBuilder("CREATE TABLE IF NOT EXISTS ");
 				createTableStatement.append(tableName).append(" ( ");
 
@@ -107,12 +117,14 @@ public class Authentication {
         }
     }
 	public boolean checkSignUpAccountExist (String username, String password) {
-		String sql = "SELECT * FROM "+this.tableName+ " Where username = '"+ username;
+		String sql = "SELECT * FROM "+this.tableName+ " Where username = '"+ username+"'";
+		 System.out.println(sql);
 		Statement st;
 		try {
-			st = DatabaseConnection.getInstance().connection.createStatement();
+			st = this.conn.connection.createStatement();
 	        ResultSet rs = st.executeQuery(sql);
-	        if(rs.wasNull()) return true;
+	        System.out.println("checkSignUpAccountExist: "+ rs);
+	        if(rs.next()) return true;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -122,10 +134,13 @@ public class Authentication {
 	 public boolean createAccount(User user) {
 	        if (userClass != null && userClass.isInstance(user)) {
 	        	String sql = "INSERT INTO " + this.tableName + " (username, password) VALUES" + user.getSQLAddClause();
+	   		 System.out.println(sql);
 	        	Statement st;
 	    		try {
-	    			st = DatabaseConnection.getInstance().connection.createStatement();
+	    			st = this.conn.connection.createStatement();
 	    	        int rs = st.executeUpdate(sql);
+	    	        System.out.println("createAccount: "+ rs);
+
 	    	        // nhớ check lại
 	    	        if(rs != 0) return true;
 	    		} catch (SQLException e) {
@@ -135,17 +150,34 @@ public class Authentication {
 	        }
 			return false;
 	 }
-	 public boolean checkSignUp(String username, String password) {
-		 String sql = "SELECT * FROM "+this.tableName+ " Where username = '"+ username + " and password = "+ password;
+	 public boolean checkSignIn(String username, String password) {
+		 String sql = "SELECT * FROM "+this.tableName+ " Where username = '"+ username + "' and password = '"+ password +"' ";
+		 System.out.println(sql);
 			Statement st;
 			try {
-				st = DatabaseConnection.getInstance().connection.createStatement();
+				st = this.conn.connection.createStatement();
 		        ResultSet rs = st.executeQuery(sql);
-		        if(!rs.wasNull()) return true;
+		        if(rs.next()) return true;
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			return false;
 	 }
+	public boolean createAccount(String username, String password) {
+        	String sql = "INSERT INTO " + this.tableName + " (username, password) VALUES ('" + username +"','"+ password+"' )" ;
+   		 System.out.println(sql);
+        	Statement st;
+    		try {
+    			st = this.conn.connection.createStatement();
+    	        int rs = st.executeUpdate(sql);
+    	        // nhớ check lại
+    	        if(rs != 0) return true;
+    		} catch (SQLException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+	        
+			return false;
+	}
 }
