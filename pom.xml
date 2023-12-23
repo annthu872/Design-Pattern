@@ -47,6 +47,25 @@
 	        <artifactId>javafx-fxml</artifactId>
 	        <version>21</version>
 	    </dependency>
+	    
+	    <dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>3.13.0</version>
+		</dependency>
+		
+		<dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+        </dependency>
+		
+		<dependency>
+		    <groupId>org.jetbrains</groupId>
+		    <artifactId>annotations</artifactId>
+		    <version>16.0.2</version>
+		</dependency>
+
+
 	    <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml -->
 	</dependencies>
 

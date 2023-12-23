@@ -7,16 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.example.designpattern.DatabaseConnection;
 import com.example.designpattern.DesignpatternApplication;
+import com.example.designpattern.table.Table;
+import com.example.tablehandler.TableGenFromDB;
+
 import javafx.scene.*;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button; 
 public class FormPopupController implements Initializable {
@@ -35,7 +36,8 @@ public class FormPopupController implements Initializable {
     private Stage stage;
     private List<TextField> textfieldList;
     private List<String> fieldnameList;
-    private  List<String> data;
+    private List<String> data;
+    
     public FormPopupController(Stage stage, List<String> fieldnameList, List<String> data) {
         this.fieldnameList = new ArrayList<>(fieldnameList);
         this.stage = stage;
@@ -70,5 +72,33 @@ public class FormPopupController implements Initializable {
 
 			this.stage.close();
 		});
+		
+		btnAdd.setOnAction(e -> {
+			List<String> fieldValues = new ArrayList<>();
+		    for (TextField textField : textfieldList) {
+		        fieldValues.add(textField.getText());
+		    }
+
+		    DatabaseConnection con = DatabaseConnection.getInstance();
+		    List<Table> tables = con.getTablesWithColumns();
+
+		    boolean isValid = false;
+		    for (Table table : tables) {
+		        isValid = table.validateUpdate(fieldValues);
+		        if (isValid) {
+		        	con.addRowToTable(TableGenFromDB.getInstance().getTableName(), fieldValues);
+		            break;
+		        }
+		    }
+
+		    con.close();
+
+		    if (isValid) {
+		        stage.close();
+		    } else {
+		    	//bao loi gi do
+		    }
+		});
+
 	}
 }
