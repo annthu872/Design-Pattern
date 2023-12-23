@@ -155,6 +155,7 @@ public class DatabaseConnection {
 	}
 	
 	public List<Table> getTablesWithColumns() {
+		ensureConnection();
 		List<Table> tableList = new ArrayList<>();
         try {
             DatabaseMetaData metaData = connection.getMetaData();
@@ -192,6 +193,7 @@ public class DatabaseConnection {
     }
 	
 	public boolean addRowToTable(String tableName, List<String> data) {
+		ensureConnection();
         try {
             StringBuilder queryBuilder = new StringBuilder("INSERT INTO ");
             queryBuilder.append(tableName).append(" VALUES (");

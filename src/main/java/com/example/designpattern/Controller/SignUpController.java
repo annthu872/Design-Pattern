@@ -3,6 +3,7 @@ package com.example.designpattern.Controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -14,48 +15,33 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class SignInController implements Initializable {
+public class SignUpController implements Initializable {
 
     @FXML
-    private Button btnLogin;
+    private Button btnBack;
 
     @FXML
     private Button btnSignUp;
 
     @FXML
-    private Button buttonForgotPassword;
+    private TextField txtAnswer;
 
     @FXML
     private PasswordField txtPassword;
+
+    @FXML
+    private TextField txtQuestion;
 
     @FXML
     private TextField txtUsername;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
-		buttonForgotPassword.setOnAction(e->{
+		btnBack.setOnAction(e->{
 			Parent root;
 			try {
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ResetPassword.fxml"));
-				ResetPasswordController controller = new ResetPasswordController();
-				loader.setController(controller);
-				root = loader.load();
-				Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
-				Scene scene = new Scene(root);
-				String css = this.getClass().getResource("/css/style.css").toExternalForm();
-				scene.getStylesheets().add(css);
-				stage.setScene(scene);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
-		btnSignUp.setOnAction(e->{
-			Parent root;
-			try {
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignUp.fxml"));
-				SignUpController controller = new SignUpController();
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
+				SignInController controller = new SignInController();
 				loader.setController(controller);
 				root = loader.load();
 				Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
@@ -69,12 +55,14 @@ public class SignInController implements Initializable {
 			}
 			
 		});
-		btnLogin.setOnAction(e->{
+		btnSignUp.setOnAction(e->{
 			//Handle login check
 			System.out.println("username:"+txtUsername.getText());
 			System.out.println("txtPassword:"+txtPassword.getText());
-		});
+			System.out.println("txtQuestion:"+txtQuestion.getText());
+			System.out.println("txtAnswer:"+txtAnswer.getText());
+
+		});		
 	}
 
 }
-

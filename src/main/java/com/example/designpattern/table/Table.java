@@ -1,10 +1,18 @@
 package com.example.designpattern.table;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.lang3.text.WordUtils;
 
 import com.example.designpattern.column.Column;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Serializable;
 
 
@@ -24,20 +32,56 @@ public class Table implements Serializable {
 	public String getTableName() {
 		return this.tableName;	
 	}
+	
+	private String generateImports() {
+        Set<String> imports = new HashSet<>();
+
+        for (Column column : columnList) {
+            if (column.isPrimaryKey()) {
+                imports.add("import jakarta.persistence.Id;");
+                imports.add("import jakarta.persistence.GeneratedValue;");
+                imports.add("import jakarta.persistence.GenerationType;");
+            }
+
+            if (!column.isNullable()) {
+                imports.add("import org.jetbrains.annotations.NotNull;");
+            }
+        }
+
+        StringBuilder importBuilder = new StringBuilder();
+        for (String importStmt : imports) {
+            importBuilder.append(importStmt).append("\n");
+        }
+        importBuilder.append("\n");
+        return importBuilder.toString();
+    }
+	
+	public String generateSettersAndGetters() {
+        StringBuilder methodBuilder = new StringBuilder();
+        for (Column column : columnList) {
+            methodBuilder.append(column.generateSetter());
+            methodBuilder.append(column.generateGetter());
+        }
+        return methodBuilder.toString();
+    }
 
 	public String generateJavaClass() {
-	    StringBuilder classBuilder = new StringBuilder("public class " + WordUtils.capitalize(tableName) + " {\n\n");
+		StringBuilder classBuilder = new StringBuilder("package entity;\n\n");
+		classBuilder.append(generateImports());
 
-	    // Generate variables
-	    for (Column column : columnList) {
-	        classBuilder.append("    private ").append(column.getClassName()).append(" ").append(column.getFieldName()).append(";\n");
-	    }
+        classBuilder.append("public class " + tableName + " {\n\n");
+
+        // Generate variables
+        for (Column column : columnList) {
+        	//classBuilder.append(column.generateAnnotations());
+            classBuilder.append("    private ").append(column.getClassName()).append(" ").append(column.getFieldName()).append(";\n");
+        }
 
 	    // Generate no-argument constructor
-	    classBuilder.append("\n    public ").append(WordUtils.capitalize(tableName)).append("() {\n    }\n\n");
+	    classBuilder.append("\n    public ").append(tableName).append("() {\n    }\n\n");
 
 	    // Generate constructor with parameters
-	    classBuilder.append("    public ").append(WordUtils.capitalize(tableName)).append("(");
+	    classBuilder.append("    public ").append(tableName).append("(");
 	    for (int i = 0; i < columnList.size(); i++) {
 	        Column column = columnList.get(i);
 	        classBuilder.append(column.getClassName()).append(" ").append(column.getFieldName());
@@ -49,29 +93,78 @@ public class Table implements Serializable {
 	    for (Column column : columnList) {
 	        classBuilder.append("        this.").append(column.getFieldName()).append(" = ").append(column.getFieldName()).append(";\n");
 	    }
-	    classBuilder.append("    }\n\n");
+	    classBuilder.append("	}\n\n");
 
-	    for (Column column : columnList) {
-	        classBuilder.append("    public void set").append(WordUtils.capitalize(column.getColumnName())).append("(")
-	                .append(column.getClassName()).append(" ").append(column.getFieldName()).append(") {\n")
-	                .append("        this.").append(column.getFieldName()).append(" = ").append(column.getFieldName()).append(";\n")
-	                .append("    }\n");
-
-	        classBuilder.append("    public ").append(column.getClassName()).append(" get").append(WordUtils.capitalize(column.getColumnName())).append("() {\n")
-	                .append("        return this.").append(column.getFieldName()).append(";\n")
-	                .append("    }\n\n");
-	    }
+	    classBuilder.append(generateSettersAndGetters());
 
 	    classBuilder.append("}");
 	    return classBuilder.toString();
 	}
+	
+	public String generateFormClass() {
+        StringBuilder formClass = new StringBuilder("package form;\n\n");
 
-    public boolean addToDatabase() {
-		return false;
+        formClass.append("import com.example.testbasicform.BaseForm;\n\n");
+        formClass.append("import entity." + tableName + ";\n\n");
+        
+        formClass.append("public class ")
+                .append(tableName)
+                .append("Form extends BaseForm<")
+                .append(tableName)
+                .append("> {\n");
+        formClass.append("\tpublic ")
+        		.append(tableName)
+                .append("Form() {\n");
+        formClass.append("\t\tsuper(")
+        		.append(tableName)
+                .append(".class);\n");
+        formClass.append("\t}\n");
+
+        formClass.append("}\n");
+
+        return formClass.toString();
     }
-    
-    public String toSql() {
-		return null;
+
+	public void writeToFile() {
+	    String projectDirectory = System.getProperty("user.dir");
+	    String entityPath = projectDirectory + "/src/main/java/entity";
+	    
+	    String javaClassContent = generateJavaClass();
+	    String fileName = tableName + ".java";
+	    String filePath = entityPath + "/" + fileName;
+
+	    File directory = new File(entityPath);
+	    if (!directory.exists()) {
+	        directory.mkdirs();
+	    }
+
+	    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+	        writer.write(javaClassContent);
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	    System.out.println("Java files created");
+	}
+
+	public void writeFormToFile() {
+        String projectDirectory = System.getProperty("user.dir");
+        String formPath = projectDirectory + "/src/main/java/form";
+
+        String formClassContent = generateFormClass();
+        String fileName = tableName + "Form.java";
+        String filePath = formPath + "/" + fileName;
+
+        File directory = new File(formPath);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            writer.write(formClassContent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Form files created");
     }
 	
 	public boolean validateUpdate(List<String> values) {

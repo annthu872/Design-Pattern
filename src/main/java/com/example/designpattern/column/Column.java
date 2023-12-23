@@ -1,5 +1,7 @@
 package com.example.designpattern.column;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 public class Column {
 	protected String className;
     protected String columnName;
@@ -16,18 +18,6 @@ public class Column {
         String[] tokens = className.split("\\.");
         return tokens[tokens.length - 1];
     }
-
-    private String getPackageName() {
-        String[] tokens = className.split("\\.");
-        StringBuilder packageName = new StringBuilder();
-        for (int i = 0; i < tokens.length - 1; i++) {
-            if (i != 0) {
-                packageName.append(".");
-            }
-            packageName.append(tokens[i]);
-        }
-        return packageName.toString();
-    }
     
 	public String getColumnName() {
 		return this.columnName;
@@ -40,19 +30,32 @@ public class Column {
     public String getFieldName() {
         return columnName.replaceAll("\\s+", "");
     }
-
-    public String generateAnnotations() {
-        StringBuilder annotationBuilder = new StringBuilder("@NotNull\n");
-        if (isPrimaryKey) {
-            annotationBuilder.append("@Id\n");
-            annotationBuilder.append("@GeneratedValue(strategy = GenerationType.IDENTITY)\n");
-        }
-
-        return annotationBuilder.toString();
+    
+    public boolean isNullable() {
+        return isNullable;
     }
 
-    public String toSql() {
-		return null;
+    public boolean isPrimaryKey() {
+        return isPrimaryKey;
+    }
+
+    public String generateAnnotations() {
+        StringBuilder annotationBuilder = new StringBuilder("	@NotNull\n");
+        if (isPrimaryKey) {
+            annotationBuilder.append("	@Id\n");
+            annotationBuilder.append("	@GeneratedValue(strategy = GenerationType.IDENTITY)\n");
+        }
+        return annotationBuilder.toString();
+    }
+    
+    public String generateSetter() {
+        return "\t" + "public void set" + columnName + "(" + className + " " + getFieldName() + ") {\n"
+                + "\t\t" + "this." + getFieldName() + " = " + getFieldName() + ";\n\t" + "}\n";
+    }
+
+    public String generateGetter() {
+        return "\t" + "public " + className + " get" + columnName + "() {\n"
+        		+ "\t\t" + "return this." + getFieldName() + ";\n\t" + "}\n\n";
     }
     
     public boolean validateUpdate(String value) {

@@ -4,7 +4,6 @@
 	-fx-border-radius: 2;
 	-fx-font-weight:  bold;
 	-fx-alignment: CENTER;
-	-fx-max-height: 40;
 	-fx-font-size: 16;
 }
 .button-primary:hover{
@@ -13,7 +12,6 @@
 	-fx-border-radius: 2;
 	-fx-font-weight:  bold;
 	-fx-alignment: CENTER;
-	-fx-max-height: 40;
 	-fx-font-size: 16;
 }
 .button-primary:pressed{
@@ -22,7 +20,6 @@
 	-fx-border-radius: 2;
 	-fx-font-weight:  bold;
 	-fx-alignment: CENTER;
-	-fx-max-height: 40;
 	-fx-font-size: 16;
 }
 
@@ -32,6 +29,7 @@
 	-fx-border-color: #7B66FF;
 	-fx-border-width: 2;
 	-fx-font-weight: bold;
+		-fx-font-size: 16;
 }
 .button-normal:hover{
 	-fx-text-fill:  #7B66FF;
@@ -39,6 +37,7 @@
 	-fx-border-color: #7B66FF;
 	-fx-border-width: 2;
 	-fx-font-weight: bold;
+		-fx-font-size: 16;
 }
 .button-normal:pressed{
 	-fx-text-fill:  #7B66FF;
@@ -46,6 +45,7 @@
 	-fx-border-color: #7B66FF;
 	-fx-border-width: 2;
 	-fx-font-weight: bold;
+		-fx-font-size: 16;
 }
 .table-button-not-choosen{
 	-fx-background-color: white;
@@ -96,7 +96,7 @@
 }
 .heading-label{
 	-fx-text-fill:  #7B66FF;
-		-fx-font-weight: bold;
+	-fx-font-weight: bold;
 	
 }
 .border{
@@ -111,4 +111,11 @@
 }
 .text-field:focused {
     -fx-background-color: -fx-focus-color, white ;
+}
+.button-word{
+	-fx-background-color: transparent;
+	-fx-text-fill: #7B66FF;
+}
+.normal-label{
+	 -fx-fill: black;
 }
