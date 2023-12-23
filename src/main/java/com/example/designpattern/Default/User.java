@@ -11,4 +11,9 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public String getSQLAddClause() {
+		// TODO Auto-generated method stub
+		return "(" + this.username + " , " +this.password +" ) ";
+	}
 }

@@ -11,12 +11,4 @@ public class employees {
 	private String name ;
 	int age ;
 	private String department;
-	public employees(int id, String name, int age, String department) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.age = age;
-		this.department = department;
-
-	}
 }

@@ -49,9 +49,10 @@ public class DesignpatternApplication extends Application {
 	}
 	
 	public static void main(String[] args) {
-		SpringApplication.run(DesignpatternApplication.class, args);
-		launch(args);
-Authentication tableCreator = new Authentication();
+//		SpringApplication.run(DesignpatternApplication.class, args);
+//		launch(args);
+		
+		Authentication tableCreator =  Authentication.getInstance();
 
 		// Create a table for User class
 		try {
@@ -59,5 +60,6 @@ Authentication tableCreator = new Authentication();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
 	}
 }

@@ -3,14 +3,26 @@ package com.example.designpattern.Default;
 import java.lang.reflect.Field;
 import com.example.designpattern.*;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 public class Authentication {
 	private String tableName = "users";
+	private Class<? extends User> userClass;
+	private static Authentication instance;
+    public static synchronized Authentication getInstance() {
+        if (instance == null) {
+            instance = new Authentication();
+        }
+        return instance;
+    }
+    private Authentication() {}
+    
+    
 	public void createTableToDatabase(Class<? extends User> userClass) throws SQLException {
-		DatabaseConnection conn = new DatabaseConnection();
+		DatabaseConnection conn = DatabaseConnection.getInstance();
+		this.tableName = tableName;
 		
-		conn.connect();
 		Statement  stmt = conn.connection.createStatement();
 		StringBuilder createTableStatement = new StringBuilder("CREATE TABLE IF NOT EXISTS users (");
 
@@ -36,8 +48,7 @@ public class Authentication {
         stmt.execute(createTableStatement.toString());
 	}
 	public void createTableToDatabaseWithTableName(String tableName,Class<? extends User> userClass) throws SQLException {
-		DatabaseConnection conn = new DatabaseConnection();
-		conn.connect();
+		DatabaseConnection conn = DatabaseConnection.getInstance();
 		this.tableName = tableName;
 
 		Statement  stmt = null;
@@ -75,7 +86,6 @@ public class Authentication {
 		        System.out.println(createTableStatement);
 		        stmt.execute(createTableStatement.toString());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -96,10 +106,46 @@ public class Authentication {
             return "";
         }
     }
-	public boolean SignUpAccount (String username, String password) {
+	public boolean checkSignUpAccountExist (String username, String password) {
 		String sql = "SELECT * FROM "+this.tableName+ " Where username = '"+ username;
-		
+		Statement st;
+		try {
+			st = DatabaseConnection.getInstance().connection.createStatement();
+	        ResultSet rs = st.executeQuery(sql);
+	        if(rs.wasNull()) return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return false;
-		
 	}
+	 public boolean createAccount(User user) {
+	        if (userClass != null && userClass.isInstance(user)) {
+	        	String sql = "INSERT INTO " + this.tableName + " (username, password) VALUES" + user.getSQLAddClause();
+	        	Statement st;
+	    		try {
+	    			st = DatabaseConnection.getInstance().connection.createStatement();
+	    	        int rs = st.executeUpdate(sql);
+	    	        // nhớ check lại
+	    	        if(rs != 0) return true;
+	    		} catch (SQLException e) {
+	    			// TODO Auto-generated catch block
+	    			e.printStackTrace();
+	    		}
+	        }
+			return false;
+	 }
+	 public boolean checkSignUp(String username, String password) {
+		 String sql = "SELECT * FROM "+this.tableName+ " Where username = '"+ username + " and password = "+ password;
+			Statement st;
+			try {
+				st = DatabaseConnection.getInstance().connection.createStatement();
+		        ResultSet rs = st.executeQuery(sql);
+		        if(!rs.wasNull()) return true;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return false;
+	 }
 }
