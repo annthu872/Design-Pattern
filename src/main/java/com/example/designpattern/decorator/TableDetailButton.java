@@ -6,6 +6,9 @@ import java.util.List;
 
 import com.example.designpattern.Controller.TableDetailButtonController;
 import com.example.designpattern.Controller.TableListController;
+import com.example.tablehandler.TableUIHandle;
+import com.example.testbasicform.BaseForm;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
@@ -20,6 +23,7 @@ public class TableDetailButton extends ScreenUnitDecorator {
 	@Override
 	public Parent getownUI() throws IOException {
 		TableDetailButtonController controller = new TableDetailButtonController();
+		controller.setForm(TableUIHandle.getInstance().getForm());
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/TableDetailButton.fxml"));
 		loader.setController(controller);
 		AnchorPane a = new AnchorPane();

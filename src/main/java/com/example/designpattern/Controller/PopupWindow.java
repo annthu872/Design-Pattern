@@ -3,19 +3,21 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.designpattern.DesignpatternApplication;
+import com.example.testbasicform.BaseForm;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 public class PopupWindow {
-    public static void display(List<String> fieldname){
+    public static void display(BaseForm bf){
         Stage popupStage = new Stage();
         popupStage.initModality(Modality.APPLICATION_MODAL);
         Parent root;
 		try {
-			FormPopupController controller = new FormPopupController(popupStage, fieldname, null);
+			FormPopupController controller = new FormPopupController(popupStage,  bf, null);
 			FXMLLoader loader = new FXMLLoader(DesignpatternApplication.class.getResource("/screen/AddForm.fxml"));
 			loader.setController(controller);
 			root = loader.load();
@@ -31,12 +33,12 @@ public class PopupWindow {
 		}
         
     }
-    public static void display(List<String> fieldname,List<String> data){
+    public static void display(BaseForm bf, ArrayList<String> data){
         Stage popupStage = new Stage();
         popupStage.initModality(Modality.APPLICATION_MODAL);
         Parent root;
 		try {
-			FormPopupController controller = new FormPopupController(popupStage, fieldname, data);
+			FormPopupController controller = new FormPopupController(popupStage, bf, data);
 			FXMLLoader loader = new FXMLLoader(DesignpatternApplication.class.getResource("/screen/UpdateForm.fxml"));
 			loader.setController(controller);
 			root = loader.load();

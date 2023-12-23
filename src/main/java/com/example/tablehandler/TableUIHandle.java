@@ -2,11 +2,14 @@ package com.example.tablehandler;
 
 import java.util.ArrayList;
 
+import com.example.testbasicform.BaseForm;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 
@@ -16,6 +19,16 @@ public class TableUIHandle {
     private ArrayList<String> rowData;
     private ArrayList<String> columnNames = new ArrayList<String>();
     private ObservableList<ObservableList<String>> tabledata = FXCollections.observableArrayList();
+    
+    private BaseForm bf;
+    
+    public void setForm(BaseForm bf) {
+    	this.bf = bf;
+    }
+    
+    public BaseForm getForm() {
+    	return bf;
+    }
     
     public ArrayList<String> getFieldname() {
     	return rowData;
@@ -67,6 +80,18 @@ public class TableUIHandle {
         for (ObservableList<String> row : tabledata) {
             myTable.getItems().add(row);
         }
+        
+        myTable.setRowFactory(tv -> {
+            TableRow<ObservableList<String>> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    ObservableList<String> rData = row.getItem();
+                    rowData = new ArrayList<>(rData);
+                    System.out.println(rowData);
+                }
+            });
+            return row;
+        });
         
         if(tabledata!=null) {
             myTable.setOnMouseClicked((MouseEvent event) -> {

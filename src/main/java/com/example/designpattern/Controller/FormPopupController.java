@@ -11,6 +11,7 @@ import com.example.designpattern.DatabaseConnection;
 import com.example.designpattern.DesignpatternApplication;
 import com.example.designpattern.table.Table;
 import com.example.tablehandler.TableGenFromDB;
+import com.example.testbasicform.BaseForm;
 
 import javafx.scene.*;
 import javafx.fxml.FXML;
@@ -38,8 +39,8 @@ public class FormPopupController implements Initializable {
     private List<String> fieldnameList;
     private List<String> data;
     
-    public FormPopupController(Stage stage, List<String> fieldnameList, List<String> data) {
-        this.fieldnameList = new ArrayList<>(fieldnameList);
+    public FormPopupController(Stage stage, BaseForm bf, List<String> data) {
+        this.fieldnameList = bf.getColumnNames();
         this.stage = stage;
         this.textfieldList = new ArrayList<TextField>();
         this.data = data;
