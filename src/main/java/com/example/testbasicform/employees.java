@@ -19,4 +19,5 @@ public class employees {
 		this.department = department;
 
 	}
+	public employees() {}
 }
