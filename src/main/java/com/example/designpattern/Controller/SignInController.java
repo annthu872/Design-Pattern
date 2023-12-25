@@ -6,6 +6,9 @@ import java.util.ResourceBundle;
 
 import com.example.designpattern.Default.Authentication;
 import com.example.designpattern.decorator.*;
+import com.example.designpattern.notification.InformationNotification;
+import com.example.designpattern.notification.Notification;
+import com.example.designpattern.notification.WarningNotification;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -77,18 +80,22 @@ public class SignInController implements Initializable {
 			//Handle login check
 			System.out.println("username:"+txtUsername.getText());
 			System.out.println("txtPassword:"+txtPassword.getText());
-			
+			Notification noti = new Notification();
+
 			Authentication auth = Authentication.getInstance();
 			if(auth.checkSignIn(txtUsername.getText(), txtPassword.getText())) {
 				try {
 					//chuyển screen
-					System.out.println("Chuyển Screen");
-					Parent root = new HeadingUIUnit(new TableListUIUnit( new TableDetailButton(new TableDetailUIUnit()))).getUI();
+					noti.setMessage("Sign In Successful");
+					noti.setNotiType(new InformationNotification());
+					noti.display();
+					
+					Parent root = new HeadingUIUnit(new TableListUIUnit( new TableUIUnit())).getUI();
 					Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
 					Scene scene = new Scene(root);
 					String css = this.getClass().getResource("/css/style.css").toExternalForm();
 					scene.getStylesheets().add(css);
-//					stage.setScene(scene);
+					stage.setScene(scene);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -96,8 +103,10 @@ public class SignInController implements Initializable {
 			}
 			else {
 				//Notification
-				System.out.println("Sign In Fail");
-			}
+				noti.setMessage("Sign In Failure, Please check your username and password");
+				noti.setNotiType(new WarningNotification());
+				noti.display();		
+				}
 			
 		});
 	}

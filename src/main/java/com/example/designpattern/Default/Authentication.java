@@ -95,7 +95,7 @@ public class Authentication {
             return "";
         }
     }
-	public boolean checkSignUpAccountExist (String username, String password) {
+	public boolean checkUsernameExist (String username) {
 		String sql = "SELECT * FROM "+this.tableName+ " Where username = '"+ username+"'";
 		 System.out.println(sql);
 		Statement st;
@@ -110,7 +110,7 @@ public class Authentication {
 		}
 		return false;
 	}
-	public int getAccountId (String username, String password) {
+	public int getAccountId (String username) {
 		String sql = "SELECT * FROM "+this.tableName+ " Where username = '"+ username+"'";
 		 System.out.println(sql);
 		Statement st;
@@ -135,7 +135,7 @@ public class Authentication {
 				st = this.conn.connection.createStatement();
 		        ResultSet rs = st.executeQuery(sql);
 		        if(rs.next()) {
-					setActiveforSignInAccount(username, password);
+					setActiveforSignInAccount(username);
 		        	return true;
 		        }
 			} catch (SQLException e) {
@@ -145,8 +145,8 @@ public class Authentication {
 			
 			return false;
 	 }
-	 public boolean setActiveforSignInAccount(String username, String password) {
-		 String sql = "Update "+this.tableName+ " set active = 1 Where id = "+ getAccountId(username,password)+ ";";
+	 public boolean setActiveforSignInAccount(String username) {
+		 String sql = "Update "+this.tableName+ " set active = 1 Where id = "+ getAccountId(username)+ ";";
 		 System.out.println(sql);
 			Statement st;
 			try {
@@ -169,7 +169,7 @@ public class Authentication {
     	        if(rs != 0) 
     	        {	
     	        	
-    	        	int id = getAccountId(username, password);
+    	        	int id = getAccountId(username);
     	        	if(id != -1) {
         	        	sql = "INSERT INTO ResetPasswordTable (id , question, answer) VALUES ( "+id+" , '" + question +"','"+ answer+"' )" ;
         	        	System.out.println(sql);
@@ -183,6 +183,60 @@ public class Authentication {
     			e.printStackTrace();
     		}
 	        
+			return false;
+	}
+	public String loadQuestionResetPassword(String username) {
+		int id = this.getAccountId(username);
+		String sql = "SELECT * FROM ResetPasswordTable Where id ="+ id +";";
+		 System.out.println(sql);
+		Statement st;
+		try {
+			st = this.conn.connection.createStatement();
+	        ResultSet rs = st.executeQuery(sql);
+	        System.out.println("checkSignUpAccountExist: "+ rs);
+	        if(rs.next()) {
+	        	return rs.getString("question");
+	        }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public boolean checkResetPasswordAnswerCorrect(String username, String answer) {
+		int id = this.getAccountId(username);
+		String sql = "SELECT * FROM ResetPasswordTable Where id ="+ id +";";
+		 System.out.println(sql);
+		Statement st;
+		try {
+			st = this.conn.connection.createStatement();
+	        ResultSet rs = st.executeQuery(sql);
+	        System.out.println("checkResetPasswordAnswerCorrect: "+ rs);
+	        if(rs.next()) {
+	        	if(rs.getString("answer") == answer) {
+	        		return true;
+	        	}
+	        }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	public boolean resetPassword(String username, String password) {
+		int id = this.getAccountId(username);
+		String sql = "Update "+this.tableName+ " set password = '"+ password +"' Where id = "+ getAccountId(username)+ ";";
+		 System.out.println(sql);
+			Statement st;
+			try {
+				st = this.conn.connection.createStatement();
+		        int rs = st.executeUpdate(sql);
+		        if(rs != 0 ) return true;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return false;
 	}
 }

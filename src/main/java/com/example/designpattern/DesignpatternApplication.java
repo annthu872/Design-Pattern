@@ -49,8 +49,8 @@ public class DesignpatternApplication extends Application {
 	}
 	
 	public static void main(String[] args) {
-//		SpringApplication.run(DesignpatternApplication.class, args);
-//		launch(args);
+		SpringApplication.run(DesignpatternApplication.class, args);
+		launch(args);
 		
 	}
 }
