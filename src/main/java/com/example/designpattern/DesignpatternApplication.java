@@ -52,9 +52,14 @@ public class DesignpatternApplication extends Application {
 	}
 	
 	public static void main(String[] args) {
-//		SpringApplication.run(DesignpatternApplication.class, args);
-//		launch(args);
+		SpringApplication.run(DesignpatternApplication.class, args);
+		launch(args);
 		
-		Authentication.createTableToDatabase()
+//		try {
+//			Authentication.getInstance().createTableToDatabase(User.class);
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 }

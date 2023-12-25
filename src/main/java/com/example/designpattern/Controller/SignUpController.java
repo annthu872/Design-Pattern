@@ -70,7 +70,7 @@ public class SignUpController implements Initializable {
 			
 			Authentication auth = Authentication.getInstance();
 			if(!auth.checkSignUpAccountExist(txtUsername.getText(), txtPassword.getText())) {
-				if(auth.createAccount(txtUsername.getText(), txtPassword.getText()))
+				if(auth.createAccount(txtUsername.getText(), txtPassword.getText(), txtQuestion.getText(), txtAnswer.getText()))
 				try {
 					//chuyển screen
 					
