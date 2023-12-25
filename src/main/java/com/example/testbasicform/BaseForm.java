@@ -100,12 +100,13 @@ public class BaseForm<T> {
     }
     
     public void execute(String sql) {
-    	try {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+        try {
+            Statement stmt = conn.createStatement();
+            int affectedRows = stmt.executeUpdate(sql);
+            System.out.println("Affected rows: " + affectedRows);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     
 	public void add(String addClause) {
@@ -120,9 +121,36 @@ public class BaseForm<T> {
         //execute(sql.toString());
 	}
     
-	public void delete(String condition) {
-		String sql = "DELETE FROM " + tableName + " WHERE " + condition;
-		//execute(sql);
+	public void delete(ArrayList<String> rowData) {
+	    StringBuilder conditionBuilder = new StringBuilder();
+	    for (int i = 0; i < columnNames.size(); i++) {
+	        String columnName = columnNames.get(i);
+	        String value = rowData.get(i);
+
+	        if (i > 0) {
+	            conditionBuilder.append(" AND ");
+	        }
+
+	        try {
+	            Field field = clazz.getDeclaredField(columnName);
+	            Class<?> fieldType = field.getType();
+
+	            // Assuming the values need to be treated differently based on their types
+	            if (fieldType == String.class) {
+	                conditionBuilder.append(columnName).append(" = '").append(value).append("'");
+	            } else if (fieldType == int.class || fieldType == boolean.class || fieldType == double.class) {
+	                conditionBuilder.append(columnName).append(" = ").append(value);
+	            } else {
+	                conditionBuilder.append(columnName).append(" = '").append(value).append("'");
+	            }
+	        } catch (NoSuchFieldException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    String condition = conditionBuilder.toString();
+	    String sql = "DELETE FROM " + tableName + " WHERE " + condition;
+        System.out.println(sql);
+		execute(sql);
 	}
 	
 	public void update(String setClause, String condition) {

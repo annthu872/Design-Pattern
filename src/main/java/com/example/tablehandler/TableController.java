@@ -99,6 +99,14 @@ public class TableController implements Initializable {
             myTable.getItems().add(row);
         }
         
+        if(currentForm.getTableData()!=null) {
+            myTable.setOnMouseClicked((MouseEvent event) -> {
+                int rowIndex = myTable.getSelectionModel().getSelectedIndex();
+                ObservableList<String> cellData = myTable.getItems().get(rowIndex);
+                rowData = new ArrayList<>(cellData);
+            });
+        }
+        
         myTable.setRowFactory(tv -> {
             TableRow<ObservableList<String>> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
@@ -123,6 +131,12 @@ public class TableController implements Initializable {
                     menuItem2.setOnAction(e ->{
                     	PopupWindow.display(currentForm.getColumnNames(),this.getFieldname());
                     });
+                    
+                    menuItem3.setOnAction(e ->{
+                    	ObservableList<String> selectedItem = myTable.getSelectionModel().getSelectedItem();
+            			myTable.getItems().remove(selectedItem);
+            			currentForm.delete(rowData);	
+                    });
 
                     if (menu != null) {
                         System.out.println("Hello");
@@ -133,13 +147,7 @@ public class TableController implements Initializable {
             return row;
         });
         
-        if(currentForm.getTableData()!=null) {
-            myTable.setOnMouseClicked((MouseEvent event) -> {
-                int rowIndex = myTable.getSelectionModel().getSelectedIndex();
-                ObservableList<String> cellData = myTable.getItems().get(rowIndex);
-                rowData = new ArrayList<>(cellData);
-            });
-        }
+        
 
     }
     @Override
@@ -148,5 +156,11 @@ public class TableController implements Initializable {
 		
 		btnAdd.setOnAction(e -> PopupWindow.display(currentForm.getColumnNames()));
 		btnEdit.setOnAction(e -> PopupWindow.display(currentForm.getColumnNames(),this.getFieldname()));
+		btnDelete.setOnAction(e ->{
+			ObservableList<String> selectedItem = myTable.getSelectionModel().getSelectedItem();
+			myTable.getItems().remove(selectedItem);
+			currentForm.getTableData().remove(selectedItem);
+			currentForm.delete(rowData);	
+		});
 	}
 }
