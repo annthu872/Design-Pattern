@@ -34,7 +34,7 @@ public class Authentication {
         // Add fields specific to the given userClass
         Field[] fields = userClass.getDeclaredFields();
         for (Field field : fields) {
-        	if(field.getName() == "id" || field.getName() == "username" ||field.getName() == "password" ||field.getName() == "active" ) {
+        	if(field.getName().equals("id") || field.getName().equals("username") ||field.getName().equals("password") ||field.getName().equals("active" ) ) {
         		continue;
         	}
             createTableStatement.append(field.getName()).append(" ")
@@ -213,7 +213,7 @@ public class Authentication {
 	        ResultSet rs = st.executeQuery(sql);
 	        System.out.println("checkResetPasswordAnswerCorrect: "+ rs);
 	        if(rs.next()) {
-	        	if(rs.getString("answer") == answer) {
+	        	if(rs.getString("answer").equals( answer)) {
 	        		return true;
 	        	}
 	        }

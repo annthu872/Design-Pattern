@@ -73,13 +73,13 @@ public class ResetPasswordController2 implements Initializable {
 			System.out.println("txtPassword:"+txtPassword.getText());
 			System.out.println("txtPasswordConfirm:"+txtPasswordConfirm.getText());
 			Notification noti = new Notification();
-			if(this.txtPassword.getText() == "") {
+			if(this.txtPassword.getText().equals("")) {
 				noti.setMessage("Password can not null");
 				noti.setNotiType(new WarningNotification());
 				noti.display();
 				return;
 			}
-			if(this.txtPassword.getText() != this.txtPasswordConfirm.getText()) {
+			if(!this.txtPassword.getText().equals( this.txtPasswordConfirm.getText())) {
 				noti.setMessage("Confirm Password not match Password");
 				noti.setNotiType(new WarningNotification());
 				noti.display();
@@ -88,7 +88,7 @@ public class ResetPasswordController2 implements Initializable {
 			if(!Authentication.getInstance().checkResetPasswordAnswerCorrect(this.txtUsername.getText(), this.txtAnswer.getText())) {
 				noti.setMessage("Answer for Reset Password Question is not Correct");
 				noti.setNotiType(new WarningNotification());
-				noti.display()
+				noti.display();
 				return;
 			}
 			if(Authentication.getInstance().resetPassword(this.txtUsername.getText(), this.txtPassword.getText())) {
