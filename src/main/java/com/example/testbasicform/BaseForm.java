@@ -24,7 +24,7 @@ import javafx.beans.property.SimpleStringProperty;
 public class BaseForm<T> {
 	Connection conn = DatabaseConnection.connection;
 	
-	TableController tableInstance = TableController.getInstance();
+	//TableController tableInstance = TableController.getInstance();
 	
 	private ArrayList<String> columnNames = new ArrayList<String>();
 	private ObservableList<ObservableList<String>> tableData = FXCollections.observableArrayList();
@@ -53,6 +53,10 @@ public class BaseForm<T> {
     
     public void setTableData(ObservableList<ObservableList<String>> dt) {
     	tableData = dt;
+    }
+    
+    public String getTableName() {
+    	return tableName;
     }
     
     public ObservableList<ObservableList<String>> getTableData(){
@@ -183,13 +187,15 @@ public class BaseForm<T> {
         }
     }
     
-    public void read() {
+    public void read(TableController tableInstance) {
         String sql = "SELECT * FROM " + tableName;
         data = executeQueryAndParse(sql);
         setTableData(convertObjectListToObservableList(data));
-        tableInstance.setcolumnNames(this.getColumnNames());
-		tableInstance.setTableData(this.getTableData());
-		tableInstance.updateData();
+        tableInstance.setForm(this);
+        //tableInstance.setcolumnNames(this.getColumnNames());
+		//tableInstance.setTableData(this.getTableData());
+		//tableInstance.updateData();
+        //tableInstance.setForm(this);
     }
 
 }

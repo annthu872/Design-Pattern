@@ -68,6 +68,8 @@ public class TableUIHandle {
             myTable.getItems().add(row);
         }
         
+        
+        
         if(tabledata!=null) {
             myTable.setOnMouseClicked((MouseEvent event) -> {
                 // Get the selected row and column index
