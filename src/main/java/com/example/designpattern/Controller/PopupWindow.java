@@ -32,7 +32,7 @@ public class PopupWindow {
         
     }
     public static void display(List<String> fieldname,List<String> data){
-        Stage popupStage = new Stage();
+    	Stage popupStage = new Stage();
         popupStage.initModality(Modality.APPLICATION_MODAL);
         Parent root;
 		try {
@@ -44,7 +44,7 @@ public class PopupWindow {
 	        Scene popupScene = new Scene(root);
 	        popupScene.getStylesheets().add(css);
 	        popupStage.setScene(popupScene);
-	        popupStage.setTitle("Edit Form");
+	        popupStage.setTitle("Adding Form");
 	        popupStage.showAndWait();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

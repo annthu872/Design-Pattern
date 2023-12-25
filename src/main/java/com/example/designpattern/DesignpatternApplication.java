@@ -19,8 +19,7 @@ import com.example.designpattern.decorator.TableDetailButton;
 import com.example.designpattern.filegenerator.FileGenerator;
 import com.example.designpattern.table.Table;
 import com.example.tablehandler.TableGenFromDB;
-import com.example.testbasicform.Actor;
-import com.example.testbasicform.ActorForm;
+
 @SpringBootApplication
 
 
@@ -32,10 +31,9 @@ public class DesignpatternApplication extends Application {
 
 			DatabaseConnection con = DatabaseConnection.getInstance();
 			
-			Parent root = new HeadingUIUnit(new TableListUIUnit( new TableDetailButton(new TableDetailUIUnit()))).getUI();
+			Parent root = new HeadingUIUnit(new TableListUIUnit( new TableUIUnit())).getUI();
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
 			Scene scene = new Scene(root);
-			String css = this.getClass().getResource("/css/style.css").toExternalForm();
 			scene.getStylesheets().add(css);
 
 			primaryStage.setScene(scene);
