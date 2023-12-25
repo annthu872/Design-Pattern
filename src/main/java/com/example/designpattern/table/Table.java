@@ -65,7 +65,7 @@ public class Table implements Serializable {
         return methodBuilder.toString();
     }
 
-	public String generateEntityClass() {
+	public String generateJavaClass() {
 		StringBuilder classBuilder = new StringBuilder("package entity;\n\n");
 		classBuilder.append(generateImports());
 
@@ -104,6 +104,7 @@ public class Table implements Serializable {
 	public String generateFormClass() {
         StringBuilder formClass = new StringBuilder("package form;\n\n");
 
+        formClass.append("import com.example.testbasicform.BaseForm;\n\n");
         formClass.append("import entity." + tableName + ";\n\n");
         
         formClass.append("public class ")
@@ -122,6 +123,48 @@ public class Table implements Serializable {
         formClass.append("}\n");
 
         return formClass.toString();
+    }
+
+	public void writeToFile() {
+	    String projectDirectory = System.getProperty("user.dir");
+	    String entityPath = projectDirectory + "/src/main/java/entity";
+	    
+	    String javaClassContent = generateJavaClass();
+	    String fileName = tableName + ".java";
+	    String filePath = entityPath + "/" + fileName;
+
+	    File directory = new File(entityPath);
+	    if (!directory.exists()) {
+	        directory.mkdirs();
+	    }
+
+	    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+	        writer.write(javaClassContent);
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	    System.out.println("Java files created");
+	}
+
+	public void writeFormToFile() {
+        String projectDirectory = System.getProperty("user.dir");
+        String formPath = projectDirectory + "/src/main/java/form";
+
+        String formClassContent = generateFormClass();
+        String fileName = tableName + "Form.java";
+        String filePath = formPath + "/" + fileName;
+
+        File directory = new File(formPath);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            writer.write(formClassContent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Form files created");
     }
 	
 	public boolean validateUpdate(List<String> values) {
