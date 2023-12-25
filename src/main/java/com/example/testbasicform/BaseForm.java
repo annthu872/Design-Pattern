@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import com.example.designpattern.DatabaseConnection;
+import com.example.tablehandler.TableController;
 import com.example.tablehandler.TableUIHandle;
 
 import javafx.collections.FXCollections;
@@ -23,7 +24,7 @@ import javafx.beans.property.SimpleStringProperty;
 public class BaseForm<T> {
 	Connection conn = DatabaseConnection.connection;
 	
-	TableUIHandle tableInstance = TableUIHandle.getInstance();
+	TableController tableInstance = TableController.getInstance();
 	
 	private ArrayList<String> columnNames = new ArrayList<String>();
 	private ObservableList<ObservableList<String>> tableData = FXCollections.observableArrayList();

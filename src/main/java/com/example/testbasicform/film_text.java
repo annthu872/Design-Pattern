@@ -10,4 +10,5 @@ public class film_text {
 		title = t;
 		description = d;
 	}
+	public film_text() {}
 }

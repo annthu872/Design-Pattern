@@ -15,15 +15,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.example.designpattern.Controller.*;
 import com.example.designpattern.decorator.*;
 import com.example.designpattern.decorator.TableDetailButton;
+import com.example.designpattern.filegenerator.FileGenerator;
 import com.example.designpattern.table.Table;
 import com.example.tablehandler.TableGenFromDB;
-
 import com.example.designpattern.Default.*;
 
-import com.example.testbasicform.Actor;
-import com.example.testbasicform.ActorForm;
 
-@SpringBootApplication
 
 
 public class DesignpatternApplication extends Application {
@@ -38,8 +35,8 @@ public class DesignpatternApplication extends Application {
 			SignInController controller = new SignInController();
 			loader.setController(controller);
 			Parent root = loader.load();
-			Scene scene = new Scene(root);
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
+			Scene scene = new Scene(root);
 			scene.getStylesheets().add(css);
 
 			primaryStage.setScene(scene);
@@ -52,14 +49,8 @@ public class DesignpatternApplication extends Application {
 	}
 	
 	public static void main(String[] args) {
-		SpringApplication.run(DesignpatternApplication.class, args);
-		launch(args);
+//		SpringApplication.run(DesignpatternApplication.class, args);
+//		launch(args);
 		
-//		try {
-//			Authentication.getInstance().createTableToDatabase(User.class);
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 	}
 }

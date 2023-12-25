@@ -32,7 +32,8 @@ public class FormPopupController implements Initializable {
     private Button btnCancel;
 
     @FXML
-    private Label titleLabel;
+    private Button btnUpdate;
+
     private Stage stage;
     private List<TextField> textfieldList;
     private List<String> fieldnameList;
@@ -73,32 +74,40 @@ public class FormPopupController implements Initializable {
 			this.stage.close();
 		});
 		
-		btnAdd.setOnAction(e -> {
-			List<String> fieldValues = new ArrayList<>();
-		    for (TextField textField : textfieldList) {
-		        fieldValues.add(textField.getText());
-		    }
+		if(btnAdd != null) {
+			btnAdd.setOnAction(e -> {
+				List<String> fieldValues = new ArrayList<>();
+			    for (TextField textField : textfieldList) {
+			        fieldValues.add(textField.getText());
+			    }
 
-		    DatabaseConnection con = DatabaseConnection.getInstance();
-		    List<Table> tables = con.getTablesWithColumns();
+			    DatabaseConnection con = DatabaseConnection.getInstance();
+			    List<Table> tables = con.getTablesWithColumns();
 
-		    boolean isValid = false;
-		    for (Table table : tables) {
-		        isValid = table.validateUpdate(fieldValues);
-		        if (isValid) {
-		        	con.addRowToTable(TableGenFromDB.getInstance().getTableName(), fieldValues);
-		            break;
-		        }
-		    }
+			    boolean isValid = false;
+			    for (Table table : tables) {
+			        isValid = table.validateUpdate(fieldValues);
+			        if (isValid) {
+			        	con.addRowToTable(TableGenFromDB.getInstance().getTableName(), fieldValues);
+			            break;
+			        }
+			    }
 
-		    con.close();
+			    con.close();
 
-		    if (isValid) {
-		        stage.close();
-		    } else {
-		    	//bao loi gi do
-		    }
-		});
+			    if (isValid) {
+			        stage.close();
+			    } else {
+			    	//bao loi gi do
+			    }
+			});
+		}
+		if(btnUpdate != null) {
+			btnUpdate.setOnAction(e->{
+				
+			});
+		}
 
+		
 	}
 }

@@ -1,5 +1,7 @@
 package com.example.designpattern.Controller;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +9,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXMLLoader;
 import com.example.designpattern.decorator.IScreenUnit;
 import com.example.tablehandler.TableGenFromDB;
+import com.example.testbasicform.BaseForm;
 import com.example.testbasicform.PersonForm;
 import com.example.testbasicform.film_categoryForm;
 
@@ -29,6 +32,7 @@ public class TableListController implements Initializable {
         this.tableList = new ArrayList<>(tableList);
     }
     private List<Button> tableListButton = new ArrayList<Button>();
+    private Object jobType;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		for ( int i =0; i< tableList.size(); i++) {
@@ -50,14 +54,25 @@ public class TableListController implements Initializable {
                 }
                 button.getStyleClass().add("table-button-choosen");
                 
-               
-//                TableGenFromDB controller = new TableGenFromDB();
-                film_categoryForm pf = new film_categoryForm();
-                pf.read();
-//        		table.setTableName( button.getText()); 
-//        		IScreenUnit.mScreen.setController(table);
-                
-//              MyController controller = new MyController();
+                String buttonText = button.getText();
+                String formClassName = buttonText + "Form";
+
+                try {
+                    // Load the class
+                    Class<?> formClass = Class.forName("com.example.testbasicform." + formClassName);
+
+                    // Create an instance of the class
+                    Constructor<?> constructor = formClass.getConstructor();
+                    BaseForm<?> formInstance = (BaseForm<?>) constructor.newInstance();
+                    formInstance.read();
+                    // Now you can use the created formInstance as needed
+                    // For example, call methods or perform actions related to the form
+
+                } catch (ClassNotFoundException | NoSuchMethodException | SecurityException
+                        | InstantiationException | IllegalAccessException | IllegalArgumentException
+                        | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
             });
 		}
 	}
