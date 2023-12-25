@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.example.designpattern.Controller.*;
 import com.example.designpattern.decorator.*;
 import com.example.designpattern.decorator.TableDetailButton;
+import com.example.designpattern.filegenerator.FileGenerator;
 import com.example.designpattern.table.Table;
 import com.example.tablehandler.TableGenFromDB;
 import com.example.testbasicform.Actor;
@@ -47,15 +48,13 @@ public class DesignpatternApplication extends Application {
 	}
 	
 	public static void main(String[] args) {
-		SpringApplication.run(DesignpatternApplication.class, args);
-		launch(args);
+//		SpringApplication.run(DesignpatternApplication.class, args);
+//		launch(args);
 		
-//		DatabaseConnection con = new DatabaseConnection();
-//        con.connect();
-//        List<Table> tables = con.getTablesWithColumns();
-//        for (Table table : tables) {
-//            System.out.println(table.generateJavaClass());
-//        }
-//        con.close();
+		DatabaseConnection con = DatabaseConnection.getInstance();
+        List<Table> tables = con.getTablesWithColumns();
+        FileGenerator gen = new FileGenerator("C:\\Users\\duong\\OneDrive\\Máy tính\\New folder");
+        gen.generateAll(System.getProperty("user.dir"), tables);
+        con.close();
 	}
 }
