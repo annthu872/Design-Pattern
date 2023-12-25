@@ -142,7 +142,7 @@ public class BaseForm<T> {
 
         sql.append(")");
         System.out.println(sql.toString());
-        //execute(sql.toString());
+        execute(sql.toString());
 	}
     
 	public void delete(ArrayList<String> rowData) {

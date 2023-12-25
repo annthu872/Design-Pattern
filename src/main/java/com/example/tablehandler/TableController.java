@@ -114,7 +114,7 @@ public class TableController implements Initializable {
                     ObservableList<String> rData = row.getItem();
                     rowData = new ArrayList<>(rData);
                     System.out.println(rowData);
-                    PopupWindow.display(currentForm.getColumnNames(),this.getFieldname());
+                    PopupWindow.display(currentForm,this.getFieldname());
                 }
                 
             row.setOnContextMenuRequested(revent -> {
@@ -125,11 +125,11 @@ public class TableController implements Initializable {
                     menu.getItems().addAll(menuItem1, menuItem2, menuItem3);
                     
                     menuItem1.setOnAction(e -> {
-                        PopupWindow.display(currentForm.getColumnNames());
+                        PopupWindow.display(currentForm);
                     });
                     
                     menuItem2.setOnAction(e ->{
-                    	PopupWindow.display(currentForm.getColumnNames(),this.getFieldname());
+                    	PopupWindow.display(currentForm,this.getFieldname());
                     });
                     
                     menuItem3.setOnAction(e ->{
@@ -154,8 +154,8 @@ public class TableController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 //		List<String> dataList = TableGenFromDB.getInstance().getFieldname();
 		
-		btnAdd.setOnAction(e -> PopupWindow.display(currentForm.getColumnNames()));
-		btnEdit.setOnAction(e -> PopupWindow.display(currentForm.getColumnNames(),this.getFieldname()));
+		btnAdd.setOnAction(e -> PopupWindow.display(currentForm));
+		btnEdit.setOnAction(e -> PopupWindow.display(currentForm,this.getFieldname()));
 		btnDelete.setOnAction(e ->{
 			ObservableList<String> selectedItem = myTable.getSelectionModel().getSelectedItem();
 			myTable.getItems().remove(selectedItem);

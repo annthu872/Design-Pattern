@@ -10,7 +10,9 @@ import java.util.ResourceBundle;
 import com.example.designpattern.DatabaseConnection;
 import com.example.designpattern.DesignpatternApplication;
 import com.example.designpattern.table.Table;
+import com.example.tablehandler.TableController;
 import com.example.tablehandler.TableGenFromDB;
+import com.example.testbasicform.BaseForm;
 
 import javafx.scene.*;
 import javafx.fxml.FXML;
@@ -38,12 +40,13 @@ public class FormPopupController implements Initializable {
     private List<TextField> textfieldList;
     private List<String> fieldnameList;
     private List<String> data;
-    
-    public FormPopupController(Stage stage, List<String> fieldnameList, List<String> data) {
-        this.fieldnameList = new ArrayList<>(fieldnameList);
+    private BaseForm bf;
+    public FormPopupController(Stage stage, BaseForm bf, List<String> data) {
+        this.fieldnameList = new ArrayList<>(bf.getColumnNames());
         this.stage = stage;
         this.textfieldList = new ArrayList<TextField>();
         this.data = data;
+        this.bf = bf;
     }
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -76,7 +79,7 @@ public class FormPopupController implements Initializable {
 		
 		if(btnAdd != null) {
 			btnAdd.setOnAction(e -> {
-				List<String> fieldValues = new ArrayList<>();
+				ArrayList<String> fieldValues = new ArrayList<>();
 			    for (TextField textField : textfieldList) {
 			        fieldValues.add(textField.getText());
 			    }
@@ -88,7 +91,10 @@ public class FormPopupController implements Initializable {
 			    for (Table table : tables) {
 			        isValid = table.validateUpdate(fieldValues);
 			        if (isValid) {
-			        	con.addRowToTable(TableGenFromDB.getInstance().getTableName(), fieldValues);
+//			        	con.addRowToTable(TableGenFromDB.getInstance().getTableName(), fieldValues);
+			        	bf.add(fieldValues);
+			        	TableController.getInstance().addRow(fieldValues);
+//			        	bf.read(TableController.getInstance());
 			            break;
 			        }
 			    }
