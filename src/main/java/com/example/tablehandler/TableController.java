@@ -63,9 +63,9 @@ public class TableController implements Initializable {
     public ObservableList<ObservableList<String>> getTableData() {
     	return tabledata;
     }*/
-    public void addRow(ObservableList<String> newData) {
-    	newData = FXCollections.observableArrayList();
-    	myTable.getItems().add(newData);
+    public void addRow(ArrayList<String> newData) {
+        ObservableList<String> newRow = FXCollections.observableArrayList(newData);
+        myTable.getItems().add(newRow);
     }
     
     private static TableController instance;
