@@ -3,6 +3,7 @@ package com.example.testbasicform;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.security.Timestamp;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -109,14 +110,37 @@ public class BaseForm<T> {
         }
     }
     
-	public void add(String addClause) {
+	public void add(ArrayList<String> values) {
 		StringBuilder sql = new StringBuilder("INSERT INTO " + tableName + " (");
 		for (String columnName : columnNames) {
             sql.append(columnName).append(", ");
         }
         sql.setLength(sql.length() - 2); // Remove the last comma
-        sql.append(") VALUES ");
-        sql.append(addClause);
+        sql.append(") VALUES (");
+        for (int i = 0; i < values.size(); i++) {
+            String value = values.get(i);
+            String columnName = getColumnNames().get(i);
+
+            try {
+                Field field = clazz.getDeclaredField(columnName);
+                Class<?> fieldType = field.getType();
+
+                // Assuming the values need to be treated differently based on their types
+                if (fieldType == String.class || fieldType == Timestamp.class) {
+                    sql.append("'").append(value).append("'");
+                } else {
+                    sql.append(value);
+                }
+
+                if (i < values.size() - 1) {
+                    sql.append(", ");
+                }
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+        }
+
+        sql.append(")");
         System.out.println(sql.toString());
         //execute(sql.toString());
 	}
