@@ -68,6 +68,10 @@ public class BaseForm<T> {
     	return columnNames;
     }
     
+    public Class<T> getClazz() {
+        return clazz;
+    }
+    
     public void getAllAttributes(Class<?> clazz) {
         ArrayList<String> attributeNames = new ArrayList<>();
         Field[] fields = clazz.getDeclaredFields();

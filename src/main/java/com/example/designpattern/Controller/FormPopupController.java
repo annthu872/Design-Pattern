@@ -4,6 +4,7 @@ import java.io.IOException;
 import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -83,13 +84,16 @@ public class FormPopupController implements Initializable {
 			    for (TextField textField : textfieldList) {
 			        fieldValues.add(textField.getText());
 			    }
+		        System.out.print(fieldValues);
 
 			    DatabaseConnection con = DatabaseConnection.getInstance();
 			    List<Table> tables = con.getTablesWithColumns();
 
 			    boolean isValid = false;
 			    for (Table table : tables) {
-			        isValid = table.validateUpdate(fieldValues);
+			    	BaseForm<?> curForm = TableController.getInstance().getForm();
+			    	if (!table.getTableName().equals(curForm.getTableName())) continue;
+			        isValid = table.validateAdd(fieldValues);
 			        if (isValid) {
 //			        	con.addRowToTable(TableGenFromDB.getInstance().getTableName(), fieldValues);
 			        	bf.add(fieldValues);
@@ -99,8 +103,6 @@ public class FormPopupController implements Initializable {
 			        }
 			    }
 
-			    con.close();
-
 			    if (isValid) {
 			        stage.close();
 			    } else {
@@ -108,12 +110,39 @@ public class FormPopupController implements Initializable {
 			    }
 			});
 		}
-		if(btnUpdate != null) {
-			btnUpdate.setOnAction(e->{
-				
-			});
-		}
+		if (btnUpdate != null) {
+		    btnUpdate.setOnAction(e -> {
+		    	String input = "1, ACADEMY, A Epic Drama of a Feminist And a Mad Scientist who must Battle a Teacher in The Canadian Rockies";
+		    	String[] splitValues = input.split(", ");
+		        ArrayList<String> oldFieldValues = new ArrayList<>(Arrays.asList(splitValues));
+		        ArrayList<String> newFieldValues = new ArrayList<>();
+		        for (TextField textField : textfieldList) {
+		            newFieldValues.add(textField.getText());
+		        }
+		        System.out.println("------------------------");
+		        System.out.println(oldFieldValues);
+		        System.out.println(newFieldValues);
 
 		
+		        DatabaseConnection con = DatabaseConnection.getInstance();
+		        List<Table> tables = con.getTablesWithColumns();
+
+		        boolean isValid = false;
+		        for (Table table : tables) {
+		        	BaseForm<?> curForm = TableController.getInstance().getForm();
+			    	if (!table.getTableName().equals(curForm.getTableName())) continue;
+		            isValid = table.validateUpdate(bf.getClazz(), oldFieldValues, newFieldValues);
+		            if (isValid) {
+
+		            }
+		        }
+
+		        if (isValid) {
+		            stage.close();
+		        } else {
+
+		        }
+		    });
+		}
 	}
 }

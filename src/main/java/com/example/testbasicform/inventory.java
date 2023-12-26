@@ -6,26 +6,34 @@ import org.jetbrains.annotations.NotNull;
 import jakarta.persistence.GenerationType;
 import java.sql.Timestamp;
 
-public class film_category {
+public class inventory {
 
 	@NotNull
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String inventory_id;
+	@NotNull
     private Integer film_id;
 	@NotNull
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Byte category_id;
+    private Byte store_id;
 	@NotNull
     private Timestamp last_update;
 
-    public film_category() {
+    public inventory() {
     }
 
-    public film_category(Integer film_id, Byte category_id, Timestamp last_update) {
+    public inventory(String inventory_id, Integer film_id, Byte store_id, Timestamp last_update) {
+        this.inventory_id = inventory_id;
         this.film_id = film_id;
-        this.category_id = category_id;
+        this.store_id = store_id;
         this.last_update = last_update;
+	}
+
+	public void setinventory_id(String inventory_id) {
+		this.inventory_id = inventory_id;
+	}
+	public String getinventory_id() {
+		return this.inventory_id;
 	}
 
 	public void setfilm_id(Integer film_id) {
@@ -35,11 +43,11 @@ public class film_category {
 		return this.film_id;
 	}
 
-	public void setcategory_id(Byte category_id) {
-		this.category_id = category_id;
+	public void setstore_id(Byte store_id) {
+		this.store_id = store_id;
 	}
-	public Byte getcategory_id() {
-		return this.category_id;
+	public Byte getstore_id() {
+		return this.store_id;
 	}
 
 	public void setlast_update(Timestamp last_update) {

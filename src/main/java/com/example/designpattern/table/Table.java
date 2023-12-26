@@ -8,6 +8,7 @@ import java.util.Set;
 import org.apache.commons.lang3.text.WordUtils;
 
 import com.example.designpattern.column.Column;
+import com.example.designpattern.notification.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -46,6 +47,10 @@ public class Table implements Serializable {
             if (!column.isNullable()) {
                 imports.add("import org.jetbrains.annotations.NotNull;");
             }
+            
+            if (!column.isTimestamp()) {
+            	imports.add("import java.sql.Timestamp;");
+            }
         }
 
         StringBuilder importBuilder = new StringBuilder();
@@ -66,14 +71,14 @@ public class Table implements Serializable {
     }
 
 	public String generateEntityClass() {
-		StringBuilder classBuilder = new StringBuilder("package entity;\n\n");
+		StringBuilder classBuilder = new StringBuilder("package com.example.testbasicform;\n\n");
 		classBuilder.append(generateImports());
 
         classBuilder.append("public class " + tableName + " {\n\n");
 
         // Generate variables
         for (Column column : columnList) {
-        	//classBuilder.append(column.generateAnnotations());
+        	classBuilder.append(column.generateAnnotations());
             classBuilder.append("    private ").append(column.getClassName()).append(" ").append(column.getFieldName()).append(";\n");
         }
 
@@ -124,21 +129,90 @@ public class Table implements Serializable {
         return formClass.toString();
     }
 	
-	public boolean validateUpdate(List<String> values) {
-        if (values.size() != columnList.size()) {
-            return false;
-        }
-
-        for (int i = 0; i < columnList.size(); i++) {
+	public String validateTypeAndNotNull(List<String> values) {
+		String message = "";
+		for (int i = 0; i < columnList.size(); i++) {
             Column column = columnList.get(i);
             String value = values.get(i);
 
-            if (!column.validateUpdate(value)) {
-                return false;
+            if (!column.validateUpdate(value).equals("")) {
+            	message += column.validateUpdate(value);
             }
         }
-        return true;
+        
+        return message;
     }
+	
+	public String validatePrimaryKeyUpdate(Class object, List<String> oldValues, List<String> newValues) {
+	    for (int i = 0; i < columnList.size(); i++) {
+	        Column column = columnList.get(i);
+	        if (column.isPrimaryKey()) {
+	            String oldValue = oldValues.get(i);
+	            String newValue = newValues.get(i);
+	            
+	            // Check if the primary key value has changed
+	            if (!oldValue.equals(newValue)) {
+	                // Get the field name using reflection and check the annotation to verify if it's a primary key
+	                try {
+	                    java.lang.reflect.Field field = object.getDeclaredField(column.getFieldName());
+	                    field.setAccessible(true);
+	                    jakarta.persistence.Id annotation = field.getAnnotation(jakarta.persistence.Id.class);
+	                    if (annotation != null) {
+	                        return "Can not change value of " + column.getClassName(); 
+	                    }
+	                } catch (NoSuchFieldException e) {
+	                    e.printStackTrace();
+	                }
+	            }
+	        }
+	    }
+	    return "";
+	}
+
+	public boolean validateAdd(List<String> values) {
+		String message = validateTypeAndNotNull(values);
+		if(!message.equals("")) {
+			Notification noti = new Notification();
+	        noti.setMessage("Invalid input!\n" + message);
+	        noti.setNotiType(new ErrorNotification());
+	        noti.display();
+	        return false;
+		}
+		
+		Notification noti = new Notification();
+        noti.setMessage("Add success!");
+        noti.setNotiType(new InformationNotification());
+        noti.display();
+
+		return true;
+	}
+	
+	public boolean validateUpdate(Class object, List<String> oldValues, List<String> newValues) {
+		String messageValidateTypeAndNotNull = validateTypeAndNotNull(newValues);
+		if(!messageValidateTypeAndNotNull.equals("")) {
+			Notification noti = new Notification();
+	        noti.setMessage("Invalid input!\n" + messageValidateTypeAndNotNull);
+	        noti.setNotiType(new ErrorNotification());
+	        noti.display();
+	        return false;
+		}
+		
+		String messageValidatePrimaryKeyUpdate = validatePrimaryKeyUpdate(object, oldValues, newValues);
+		if(!messageValidatePrimaryKeyUpdate.equals("")) {
+			Notification noti = new Notification();
+	        noti.setMessage("Can not change primary key value!\n" + messageValidatePrimaryKeyUpdate);
+	        noti.setNotiType(new ErrorNotification());
+	        noti.display();
+	        return false;
+		}
+		
+		Notification noti = new Notification();
+        noti.setMessage("Add success!");
+        noti.setNotiType(new InformationNotification());
+        noti.display();
+
+		return true;
+	}
 	
 	public String toString() {
         StringBuilder tableString = new StringBuilder("Table Name: " + tableName + "\n");
