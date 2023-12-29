@@ -49,7 +49,13 @@ public class DesignpatternApplication extends Application {
 	}
 	
 	public static void main(String[] args) {
-		SpringApplication.run(DesignpatternApplication.class, args);
-		launch(args);		
+//		SpringApplication.run(DesignpatternApplication.class, args);
+		Authentication a = Authentication.getInstance();
+		a.setTableName("hi");
+		a.createResetPasswordTable();
+		a.addActiveFieldtoTable();
+		launch(args);	
+
+		
 	}
 }

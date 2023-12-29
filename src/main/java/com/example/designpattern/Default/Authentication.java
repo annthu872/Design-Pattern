@@ -3,12 +3,11 @@ package com.example.designpattern.Default;
 import java.lang.reflect.Field;
 import com.example.designpattern.*;
 
+import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 public class Authentication {
-	private String tableName = "users";
-	private Class<? extends User> userClass;
 	private static Authentication instance;
 	DatabaseConnection conn = DatabaseConnection.getInstance();
     public static synchronized Authentication getInstance() {
@@ -17,10 +16,49 @@ public class Authentication {
         }
         return instance;
     }
-    private Authentication() {}
+
+	public void setResetPasswordTable(String resetPasswordTable) {
+		this.resetPasswordTableName = resetPasswordTable;
+	}
+	private String userstableName = "users";
+
+	private String resetPasswordTableName = "ResetPasswordTable";
+	private String usernameColumnName="username";
+	private String passwordColumnName = "password";
+	private String activeColummnName = "active";
+	private String primaryKeyName = "id";
+	private String questionResetPasswordColumnName = "question";
+	private String answerResetPasswordColumnName = "answer";
+	private String primaryKeyDatatype = "int";
+	
+	public void setTableName(String tableName) {
+		this.userstableName = tableName;
+	}
+	public void setPrimaryKeyDatatype(String datatype) {
+		this.primaryKeyDatatype = datatype;
+	}
+	public void setUsernameColumnName(String usernameColumnName) {
+		this.usernameColumnName = usernameColumnName;
+	}
+	public void setPasswordColumnName(String passwordColumnName) {
+		this.passwordColumnName = passwordColumnName;
+	}
+	public void setActiveColummnName(String activeColummnName) {
+		this.activeColummnName = activeColummnName;
+	}
+	public void setPrimaryKeyName(String primaryKeyName) {
+		this.primaryKeyName = primaryKeyName;
+	}
+	public void setQuestionResetPasswordColumnName(String questionResetPasswordColumnName) {
+		this.questionResetPasswordColumnName = questionResetPasswordColumnName;
+	}
+	public void setAnswerResetPasswordColumnName(String answerResetPasswordColumnName) {
+		this.answerResetPasswordColumnName = answerResetPasswordColumnName;
+	}
+	
+	
     
-	public void createTableToDatabase(Class<? extends User> userClass) throws SQLException {
-		this.tableName = tableName;
+	public void createDefaultUserTableToDatabase(Class<? extends User> userClass) throws SQLException {
 		
 		Statement  stmt = this.conn.connection.createStatement();
 		StringBuilder createTableStatement = new StringBuilder("CREATE TABLE IF NOT EXISTS users (");
@@ -46,15 +84,37 @@ public class Authentication {
         
         System.out.println(createTableStatement);
         stmt.execute(createTableStatement.toString());
-        createResetPasswordTable("users");
-
+        createResetPasswordTable();
 	}
-	public void createResetPasswordTable(String UserTableName) {
-		this.tableName = tableName;
+	
+	public boolean addActiveFieldtoTable() {
+		try {
+			if (!columnExists(this.userstableName, this.activeColummnName)) {
+			    // Column does not exist, add it
+				String sql = "ALTER TABLE " + this.userstableName + " ADD COLUMN " + this.activeColummnName + " BIT" ;
+			    try (Statement statement = this.conn.connection.createStatement()) {
+			        statement.executeUpdate(sql);
+			        System.out.println("Column added successfully");
+			        return true;
+			    }
+			} else {
+			    System.out.println("Column already exists");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	public boolean columnExists( String tableName, String columnName) throws SQLException {
+        DatabaseMetaData metadata = this.conn.connection.getMetaData();
+        try (ResultSet resultSet = metadata.getColumns(null, null, tableName, columnName)) {
+            return resultSet.next(); // true if the column exists, false otherwise
+        }
+    }
+	public void createResetPasswordTable() {
 		StringBuilder createTableStatement = new StringBuilder("");
-		createTableStatement.append("CREATE TABLE ResetPasswordTable (id INT PRIMARY KEY, question VARCHAR(255), answer VARCHAR(255));\r\n");
-	        		
-	        
+		createTableStatement.append("CREATE TABLE  IF NOT EXISTS "+this.resetPasswordTableName +" ("+ this.primaryKeyName+" "+javaTypeToSqlType(this.primaryKeyDatatype) + " PRIMARY KEY, question VARCHAR(255), answer VARCHAR(255));\r\n");
+	      
 	        System.out.println(createTableStatement);
 	        Statement stmt;
 			try {
@@ -64,9 +124,9 @@ public class Authentication {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			createTableStatement = new StringBuilder("ALTER TABLE ResetPasswordTable\r\n"
+			createTableStatement = new StringBuilder("ALTER TABLE "+this.resetPasswordTableName+ "\r\n"
 		    		+ "ADD CONSTRAINT FK_RPIUsers\r\n"
-		    		+ "FOREIGN KEY (id) REFERENCES users(id);");
+		    		+ "FOREIGN KEY ("+this.primaryKeyName+") REFERENCES "+this.userstableName +"("+this.primaryKeyName+");");
 			
 			System.out.println(createTableStatement);
 			try {
@@ -95,8 +155,25 @@ public class Authentication {
             return "";
         }
     }
+	public static String javaTypeToSqlType(String javaType) {
+        switch (javaType) {
+        case "String":
+            return "VARCHAR(255)";
+        case "int":
+            return "INT";
+        case "boolean":
+            return "BIT";
+        case "float":
+            return "FLOAT";
+        case "double":
+            return "DOUBLE";
+        default:
+            return "";
+        }
+    }
+    
 	public boolean checkUsernameExist (String username) {
-		String sql = "SELECT * FROM "+this.tableName+ " Where username = '"+ username+"'";
+		String sql = "SELECT * FROM "+this.userstableName+ " Where "+this.usernameColumnName+" = '"+ username+"'";
 		 System.out.println(sql);
 		Statement st;
 		try {
@@ -110,8 +187,8 @@ public class Authentication {
 		}
 		return false;
 	}
-	public int getAccountId (String username) {
-		String sql = "SELECT * FROM "+this.tableName+ " Where username = '"+ username+"'";
+	public String getAccountId (String username) {
+		String sql = "SELECT * FROM "+this.userstableName+ " Where "+this.usernameColumnName+" = '"+ username+"'";
 		 System.out.println(sql);
 		Statement st;
 		try {
@@ -119,16 +196,22 @@ public class Authentication {
 	        ResultSet rs = st.executeQuery(sql);
 	        System.out.println("checkSignUpAccountExist: "+ rs);
 	        if(rs.next()) {
-	        	return rs.getInt("id");
+	        	
+	        	Object columnValue = rs.getObject(this.primaryKeyName);
+                String columnValueAsString = columnValue.toString();
+                if(this.primaryKeyDatatype == "String") {
+                	return "'"+columnValueAsString+"'"; 
+                }
+	        	return columnValueAsString;
 	        }
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return -1;
+		return null;
 	}
 	 public boolean checkSignIn(String username, String password) {
-		 String sql = "SELECT * FROM "+this.tableName+ " Where username = '"+ username + "' and password = '"+ password +"' ";
+		 String sql = "SELECT * FROM "+this.userstableName+ " Where "+this.usernameColumnName+" = '"+ username + "' and "+this.passwordColumnName+" = '"+ password +"' ";
 		 System.out.println(sql);
 			Statement st;
 			try {
@@ -146,7 +229,8 @@ public class Authentication {
 			return false;
 	 }
 	 public boolean setActiveforSignInAccount(String username) {
-		 String sql = "Update "+this.tableName+ " set active = 1 Where id = "+ getAccountId(username)+ ";";
+		 
+		 String sql = "Update "+this.userstableName+ " set "+this.activeColummnName+" = 1  Where id = "+ getAccountId(username)+ ";";
 		 System.out.println(sql);
 			Statement st;
 			try {
@@ -160,7 +244,7 @@ public class Authentication {
 			return false;
 	 }
 	public boolean createAccount(String username, String password, String question, String answer) {
-        	String sql = "INSERT INTO " + this.tableName + " (username, password) VALUES ('" + username +"','"+ password+"' )" ;
+        	String sql = "INSERT INTO " + this.userstableName + " ("+this.usernameColumnName+","+this.passwordColumnName+") VALUES ('" + username +"','"+ password+"' )" ;
    		 	System.out.println(sql);
         	Statement st;
     		try {
@@ -169,9 +253,9 @@ public class Authentication {
     	        if(rs != 0) 
     	        {	
     	        	
-    	        	int id = getAccountId(username);
-    	        	if(id != -1) {
-        	        	sql = "INSERT INTO ResetPasswordTable (id , question, answer) VALUES ( "+id+" , '" + question +"','"+ answer+"' )" ;
+    	        	String id = getAccountId(username);
+    	        	if(id != null) {
+        	        	sql = "INSERT INTO "+ this.resetPasswordTableName+ " ("+this.primaryKeyName+" , "+this.questionResetPasswordColumnName+" ,"+this.answerResetPasswordColumnName+" ) VALUES ( "+id+" , '" + question +"','"+ answer+"' )" ;
         	        	System.out.println(sql);
         	        	st = this.conn.connection.createStatement();
             	        rs = st.executeUpdate(sql);
@@ -186,8 +270,8 @@ public class Authentication {
 			return false;
 	}
 	public String loadQuestionResetPassword(String username) {
-		int id = this.getAccountId(username);
-		String sql = "SELECT * FROM ResetPasswordTable Where id ="+ id +";";
+		String id = this.getAccountId(username);
+		String sql = "SELECT * FROM "+  this.resetPasswordTableName+" Where "+this.primaryKeyName +" ="+ id +";";
 		 System.out.println(sql);
 		Statement st;
 		try {
@@ -204,7 +288,7 @@ public class Authentication {
 		return null;
 	}
 	public boolean checkResetPasswordAnswerCorrect(String username, String answer) {
-		int id = this.getAccountId(username);
+		String id = this.getAccountId(username);
 		String sql = "SELECT * FROM ResetPasswordTable Where id ="+ id +";";
 		 System.out.println(sql);
 		Statement st;
@@ -225,8 +309,7 @@ public class Authentication {
 		return false;
 	}
 	public boolean resetPassword(String username, String password) {
-		int id = this.getAccountId(username);
-		String sql = "Update "+this.tableName+ " set password = '"+ password +"' Where id = "+ getAccountId(username)+ ";";
+		String sql = "Update "+this.userstableName+ " set password = '"+ password +"' Where id = "+ getAccountId(username)+ ";";
 		 System.out.println(sql);
 			Statement st;
 			try {

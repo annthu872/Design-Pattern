@@ -9,6 +9,7 @@ import com.example.designpattern.decorator.HeadingUIUnit;
 import com.example.designpattern.decorator.TableDetailButton;
 import com.example.designpattern.decorator.TableDetailUIUnit;
 import com.example.designpattern.decorator.TableListUIUnit;
+import com.example.designpattern.notification.ErrorNotification;
 import com.example.designpattern.notification.InformationNotification;
 import com.example.designpattern.notification.Notification;
 import com.example.designpattern.notification.WarningNotification;
@@ -71,7 +72,12 @@ public class SignUpController implements Initializable {
 			System.out.println("txtQuestion:"+txtQuestion.getText());
 			System.out.println("txtAnswer:"+txtAnswer.getText());
 			Notification noti = new Notification();
-
+			if(txtUsername.getText().equals("") || txtPassword.getText().equals("") || txtQuestion.getText().equals("")|| txtAnswer.getText().equals("")) {
+				noti.setMessage("Can not leave field empty");
+				noti.setNotiType(new ErrorNotification());
+				noti.display();
+				return;
+			}
 			Authentication auth = Authentication.getInstance();
 			if(!auth.checkUsernameExist(txtUsername.getText())) {
 				if(auth.createAccount(txtUsername.getText(), txtPassword.getText(), txtQuestion.getText(), txtAnswer.getText()))
