@@ -28,13 +28,10 @@ public class DesignpatternApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-
-			DatabaseConnection con = DatabaseConnection.getInstance();
-			
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
-			SignInController controller = new SignInController();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/DatabaseConnection.fxml"));
+			DatabaseConnectionController controller = new DatabaseConnectionController();
 			loader.setController(controller);
-			Parent root = loader.load();
+            Parent root = loader.load();
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(css);
@@ -49,13 +46,14 @@ public class DesignpatternApplication extends Application {
 	}
 	
 	public static void main(String[] args) {
-//		SpringApplication.run(DesignpatternApplication.class, args);
+	SpringApplication.run(DesignpatternApplication.class, args);
 		Authentication a = Authentication.getInstance();
 		a.setTableName("hi");
 		a.createResetPasswordTable();
 		a.addActiveFieldtoTable();
 		launch(args);	
 
-		
+		SpringApplication.run(DesignpatternApplication.class, args);
+		launch(args);
 	}
 }
