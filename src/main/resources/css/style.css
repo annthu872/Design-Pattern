@@ -119,3 +119,14 @@
 .normal-label{
 	 -fx-fill: black;
 }
+
+.combo-box {
+    -fx-font-family: "System Bold";
+    -fx-font-size: 21px;
+    -fx-background-color: -fx-text-box-border, white ;
+    -fx-background-insets: 0, 0 0 1 0 ;
+    -fx-background-radius: 0 ;
+}
+.combo-box:focused {
+    -fx-background-color: -fx-focus-color, white ;
+}

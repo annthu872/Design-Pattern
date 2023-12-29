@@ -28,10 +28,14 @@ public class DesignpatternApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/DatabaseConnection.fxml"));
+			DatabaseConnectionController controller = new DatabaseConnectionController();
+			loader.setController(controller);
+            Parent root = loader.load();
 
-			DatabaseConnection con = DatabaseConnection.getInstance();
-			
-			Parent root = new HeadingUIUnit(new TableListUIUnit( new TableUIUnit())).getUI();
+//			DatabaseConnection con = DatabaseConnection.getInstance();
+//			
+//			Parent root = new HeadingUIUnit(new TableListUIUnit( new TableUIUnit())).getUI();
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(css);
@@ -46,13 +50,13 @@ public class DesignpatternApplication extends Application {
 	}
 	
 	public static void main(String[] args) {
-//		SpringApplication.run(DesignpatternApplication.class, args);
-//		launch(args);
+		SpringApplication.run(DesignpatternApplication.class, args);
+		launch(args);
 		
-		DatabaseConnection con = DatabaseConnection.getInstance();
-        List<Table> tables = con.getTablesWithColumns();
-        FileGenerator gen = new FileGenerator("C:\\Users\\duong\\OneDrive\\Máy tính\\New folder");
-        gen.generateAll(System.getProperty("user.dir"), tables);
-        con.close();
+//		DatabaseConnection con = DatabaseConnection.getInstance();
+//        List<Table> tables = con.getTablesWithColumns();
+//        FileGenerator gen = new FileGenerator("C:\\Users\\duong\\OneDrive\\Máy tính\\New folder");
+//        gen.generateAll(System.getProperty("user.dir"), tables);
+//        con.close();
 	}
 }
