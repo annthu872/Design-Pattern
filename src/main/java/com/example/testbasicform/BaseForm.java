@@ -3,29 +3,21 @@ package com.example.testbasicform;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 import com.example.designpattern.DatabaseConnection;
 import com.example.tablehandler.TableController;
-import com.example.tablehandler.TableUIHandle;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.beans.property.SimpleStringProperty;
 
 public class BaseForm<T> {
 	Connection conn = DatabaseConnection.connection;
-	
-	//TableController tableInstance = TableController.getInstance();
 	
 	private ArrayList<String> columnNames = new ArrayList<String>();
 	private ObservableList<ObservableList<String>> tableData = FXCollections.observableArrayList();
@@ -58,6 +50,10 @@ public class BaseForm<T> {
     
     public String getTableName() {
     	return tableName;
+    }
+    
+    public ArrayList<T> getData(){
+    	return data;
     }
     
     public ObservableList<ObservableList<String>> getTableData(){
@@ -128,8 +124,6 @@ public class BaseForm<T> {
             try {
                 Field field = clazz.getDeclaredField(columnName);
                 Class<?> fieldType = field.getType();
-
-                // Assuming the values need to be treated differently based on their types
                 if (fieldType == String.class || fieldType == Timestamp.class) {
                     sql.append("'").append(value).append("'");
                 } else {
@@ -163,7 +157,6 @@ public class BaseForm<T> {
 	            Field field = clazz.getDeclaredField(columnName);
 	            Class<?> fieldType = field.getType();
 
-	            // Assuming the values need to be treated differently based on their types
 	            if (fieldType == String.class) {
 	                conditionBuilder.append(columnName).append(" = '").append(value).append("'");
 	            } else if (fieldType == int.class || fieldType == boolean.class || fieldType == double.class) {
@@ -182,6 +175,9 @@ public class BaseForm<T> {
 	}
 	
 	public void update(String setClause, String condition) {
+		StringBuilder conditionBuilder = new StringBuilder();
+		StringBuilder setClauseBuilder = new StringBuilder();
+		
 		String sql = "UPDATE " + tableName + " SET " + setClause + " WHERE " + condition;
 		//execute(sql.toString());
 	}
@@ -248,10 +244,6 @@ public class BaseForm<T> {
         data = executeQueryAndParse(sql);
         setTableData(convertObjectListToObservableList(data));
         tableInstance.setForm(this);
-        //tableInstance.setcolumnNames(this.getColumnNames());
-		//tableInstance.setTableData(this.getTableData());
-		//tableInstance.updateData();
-        //tableInstance.setForm(this);
     }
 
 }
