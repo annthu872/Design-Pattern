@@ -33,6 +33,15 @@ public class Table implements Serializable {
 		return this.tableName;	
 	}
 	
+	public String getClassNameByColumnName(String columnName) {
+	    for (Column column : columnList) {
+	        if (column.getColumnName().equalsIgnoreCase(columnName)) {
+	            return column.getClassName();
+	        }
+	    }
+	    return null;
+	}
+	
 	private String generateImports() {
         Set<String> imports = new HashSet<>();
 
