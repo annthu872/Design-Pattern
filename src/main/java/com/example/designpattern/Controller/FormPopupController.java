@@ -14,6 +14,7 @@ import com.example.designpattern.table.Table;
 import com.example.tablehandler.TableController;
 import com.example.tablehandler.TableGenFromDB;
 import com.example.testbasicform.BaseForm;
+import com.example.designpattern.notification.*;
 
 import javafx.scene.*;
 import javafx.fxml.FXML;
@@ -84,7 +85,6 @@ public class FormPopupController implements Initializable {
 			    for (TextField textField : textfieldList) {
 			        fieldValues.add(textField.getText());
 			    }
-		        System.out.print(fieldValues);
 
 			    DatabaseConnection con = DatabaseConnection.getInstance();
 			    List<Table> tables = con.getTablesWithColumns();
@@ -93,7 +93,7 @@ public class FormPopupController implements Initializable {
 			    for (Table table : tables) {
 			    	BaseForm<?> curForm = TableController.getInstance().getForm();
 			    	if (!table.getTableName().equals(curForm.getTableName())) continue;
-			        isValid = table.validateAdd(fieldValues);
+			        isValid = table.validateAdd(curForm.getColumnNames(), curForm.getTableData(), fieldValues);
 			        if (isValid) {
 //			        	con.addRowToTable(TableGenFromDB.getInstance().getTableName(), fieldValues);
 			        	bf.add(fieldValues);
