@@ -6,33 +6,24 @@ import org.jetbrains.annotations.NotNull;
 import jakarta.persistence.GenerationType;
 import java.sql.Timestamp;
 
-public class film_category {
+public class category {
 
-	@NotNull
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer film_id;
 	@NotNull
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Byte category_id;
 	@NotNull
+    private String name;
+	@NotNull
     private Timestamp last_update;
 
-    public film_category() {
+    public category() {
     }
 
-    public film_category(Integer film_id, Byte category_id, Timestamp last_update) {
-        this.film_id = film_id;
+    public category(Byte category_id, String name, Timestamp last_update) {
         this.category_id = category_id;
+        this.name = name;
         this.last_update = last_update;
-	}
-
-	public void setfilm_id(Integer film_id) {
-		this.film_id = film_id;
-	}
-	public Integer getfilm_id() {
-		return this.film_id;
 	}
 
 	public void setcategory_id(Byte category_id) {
@@ -40,6 +31,13 @@ public class film_category {
 	}
 	public Byte getcategory_id() {
 		return this.category_id;
+	}
+
+	public void setname(String name) {
+		this.name = name;
+	}
+	public String getname() {
+		return this.name;
 	}
 
 	public void setlast_update(Timestamp last_update) {

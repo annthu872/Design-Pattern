@@ -42,7 +42,7 @@ public class DatabaseConnection {
 	    connectionThread.start();
 	}
 	
-	private void ensureConnection() {
+	public void ensureConnection() {
         if (connection == null) {
             connect();
         }

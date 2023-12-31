@@ -3,28 +3,21 @@ package com.example.testbasicform;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 import com.example.designpattern.DatabaseConnection;
 import com.example.tablehandler.TableController;
-import com.example.tablehandler.TableUIHandle;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.beans.property.SimpleStringProperty;
 
 public class BaseForm<T> {
 	Connection conn = DatabaseConnection.connection;
-	
-	TableController tableInstance = TableController.getInstance();
 	
 	private ArrayList<String> columnNames = new ArrayList<String>();
 	private ObservableList<ObservableList<String>> tableData = FXCollections.observableArrayList();
@@ -55,12 +48,24 @@ public class BaseForm<T> {
     	tableData = dt;
     }
     
+    public String getTableName() {
+    	return tableName;
+    }
+    
+    public ArrayList<T> getData(){
+    	return data;
+    }
+    
     public ObservableList<ObservableList<String>> getTableData(){
     	return tableData;
     }
     
     public ArrayList<String> getColumnNames() {
     	return columnNames;
+    }
+    
+    public Class<T> getClazz() {
+        return clazz;
     }
     
     public void getAllAttributes(Class<?> clazz) {
@@ -96,32 +101,83 @@ public class BaseForm<T> {
     }
     
     public void execute(String sql) {
-    	try {
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+        try {
+            Statement stmt = conn.createStatement();
+            int affectedRows = stmt.executeUpdate(sql);
+            System.out.println("Affected rows: " + affectedRows);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     
-	public void add(String addClause) {
+	public void add(ArrayList<String> values) {
 		StringBuilder sql = new StringBuilder("INSERT INTO " + tableName + " (");
 		for (String columnName : columnNames) {
             sql.append(columnName).append(", ");
         }
         sql.setLength(sql.length() - 2); // Remove the last comma
-        sql.append(") VALUES ");
-        sql.append(addClause);
+        sql.append(") VALUES (");
+        for (int i = 0; i < values.size(); i++) {
+            String value = values.get(i);
+            String columnName = getColumnNames().get(i);
+
+            try {
+                Field field = clazz.getDeclaredField(columnName);
+                Class<?> fieldType = field.getType();
+                if (fieldType == String.class || fieldType == Timestamp.class) {
+                    sql.append("'").append(value).append("'");
+                } else {
+                    sql.append(value);
+                }
+
+                if (i < values.size() - 1) {
+                    sql.append(", ");
+                }
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+        }
+
+        sql.append(")");
         System.out.println(sql.toString());
-        //execute(sql.toString());
+        execute(sql.toString());
 	}
     
-	public void delete(String condition) {
-		String sql = "DELETE FROM " + tableName + " WHERE " + condition;
-		//execute(sql);
+	public void delete(ArrayList<String> rowData) {
+	    StringBuilder conditionBuilder = new StringBuilder();
+	    for (int i = 0; i < columnNames.size(); i++) {
+	        String columnName = columnNames.get(i);
+	        String value = rowData.get(i);
+
+	        if (i > 0) {
+	            conditionBuilder.append(" AND ");
+	        }
+
+	        try {
+	            Field field = clazz.getDeclaredField(columnName);
+	            Class<?> fieldType = field.getType();
+
+	            if (fieldType == String.class) {
+	                conditionBuilder.append(columnName).append(" = '").append(value).append("'");
+	            } else if (fieldType == int.class || fieldType == boolean.class || fieldType == double.class) {
+	                conditionBuilder.append(columnName).append(" = ").append(value);
+	            } else {
+	                conditionBuilder.append(columnName).append(" = '").append(value).append("'");
+	            }
+	        } catch (NoSuchFieldException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    String condition = conditionBuilder.toString();
+	    String sql = "DELETE FROM " + tableName + " WHERE " + condition;
+        System.out.println(sql);
+		execute(sql);
 	}
 	
 	public void update(String setClause, String condition) {
+		StringBuilder conditionBuilder = new StringBuilder();
+		StringBuilder setClauseBuilder = new StringBuilder();
+		
 		String sql = "UPDATE " + tableName + " SET " + setClause + " WHERE " + condition;
 		//execute(sql.toString());
 	}
@@ -183,13 +239,11 @@ public class BaseForm<T> {
         }
     }
     
-    public void read() {
+    public void read(TableController tableInstance) {
         String sql = "SELECT * FROM " + tableName;
         data = executeQueryAndParse(sql);
         setTableData(convertObjectListToObservableList(data));
-        tableInstance.setcolumnNames(this.getColumnNames());
-		tableInstance.setTableData(this.getTableData());
-		tableInstance.updateData();
+        tableInstance.setForm(this);
     }
 
 }
