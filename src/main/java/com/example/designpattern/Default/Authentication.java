@@ -7,6 +7,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 public class Authentication {
 	private static Authentication instance;
 	DatabaseConnection conn = DatabaseConnection.getInstance();
@@ -57,11 +58,52 @@ public class Authentication {
 	}
 	
 	
-    
+    public boolean checkifUserTableNameExisted() {
+    	List<String> tableList = this.conn.getTableList(SharedVariableHolder.database);
+    		
+    	for( String str : tableList) {
+    		if(this.userstableName.equalsIgnoreCase(str)) {
+        		return true;
+        	}
+    	}
+    	
+    	return false;
+    }
+    public boolean checkifUserTableNameExisted(String name) {
+    	List<String> tableList = this.conn.getTableList(SharedVariableHolder.database);
+    		
+    	for( String str : tableList) {
+    		if(name.equalsIgnoreCase(str)) {
+        		return true;
+        	}
+    	}
+    	
+    	return false;
+    }
+    public boolean checkifResetPassTableNameExisted() {
+    	List<String> tableList = this.conn.getTableList(SharedVariableHolder.database);
+    		System.out.println("this.resetPasswordTableName"+ this.resetPasswordTableName);
+    	for( String str : tableList) {
+    		if(this.resetPasswordTableName.equalsIgnoreCase(str)) {
+        		return true;
+        	}
+    	}
+    	return false;
+    }
+    public boolean checkifResetPassTableNameExisted(String name) {
+    	List<String> tableList = this.conn.getTableList(SharedVariableHolder.database);
+    		
+    	for( String str : tableList) {
+    		if(name.equalsIgnoreCase(str)) {
+        		return true;
+        	}
+    	}
+    	return false;
+    }
 	public void createDefaultUserTableToDatabase(Class<? extends User> userClass) throws SQLException {
 		
 		Statement  stmt = this.conn.connection.createStatement();
-		StringBuilder createTableStatement = new StringBuilder("CREATE TABLE IF NOT EXISTS users (");
+		StringBuilder createTableStatement = new StringBuilder("CREATE TABLE IF NOT EXISTS "+this.userstableName+ " (");
 
         // Add common fields
         createTableStatement.append("id INT AUTO_INCREMENT PRIMARY KEY,");
@@ -84,7 +126,10 @@ public class Authentication {
         
         System.out.println(createTableStatement);
         stmt.execute(createTableStatement.toString());
-        createResetPasswordTable();
+        this.createResetPasswordTable();
+        System.out.println(this.userstableName);
+        System.out.println(this.resetPasswordTableName);
+
 	}
 	
 	public boolean addActiveFieldtoTable() {
@@ -105,15 +150,17 @@ public class Authentication {
 		}
 		return false;
 	}
+	
 	public boolean columnExists( String tableName, String columnName) throws SQLException {
         DatabaseMetaData metadata = this.conn.connection.getMetaData();
         try (ResultSet resultSet = metadata.getColumns(null, null, tableName, columnName)) {
             return resultSet.next(); // true if the column exists, false otherwise
         }
     }
+	
 	public void createResetPasswordTable() {
 		StringBuilder createTableStatement = new StringBuilder("");
-		createTableStatement.append("CREATE TABLE  IF NOT EXISTS "+this.resetPasswordTableName +" ("+ this.primaryKeyName+" "+javaTypeToSqlType(this.primaryKeyDatatype) + " PRIMARY KEY, question VARCHAR(255), answer VARCHAR(255));\r\n");
+		createTableStatement.append("CREATE TABLE IF NOT EXISTS "+this.resetPasswordTableName +" ("+ this.primaryKeyName+" "+javaTypeToSqlType(this.primaryKeyDatatype) + " PRIMARY KEY, question VARCHAR(255), answer VARCHAR(255));\r\n");
 	      
 	        System.out.println(createTableStatement);
 	        Statement stmt;
@@ -125,7 +172,7 @@ public class Authentication {
 				e.printStackTrace();
 			}
 			createTableStatement = new StringBuilder("ALTER TABLE "+this.resetPasswordTableName+ "\r\n"
-		    		+ "ADD CONSTRAINT FK_RPIUsers\r\n"
+		    		+ "ADD CONSTRAINT FK_"+this.userstableName+this.resetPasswordTableName+"\r\n"
 		    		+ "FOREIGN KEY ("+this.primaryKeyName+") REFERENCES "+this.userstableName +"("+this.primaryKeyName+");");
 			
 			System.out.println(createTableStatement);
@@ -152,7 +199,7 @@ public class Authentication {
         case "double":
             return "DOUBLE";
         default:
-            return "";
+            return javaType.getName();
         }
     }
 	public static String javaTypeToSqlType(String javaType) {
@@ -168,10 +215,26 @@ public class Authentication {
         case "double":
             return "DOUBLE";
         default:
-            return "";
+            return javaType;
         }
     }
-    
+    public static String SqlTypetoJavaType(String sqlType) {
+    	if (sqlType.equalsIgnoreCase("INT") || sqlType.equalsIgnoreCase("INTEGER")) {
+            return "int";
+        } else if (sqlType.equalsIgnoreCase("VARCHAR")) {
+            return  "String";
+//        } else if (sqlType.equalsIgnoreCase("BIGINT")) {
+//            return "Long";
+//        } else if (sqlType.equalsIgnoreCase("BOOLEAN")) {
+//            return "Boolean";
+//        } else if (sqlType.equalsIgnoreCase("BIT")) {
+//            return "Boolean"; 
+//        } else if (sqlType.equalsIgnoreCase("FLOAT")) {
+//            return "Float"; 
+        } else {
+            return "String";
+        }
+    }
 	public boolean checkUsernameExist (String username) {
 		String sql = "SELECT * FROM "+this.userstableName+ " Where "+this.usernameColumnName+" = '"+ username+"'";
 		 System.out.println(sql);
@@ -199,7 +262,7 @@ public class Authentication {
 	        	
 	        	Object columnValue = rs.getObject(this.primaryKeyName);
                 String columnValueAsString = columnValue.toString();
-                if(this.primaryKeyDatatype == "String") {
+                if(this.primaryKeyDatatype.equalsIgnoreCase("String") ) {
                 	return "'"+columnValueAsString+"'"; 
                 }
 	        	return columnValueAsString;

@@ -28,8 +28,8 @@ public class DesignpatternApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/DatabaseConnection.fxml"));
-			DatabaseConnectionController controller = new DatabaseConnectionController();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseUserTableInDatabase.fxml"));
+			ChooseUserTableController controller = new ChooseUserTableController();
 			loader.setController(controller);
             Parent root = loader.load();
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
@@ -44,16 +44,29 @@ public class DesignpatternApplication extends Application {
 		}
 		
 	}
-	
-	public static void main(String[] args) {
-	SpringApplication.run(DesignpatternApplication.class, args);
-		Authentication a = Authentication.getInstance();
-		a.setTableName("hi");
-		a.createResetPasswordTable();
-		a.addActiveFieldtoTable();
-		launch(args);	
+    private static Authentication auth = Authentication.getInstance();
 
+	public static void main(String[] args) throws SQLException {
 		SpringApplication.run(DesignpatternApplication.class, args);
 		launch(args);
+
+//		List<List<Object>> list = DatabaseConnection.getInstance().getColumnNamesAndTypes(SharedVariableHolder.database, "hi");
+//		for (List<Object> pair : list) {
+//            if (pair.size() == 2 && pair.get(0) instanceof String && pair.get(0).equals("username")) {
+//                // Match found, return the datatype
+//                try {
+//					try {
+//						System.out.println(auth.SqlTypetoJavaType((String) pair.get(1)));
+//					} catch (Exception e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				} catch (Exception e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//            }
+//        }		
 	}
+	
 }
