@@ -10,6 +10,8 @@ import org.apache.commons.lang3.text.WordUtils;
 import com.example.designpattern.column.Column;
 import com.example.designpattern.notification.*;
 
+import javafx.collections.ObservableList;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -169,7 +171,33 @@ public class Table implements Serializable {
 	    return "";
 	}
 
-	public boolean validateAdd(List<String> values) {
+	public boolean validateAdd(ArrayList<String> columnName, ObservableList<ObservableList<String>> tableData, List<String> values) {
+	    int primaryKeyIndex = -1;
+
+	    for (int i = 0; i < columnName.size(); i++) {
+	        String colName = columnName.get(i);
+	        for (Column column : columnList) {
+	            if (column.getColumnName().equals(colName) && column.isPrimaryKey()) {
+	                primaryKeyIndex = i;
+	                break;
+	            }
+	        }
+	        if (primaryKeyIndex != -1) {
+	            break;
+	        }
+	    }
+
+	    for (ObservableList<String> rowData : tableData) {
+	        String primaryKeyValue = rowData.get(primaryKeyIndex);
+	        if (primaryKeyValue.equals(values.get(primaryKeyIndex))) {
+	        	Notification noti = new Notification();
+		        noti.setMessage("Duplicate primary key value found!");
+		        noti.setNotiType(new ErrorNotification());
+		        noti.display();
+		        return false;
+	        }
+	    }
+	    
 		String message = validateTypeAndNotNull(values);
 		if(!message.equals("")) {
 			Notification noti = new Notification();
