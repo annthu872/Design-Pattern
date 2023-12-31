@@ -249,4 +249,13 @@ public class Table implements Serializable {
         }
         return tableString.toString();
     }
+	public List<String> getPrimaryKeyColumnNames() {
+	    List<String> primaryKeyColumns = new ArrayList<>();
+	    for (Column column : columnList) {
+	        if (column.isPrimaryKey()) {
+	            primaryKeyColumns.add(column.getColumnName());
+	        }
+	    }
+	    return primaryKeyColumns;
+	}
 }

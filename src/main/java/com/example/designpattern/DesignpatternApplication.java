@@ -6,12 +6,11 @@ import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-
 import org.springframework.boot.SpringApplication;
-
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.example.designpattern.Controller.*;
 import com.example.designpattern.decorator.*;
@@ -19,8 +18,9 @@ import com.example.designpattern.decorator.TableDetailButton;
 import com.example.designpattern.filegenerator.FileGenerator;
 import com.example.designpattern.table.Table;
 import com.example.tablehandler.TableGenFromDB;
+import com.example.designpattern.Default.*;
 
-@SpringBootApplication
+
 
 
 public class DesignpatternApplication extends Application {
@@ -28,10 +28,10 @@ public class DesignpatternApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-
-			DatabaseConnection con = DatabaseConnection.getInstance();
-			
-			Parent root = new HeadingUIUnit(new TableListUIUnit( new TableUIUnit())).getUI();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseUserTableInDatabase.fxml"));
+			ChooseUserTableController controller = new ChooseUserTableController();
+			loader.setController(controller);
+            Parent root = loader.load();
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(css);
@@ -43,6 +43,7 @@ public class DesignpatternApplication extends Application {
 			e.printStackTrace();
 		}
 	}
+
 	
 	public static void main(String[] args) {
 		SpringApplication.run(DesignpatternApplication.class, args);
@@ -53,5 +54,7 @@ public class DesignpatternApplication extends Application {
         FileGenerator gen = new FileGenerator("C:\\Users\\duong\\OneDrive\\Máy tính\\New folder");
         gen.generateAll(System.getProperty("user.dir"), tables);
         con.close();*/
+
 	}
+	
 }

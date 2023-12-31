@@ -45,12 +45,31 @@ public class PopupWindow {
 	        Scene popupScene = new Scene(root);
 	        popupScene.getStylesheets().add(css);
 	        popupStage.setScene(popupScene);
-	        popupStage.setTitle("Adding Form");
+	        popupStage.setTitle("Updating Form");
 	        popupStage.showAndWait();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
+    }
+    public static void displaySetupTableForm() {
+		Stage popupStage = new Stage();
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        Parent root;
+		try {
+			ChangeAuthenticationTableController controller = new ChangeAuthenticationTableController(popupStage);
+			FXMLLoader loader = new FXMLLoader(DesignpatternApplication.class.getResource("/screen/UpdateForm.fxml"));
+			loader.setController(controller);
+			root = loader.load();
+			String css = DesignpatternApplication.class.getResource("/css/style.css").toExternalForm();
+	        Scene popupScene = new Scene(root);
+	        popupScene.getStylesheets().add(css);
+	        popupStage.setScene(popupScene);
+	        popupStage.setTitle("Updating Form");
+	        popupStage.showAndWait();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }

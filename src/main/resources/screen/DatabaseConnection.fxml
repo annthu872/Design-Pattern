@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -11,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ImageView id="background" fitHeight="768.0" fitWidth="2000.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -24,14 +25,9 @@
                <top>
                   <VBox alignment="CENTER" prefWidth="330.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="normal-label" text="Reset Password">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="normal-label" text="Database Connection">
                            <font>
                               <Font name="Arial" size="75.0" />
-                           </font>
-                        </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="normal-label" text="Reset your password and rejoin us!">
-                           <font>
-                              <Font size="24.0" />
                            </font>
                         </Text>
                      </children>
@@ -43,9 +39,34 @@
                         <Insets />
                      </BorderPane.margin>
                      <center>
-                        <VBox alignment="CENTER" maxWidth="420.0">
+                        <VBox alignment="CENTER" maxWidth="420.0" prefWidth="420.0">
                            <children>
-                              <TextField fx:id="txtUsername" nodeOrientation="LEFT_TO_RIGHT" prefWidth="420.0" promptText="Username" style="-fx-border-radius: 10;">
+                              <ComboBox fx:id="databaseComboBox"  prefHeight="40.0" prefWidth="420.0" 
+                              styleClass="combo-box" promptText="Choose database" >
+                              	<opaqueInsets>
+                                    <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />
+                                 </opaqueInsets>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" top="10.0" />
+                                 </VBox.margin>
+                              </ComboBox>
+                              
+                              <TextField fx:id="txtUsername" nodeOrientation="LEFT_TO_RIGHT" 
+                              prefHeight="50.0" prefWidth="420.0" 
+                              promptText="Username" styleClass="text-field" style="-fx-border-radius: 10;">
+                                 <font>
+                                    <Font name="System Bold" size="21.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />
+                                 </opaqueInsets>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" top="10.0" />
+                                 </VBox.margin>
+                              </TextField>
+                              <TextField fx:id="txtPassword" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" 
+                              prefHeight="50.0" prefWidth="420.0" 
+                              promptText="Password" styleClass="text-field" style="-fx-border-radius: 10;">
                                  <font>
                                     <Font name="System Bold" size="21.0" />
                                  </font>
@@ -69,17 +90,7 @@
                   <VBox maxWidth="420.0" BorderPane.alignment="CENTER">
                      <children>
 
-                        <Button fx:id="btnContinue" maxHeight="60.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="60.0" styleClass="button-primary" text="Continue">
-
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets bottom="10.0" top="10.0" />
-                           </VBox.margin>
-                        </Button>
-
-                        <Button fx:id="btnBack" maxHeight="60.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="60.0" styleClass="button-normal" text="Back to Sign Up Page">
+                        <Button fx:id="btnConfirm" maxHeight="60.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="60.0" styleClass="button-primary" text="Confirm">
 
                            <font>
                               <Font size="18.0" />

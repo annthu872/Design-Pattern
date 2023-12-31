@@ -220,4 +220,19 @@ public class DatabaseConnection {
         }
         return false;
     }
+	public List<String> getPrimaryKeyColumnNamesByTable(String tableName) {
+	    ensureConnection();
+	    List<String> primaryKeyColumns = new ArrayList<>();
+	    try {
+	        DatabaseMetaData metaData = connection.getMetaData();
+	        ResultSet primaryKeysResultSet = metaData.getPrimaryKeys(null, null, tableName);
+
+	        while (primaryKeysResultSet.next()) {
+	            primaryKeyColumns.add(primaryKeysResultSet.getString("COLUMN_NAME"));
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return primaryKeyColumns;
+	}
 }
