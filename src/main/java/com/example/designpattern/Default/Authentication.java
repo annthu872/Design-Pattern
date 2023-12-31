@@ -17,16 +17,23 @@ public class Authentication {
         }
         return instance;
     }
-
+    public void printInfor() {
+    	System.out.println("userstableName "+userstableName);
+    	System.out.println("resetPasswordTableName "+resetPasswordTableName);
+    	System.out.println("usernameColumnName "+usernameColumnName);
+    	System.out.println("passwordColumnName "+passwordColumnName);
+    	System.out.println("primaryKeyName "+primaryKeyName);
+    	System.out.println("primaryKeyDatatype "+primaryKeyDatatype);    	
+    }
 	public void setResetPasswordTable(String resetPasswordTable) {
 		this.resetPasswordTableName = resetPasswordTable;
 	}
 	private String userstableName = "users";
 
-	private String resetPasswordTableName = "ResetPasswordTable";
+	private String resetPasswordTableName = "ResetPassword";
 	private String usernameColumnName="username";
 	private String passwordColumnName = "password";
-	private String activeColummnName = "active";
+//	private String activeColummnName = "active";
 	private String primaryKeyName = "id";
 	private String questionResetPasswordColumnName = "question";
 	private String answerResetPasswordColumnName = "answer";
@@ -44,19 +51,19 @@ public class Authentication {
 	public void setPasswordColumnName(String passwordColumnName) {
 		this.passwordColumnName = passwordColumnName;
 	}
-	public void setActiveColummnName(String activeColummnName) {
-		this.activeColummnName = activeColummnName;
-	}
+//	public void setActiveColummnName(String activeColummnName) {
+//		this.activeColummnName = activeColummnName;
+//	}
 	public void setPrimaryKeyName(String primaryKeyName) {
 		this.primaryKeyName = primaryKeyName;
 	}
-	public void setQuestionResetPasswordColumnName(String questionResetPasswordColumnName) {
-		this.questionResetPasswordColumnName = questionResetPasswordColumnName;
-	}
-	public void setAnswerResetPasswordColumnName(String answerResetPasswordColumnName) {
-		this.answerResetPasswordColumnName = answerResetPasswordColumnName;
-	}
-	
+//	public void setQuestionResetPasswordColumnName(String questionResetPasswordColumnName) {
+//		this.questionResetPasswordColumnName = questionResetPasswordColumnName;
+//	}
+//	public void setAnswerResetPasswordColumnName(String answerResetPasswordColumnName) {
+//		this.answerResetPasswordColumnName = answerResetPasswordColumnName;
+//	}
+//	
 	
     public boolean checkifUserTableNameExisted() {
     	List<String> tableList = this.conn.getTableList(SharedVariableHolder.database);
@@ -109,7 +116,7 @@ public class Authentication {
         createTableStatement.append("id INT AUTO_INCREMENT PRIMARY KEY,");
         createTableStatement.append("username VARCHAR(255) NOT NULL,");
         createTableStatement.append("password VARCHAR(255) NOT NULL,");
-        createTableStatement.append("active BIT,");
+//        createTableStatement.append("active BIT,");
 
         // Add fields specific to the given userClass
         Field[] fields = userClass.getDeclaredFields();
@@ -132,24 +139,24 @@ public class Authentication {
 
 	}
 	
-	public boolean addActiveFieldtoTable() {
-		try {
-			if (!columnExists(this.userstableName, this.activeColummnName)) {
-			    // Column does not exist, add it
-				String sql = "ALTER TABLE " + this.userstableName + " ADD COLUMN " + this.activeColummnName + " BIT" ;
-			    try (Statement statement = this.conn.connection.createStatement()) {
-			        statement.executeUpdate(sql);
-			        System.out.println("Column added successfully");
-			        return true;
-			    }
-			} else {
-			    System.out.println("Column already exists");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
+//	public boolean addActiveFieldtoTable() {
+//		try {
+//			if (!columnExists(this.userstableName, this.activeColummnName)) {
+//			    // Column does not exist, add it
+//				String sql = "ALTER TABLE " + this.userstableName + " ADD COLUMN " + this.activeColummnName + " BIT" ;
+//			    try (Statement statement = this.conn.connection.createStatement()) {
+//			        statement.executeUpdate(sql);
+//			        System.out.println("Column added successfully");
+//			        return true;
+//			    }
+//			} else {
+//			    System.out.println("Column already exists");
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return false;
+//	}
 	
 	public boolean columnExists( String tableName, String columnName) throws SQLException {
         DatabaseMetaData metadata = this.conn.connection.getMetaData();
@@ -281,7 +288,7 @@ public class Authentication {
 				st = this.conn.connection.createStatement();
 		        ResultSet rs = st.executeQuery(sql);
 		        if(rs.next()) {
-					setActiveforSignInAccount(username);
+//					setActiveforSignInAccount(username);
 		        	return true;
 		        }
 			} catch (SQLException e) {
@@ -291,21 +298,21 @@ public class Authentication {
 			
 			return false;
 	 }
-	 public boolean setActiveforSignInAccount(String username) {
-		 
-		 String sql = "Update "+this.userstableName+ " set "+this.activeColummnName+" = 1  Where id = "+ getAccountId(username)+ ";";
-		 System.out.println(sql);
-			Statement st;
-			try {
-				st = this.conn.connection.createStatement();
-		        int rs = st.executeUpdate(sql);
-		        if(rs != 0 ) return true;
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return false;
-	 }
+//	 public boolean setActiveforSignInAccount(String username) {
+//		 
+//		 String sql = "Update "+this.userstableName+ " set "+this.activeColummnName+" = 1  Where id = "+ getAccountId(username)+ ";";
+//		 System.out.println(sql);
+//			Statement st;
+//			try {
+//				st = this.conn.connection.createStatement();
+//		        int rs = st.executeUpdate(sql);
+//		        if(rs != 0 ) return true;
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			return false;
+//	 }
 	public boolean createAccount(String username, String password, String question, String answer) {
         	String sql = "INSERT INTO " + this.userstableName + " ("+this.usernameColumnName+","+this.passwordColumnName+") VALUES ('" + username +"','"+ password+"' )" ;
    		 	System.out.println(sql);

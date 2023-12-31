@@ -5,6 +5,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -27,7 +28,7 @@
                <top>
                   <VBox alignment="CENTER" prefWidth="330.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="normal-label" text="Select User Table for Authentication">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="normal-label" text="Select User Detail for Authentication">
                            <font>
                               <Font name="Arial" size="60.0" />
                            </font>
@@ -102,30 +103,6 @@
                               </HBox>
                               <VBox alignment="CENTER">
                                  <children>
-                                    <HBox alignment="TOP_CENTER" spacing="10.0">
-                                       <children>
-                                          <Label prefWidth="400.0" text="User active Status Column Name:">
-                                             <font>
-                                                <Font name="System Bold" size="21.0" />
-                                             </font>
-                                          </Label>
-                                          <VBox>
-                                             <children>
-                                                <CheckBox fx:id="CheckboxAddActiveColumn" mnemonicParsing="false" prefHeight="45.0" prefWidth="420.0" text="Add new Active Column Into Table">
-                                                   <font>
-                                                      <Font size="18.0" />
-                                                   </font>
-                                                </CheckBox>
-                                                <ComboBox fx:id="CBactiveColumn" prefHeight="45.0" prefWidth="420.0" promptText="-- Choose your active column name" styleClass="combo-box" visibleRowCount="20" />
-                                                <Label style="-fx-text-fill: red;" text="*We only suport using column datatype bit to store active status of users">
-                                                   <font>
-                                                      <Font name="System Bold" size="12.0" />
-                                                   </font>
-                                                </Label>
-                                             </children>
-                                          </VBox>
-                                       </children>
-                                    </HBox>
                                     <HBox alignment="CENTER" prefWidth="670.0" />
                                     <VBox alignment="CENTER">
                                        <children>
@@ -136,14 +113,27 @@
                                                       <Font name="System Bold" size="21.0" />
                                                    </font>
                                                 </Label>
-                                                <CheckBox fx:id="CBoxSupportResetPassword" mnemonicParsing="false" prefHeight="45.0" prefWidth="420.0" text="Yes  (only support reset by question)">
-                                                   <font>
-                                                      <Font size="18.0" />
-                                                   </font>
-                                                </CheckBox>
+                                                <VBox>
+                                                   <children>
+                                                      <CheckBox fx:id="CBoxSupportResetPassword" disable="true" mnemonicParsing="false" prefHeight="45.0" prefWidth="420.0" selected="true" text="Yes  (only support reset by question)">
+                                                         <font>
+                                                            <Font size="18.0" />
+                                                         </font>
+                                                      </CheckBox>
+                                                   </children>
+                                                </VBox>
                                              </children>
                                           </HBox>
-                                          <HBox alignment="CENTER" prefWidth="670.0" />
+                                          <HBox fx:id="NamedResetPasswordPane" alignment="CENTER" spacing="10.0">
+                                             <children>
+                                                <Label prefWidth="400.0" text="Your reset password Table Name:">
+                                                   <font>
+                                                      <Font name="System Bold" size="21.0" />
+                                                   </font>
+                                                </Label>
+                                                <TextField fx:id="txtResetPasswordTableName" prefHeight="45.0" prefWidth="420.0" />
+                                             </children>
+                                          </HBox>
                                        </children>
                                     </VBox>
                                  </children>

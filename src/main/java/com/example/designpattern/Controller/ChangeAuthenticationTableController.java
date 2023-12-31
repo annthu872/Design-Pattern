@@ -124,12 +124,13 @@ public class ChangeAuthenticationTableController implements Initializable {
 						a.setResetPasswordTable(this.forgotPasswordTextField.getText());
 						try {
 							a.createDefaultUserTableToDatabase(User.class);
+							//gen code
+							
 						} catch (SQLException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 						stage.close();
-
 					}
 				}
 				else if(this.tfusertable) {
@@ -173,7 +174,7 @@ public class ChangeAuthenticationTableController implements Initializable {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-						stage.close();
+						stage.close();	
 					}
 				}
 			});

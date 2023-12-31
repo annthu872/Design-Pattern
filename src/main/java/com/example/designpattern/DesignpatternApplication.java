@@ -50,23 +50,6 @@ public class DesignpatternApplication extends Application {
 		SpringApplication.run(DesignpatternApplication.class, args);
 		launch(args);
 
-//		List<List<Object>> list = DatabaseConnection.getInstance().getColumnNamesAndTypes(SharedVariableHolder.database, "hi");
-//		for (List<Object> pair : list) {
-//            if (pair.size() == 2 && pair.get(0) instanceof String && pair.get(0).equals("username")) {
-//                // Match found, return the datatype
-//                try {
-//					try {
-//						System.out.println(auth.SqlTypetoJavaType((String) pair.get(1)));
-//					} catch (Exception e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				} catch (Exception e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//            }
-//        }		
 	}
 	
 }
