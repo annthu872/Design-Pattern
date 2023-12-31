@@ -4,13 +4,16 @@ import java.io.IOException;
 import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import com.example.designpattern.DatabaseConnection;
 import com.example.designpattern.DesignpatternApplication;
 import com.example.designpattern.table.Table;
+import com.example.tablehandler.TableController;
 import com.example.tablehandler.TableGenFromDB;
+import com.example.testbasicform.BaseForm;
 
 import javafx.scene.*;
 import javafx.fxml.FXML;
@@ -38,12 +41,13 @@ public class FormPopupController implements Initializable {
     private List<TextField> textfieldList;
     private List<String> fieldnameList;
     private List<String> data;
-    
-    public FormPopupController(Stage stage, List<String> fieldnameList, List<String> data) {
-        this.fieldnameList = new ArrayList<>(fieldnameList);
+    private BaseForm bf;
+    public FormPopupController(Stage stage, BaseForm bf, List<String> data) {
+        this.fieldnameList = new ArrayList<>(bf.getColumnNames());
         this.stage = stage;
         this.textfieldList = new ArrayList<TextField>();
         this.data = data;
+        this.bf = bf;
     }
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -76,24 +80,28 @@ public class FormPopupController implements Initializable {
 		
 		if(btnAdd != null) {
 			btnAdd.setOnAction(e -> {
-				List<String> fieldValues = new ArrayList<>();
+				ArrayList<String> fieldValues = new ArrayList<>();
 			    for (TextField textField : textfieldList) {
 			        fieldValues.add(textField.getText());
 			    }
+		        System.out.print(fieldValues);
 
 			    DatabaseConnection con = DatabaseConnection.getInstance();
 			    List<Table> tables = con.getTablesWithColumns();
 
 			    boolean isValid = false;
 			    for (Table table : tables) {
-			        isValid = table.validateUpdate(fieldValues);
+			    	BaseForm<?> curForm = TableController.getInstance().getForm();
+			    	if (!table.getTableName().equals(curForm.getTableName())) continue;
+			        isValid = table.validateAdd(fieldValues);
 			        if (isValid) {
-			        	con.addRowToTable(TableGenFromDB.getInstance().getTableName(), fieldValues);
+//			        	con.addRowToTable(TableGenFromDB.getInstance().getTableName(), fieldValues);
+			        	bf.add(fieldValues);
+			        	TableController.getInstance().addRow(fieldValues);
+//			        	bf.read(TableController.getInstance());
 			            break;
 			        }
 			    }
-
-			    con.close();
 
 			    if (isValid) {
 			        stage.close();
@@ -102,12 +110,39 @@ public class FormPopupController implements Initializable {
 			    }
 			});
 		}
-		if(btnUpdate != null) {
-			btnUpdate.setOnAction(e->{
-				
-			});
-		}
+		if (btnUpdate != null) {
+		    btnUpdate.setOnAction(e -> {
+		    	String input = "1, ACADEMY, A Epic Drama of a Feminist And a Mad Scientist who must Battle a Teacher in The Canadian Rockies";
+		    	String[] splitValues = input.split(", ");
+		        ArrayList<String> oldFieldValues = new ArrayList<>(Arrays.asList(splitValues));
+		        ArrayList<String> newFieldValues = new ArrayList<>();
+		        for (TextField textField : textfieldList) {
+		            newFieldValues.add(textField.getText());
+		        }
+		        System.out.println("------------------------");
+		        System.out.println(oldFieldValues);
+		        System.out.println(newFieldValues);
 
 		
+		        DatabaseConnection con = DatabaseConnection.getInstance();
+		        List<Table> tables = con.getTablesWithColumns();
+
+		        boolean isValid = false;
+		        for (Table table : tables) {
+		        	BaseForm<?> curForm = TableController.getInstance().getForm();
+			    	if (!table.getTableName().equals(curForm.getTableName())) continue;
+		            isValid = table.validateUpdate(bf.getClazz(), oldFieldValues, newFieldValues);
+		            if (isValid) {
+
+		            }
+		        }
+
+		        if (isValid) {
+		            stage.close();
+		        } else {
+
+		        }
+		    });
+		}
 	}
 }

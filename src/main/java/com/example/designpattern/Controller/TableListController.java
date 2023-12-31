@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.FXMLLoader;
 import com.example.designpattern.decorator.IScreenUnit;
+import com.example.tablehandler.TableController;
 import com.example.tablehandler.TableGenFromDB;
 import com.example.testbasicform.BaseForm;
 import com.example.testbasicform.PersonForm;
@@ -64,7 +65,7 @@ public class TableListController implements Initializable {
                     // Create an instance of the class
                     Constructor<?> constructor = formClass.getConstructor();
                     BaseForm<?> formInstance = (BaseForm<?>) constructor.newInstance();
-                    formInstance.read();
+                    formInstance.read(TableController.getInstance());
                     // Now you can use the created formInstance as needed
                     // For example, call methods or perform actions related to the form
 

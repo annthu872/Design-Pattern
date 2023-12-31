@@ -38,6 +38,10 @@ public class Column {
     public boolean isPrimaryKey() {
         return isPrimaryKey;
     }
+    
+    public boolean isTimestamp() {
+        return className.equals("Timestamp");
+    }
 
     public String generateAnnotations() {
         StringBuilder annotationBuilder = new StringBuilder("	@NotNull\n");
@@ -58,37 +62,37 @@ public class Column {
         		+ "\t\t" + "return this." + getFieldName() + ";\n\t" + "}\n\n";
     }
     
-    public boolean validateUpdate(String value) {
+    public String validateUpdate(String value) {
         if (!isNullable && value == null) {
-            return false;
+            return "Value cannot be null for column: " + columnName;
         }
         
         switch (className) {
-        case "Integer":
-            try {
-                Integer.parseInt(value);
-            } catch (NumberFormatException e) {
-                return false;
-            }
-            break;
-        case "Long":
-            try {
-                Long.parseLong(value);
-            } catch (NumberFormatException e) {
-                return false;
-            }
-            break;
-        case "Float":
-            try {
-                Float.parseFloat(value);
-            } catch (NumberFormatException e) {
-                return false;
-            }
-            break;
-        default:
-            break;
+            case "Integer":
+                try {
+                    Integer.parseInt(value);
+                } catch (NumberFormatException e) {
+                    return "Invalid Integer value for column: " + columnName;
+                }
+                break;
+            case "Long":
+                try {
+                    Long.parseLong(value);
+                } catch (NumberFormatException e) {
+                    return "Invalid Long value for column: " + columnName;
+                }
+                break;
+            case "Float":
+                try {
+                    Float.parseFloat(value);
+                } catch (NumberFormatException e) {
+                    return "Invalid Float value for column: " + columnName;
+                }
+                break;
+            default:
+                break;
         }
-        return true;
+        return "";
     }
     
     public String toString() {

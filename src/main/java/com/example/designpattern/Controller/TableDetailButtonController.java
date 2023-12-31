@@ -29,7 +29,7 @@ public class TableDetailButtonController implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
 //		List<String> dataList = TableGenFromDB.getInstance().getFieldname();
 		
-		btnAdd.setOnAction(e -> PopupWindow.display(TableGenFromDB.getInstance().getColumnNames()));
-		btnEdit.setOnAction(e -> PopupWindow.display(TableGenFromDB.getInstance().getColumnNames(),TableGenFromDB.getInstance().getFieldname()));
+//		btnAdd.setOnAction(e -> PopupWindow.display(TableGenFromDB.getInstance().getColumnNames()));
+//		btnEdit.setOnAction(e -> PopupWindow.display(TableGenFromDB.getInstance().getColumnNames(),TableGenFromDB.getInstance().getFieldname()));
 	}
 }

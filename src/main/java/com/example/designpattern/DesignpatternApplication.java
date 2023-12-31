@@ -42,17 +42,16 @@ public class DesignpatternApplication extends Application {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	public static void main(String[] args) {
-//		SpringApplication.run(DesignpatternApplication.class, args);
-//		launch(args);
+		SpringApplication.run(DesignpatternApplication.class, args);
+		launch(args);
 		
-		DatabaseConnection con = DatabaseConnection.getInstance();
+		/*DatabaseConnection con = DatabaseConnection.getInstance();
         List<Table> tables = con.getTablesWithColumns();
         FileGenerator gen = new FileGenerator("C:\\Users\\duong\\OneDrive\\Máy tính\\New folder");
         gen.generateAll(System.getProperty("user.dir"), tables);
-        con.close();
+        con.close();*/
 	}
 }
