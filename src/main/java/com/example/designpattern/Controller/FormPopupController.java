@@ -93,7 +93,7 @@ public class FormPopupController implements Initializable {
 			    for (Table table : tables) {
 			    	BaseForm<?> curForm = TableController.getInstance().getForm();
 			    	if (!table.getTableName().equals(curForm.getTableName())) continue;
-			        isValid = table.validateAdd(fieldValues);
+			    	 isValid = table.validateAdd(curForm.getColumnNames(), curForm.getTableData(), fieldValues);
 			        if (isValid) {
 //			        	con.addRowToTable(TableGenFromDB.getInstance().getTableName(), fieldValues);
 			        	bf.add(fieldValues);
@@ -105,8 +105,6 @@ public class FormPopupController implements Initializable {
 
 			    if (isValid) {
 			        stage.close();
-			    } else {
-			    	//bao loi gi do
 			    }
 			});
 		}
@@ -139,8 +137,6 @@ public class FormPopupController implements Initializable {
 
 		        if (isValid) {
 		            stage.close();
-		        } else {
-
 		        }
 		    });
 		}
