@@ -45,8 +45,8 @@ public class ColumnBuilder {
 
         static {
             typeMap.put("BIT", "Boolean");
-            typeMap.put("TINYINT", "Byte");
-            typeMap.put("TINYINT UNSIGNED", "Byte");
+            typeMap.put("TINYINT", "Integer");
+            typeMap.put("TINYINT UNSIGNED", "Integer");
             typeMap.put("SMALLINT", "Integer");
             typeMap.put("SMALLINT UNSIGNED", "Integer");
             typeMap.put("INTEGER", "Integer");

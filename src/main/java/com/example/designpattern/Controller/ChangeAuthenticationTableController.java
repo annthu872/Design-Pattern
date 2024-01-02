@@ -3,18 +3,13 @@ package com.example.designpattern.Controller;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
-import com.example.designpattern.DatabaseConnection;
 import com.example.designpattern.DesignpatternApplication;
 import com.example.designpattern.Default.Authentication;
 import com.example.designpattern.Default.User;
 import com.example.designpattern.notification.Notification;
 import com.example.designpattern.notification.WarningNotification;
-import com.example.designpattern.table.Table;
-import com.example.tablehandler.TableGenFromDB;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
