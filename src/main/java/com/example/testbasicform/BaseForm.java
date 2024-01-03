@@ -174,12 +174,9 @@ public class BaseForm<T> {
 		execute(sql);
 	}
 	
-	public void update(String setClause, String condition) {
-		StringBuilder conditionBuilder = new StringBuilder();
-		StringBuilder setClauseBuilder = new StringBuilder();
-		
+	public void update(String setClause, String condition) {		
 		String sql = "UPDATE " + tableName + " SET " + setClause + " WHERE " + condition;
-		//execute(sql.toString());
+		execute(sql);
 	}
 	
 	public T parseResultSetToObject(ResultSet rs) throws SQLException {

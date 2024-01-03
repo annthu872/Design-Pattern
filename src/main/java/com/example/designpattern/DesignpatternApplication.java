@@ -14,24 +14,22 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.example.designpattern.Controller.*;
 import com.example.designpattern.decorator.*;
-import com.example.designpattern.decorator.TableDetailButton;
 import com.example.designpattern.filegenerator.FileGenerator;
 import com.example.designpattern.table.Table;
 import com.example.tablehandler.TableGenFromDB;
 import com.example.designpattern.Default.*;
 
 
-
+@SpringBootApplication
 
 public class DesignpatternApplication extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseUserTableInDatabase.fxml"));
-			ChooseUserTableController controller = new ChooseUserTableController();
-			loader.setController(controller);
-            Parent root = loader.load();
+			DatabaseConnection con = DatabaseConnection.getInstance();
+			
+			Parent root = new HeadingUIUnit(new TableListUIUnit( new TableUIUnit())).getUI();
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(css);
