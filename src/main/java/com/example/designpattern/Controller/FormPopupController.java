@@ -127,6 +127,8 @@ public class FormPopupController implements Initializable {
 		            if (isValid) {
 		            	System.out.println(table.createSQLSetClause(oldFieldValues, newFieldValues));
 		            	System.out.println(table.createSQLWhereClause(oldFieldValues, newFieldValues));
+		            	System.out.println(table.getPrimaryKeyColumnNames());
+		            	
 		            	
 		            }
 		        }

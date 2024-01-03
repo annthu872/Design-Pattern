@@ -216,6 +216,23 @@ public class Table implements Serializable {
 	}
 	
 	public boolean validateUpdate(Class object, List<String> oldValues, List<String> newValues) {
+		boolean changesFound = false;
+
+	    for (int i = 0; i < oldValues.size(); i++) {
+	        if (!oldValues.get(i).equals(newValues.get(i))) {
+	            changesFound = true;
+	            break;
+	        }
+	    }
+	    
+	    if (!changesFound) {
+	        Notification noti = new Notification();
+	        noti.setMessage("No changes detected.");
+	        noti.setNotiType(new InformationNotification());
+	        noti.display();
+	        return false;
+	    }
+		
 		String messageValidateTypeAndNotNull = validateTypeAndNotNull(newValues);
 		if(!messageValidateTypeAndNotNull.equals("")) {
 			Notification noti = new Notification();
@@ -235,7 +252,7 @@ public class Table implements Serializable {
 		}
 		
 		Notification noti = new Notification();
-        noti.setMessage("Add success!");
+        noti.setMessage("Update success!");
         noti.setNotiType(new InformationNotification());
         noti.display();
 
@@ -272,30 +289,34 @@ public class Table implements Serializable {
 	public String createSQLSetClause(List<String> oldValues, List<String> newValues) {
 	    StringBuilder sqlClause = new StringBuilder("");
 
+	    boolean atLeastOneSet = false; // Flag to check if at least one field was set
+
 	    for (int i = 0; i < columnList.size(); i++) {
 	        Column column = columnList.get(i);
 	        String columnName = column.getColumnName();
 	        String oldValue = oldValues.get(i);
 	        String newValue = newValues.get(i);
 
-	        // Check if the value has changed
 	        if (!oldValue.equals(newValue)) {
-	        	sqlClause.append(columnName).append(" = ");
+	            if (atLeastOneSet) {
+	                sqlClause.append(", ");
+	            }
+
+	            sqlClause.append(columnName).append(" = ");
 
 	            if (column.getClassName().equals("String") || column.getClassName().equals("Timestamp")) {
-	            	sqlClause.append("'").append(newValue).append("'");
+	                sqlClause.append("'").append(newValue).append("'");
 	            } else {
-	            	sqlClause.append(newValue);
+	                sqlClause.append(newValue);
 	            }
 
-	            if (i < columnList.size() - 1) {
-	            	sqlClause.append(", ");
-	            }
+	            atLeastOneSet = true;
 	        }
 	    }
 
 	    return sqlClause.toString();
 	}
+
 	
 	public String createSQLWhereClause(List<String> oldValues, List<String> newValues) {
 	    StringBuilder sqlClause = new StringBuilder("");
