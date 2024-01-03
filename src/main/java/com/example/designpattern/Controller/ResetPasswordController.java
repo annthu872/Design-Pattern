@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.example.designpattern.Default.Authentication;
+import com.example.designpattern.Default.IAuthentication;
 import com.example.designpattern.notification.*;
 
 import javafx.fxml.FXML;
@@ -18,8 +19,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class ResetPasswordController implements Initializable {
-
-
     @FXML
     private Button btnBack;
 
@@ -28,14 +27,17 @@ public class ResetPasswordController implements Initializable {
 
     @FXML
     private TextField txtUsername;
-
+    IAuthentication auth;
+    public ResetPasswordController(IAuthentication auth) {
+    	this.auth = auth;
+    }
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		btnBack.setOnAction(e->{
 			Parent root;
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
-				SignInController controller = new SignInController();
+				SignInController controller = new SignInController(auth);
 				loader.setController(controller);
 				root = loader.load();
 //				root = FXMLLoader.load(getClass().getResource("/screen/SignIn.fxml"));
@@ -53,11 +55,11 @@ public class ResetPasswordController implements Initializable {
 		btnContinue.setOnAction(e->{
 			//Handle login check
 			System.out.println("username:"+txtUsername.getText());
-			if(Authentication.getInstance().checkUsernameExist(txtUsername.getText())) {
+			if(auth.checkUsernameExist(txtUsername.getText())) {
 				Parent root;
 				try {
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ResetPassword2.fxml"));
-					ResetPasswordController2 controller = new ResetPasswordController2(txtUsername.getText());
+					ResetPasswordController2 controller = new ResetPasswordController2(txtUsername.getText(),auth);
 					loader.setController(controller);
 					root = loader.load();
 

@@ -225,7 +225,7 @@ public class DatabaseConnection {
 	    List<String> primaryKeyColumns = new ArrayList<>();
 	    try {
 	        DatabaseMetaData metaData = connection.getMetaData();
-	        ResultSet primaryKeysResultSet = metaData.getPrimaryKeys(null, null, tableName);
+	        ResultSet primaryKeysResultSet = metaData.getPrimaryKeys(SharedVariableHolder.database, null, tableName);
 
 	        while (primaryKeysResultSet.next()) {
 	            primaryKeyColumns.add(primaryKeysResultSet.getString("COLUMN_NAME"));
@@ -235,4 +235,88 @@ public class DatabaseConnection {
 	    }
 	    return primaryKeyColumns;
 	}
+	
+	public boolean checkTableIntandAutoIncrementPrimaryKey(String tableName) {
+		
+		
+		ensureConnection();
+        DatabaseMetaData metaData;
+		List<List<Object>> list = getColumnNamesAndTypes(SharedVariableHolder.database, tableName);
+			try {
+				metaData = connection.getMetaData();
+				ResultSet primaryKeys = metaData.getPrimaryKeys(SharedVariableHolder.database, null, tableName);
+		        
+		        while (primaryKeys.next()) {
+		        	
+		        	String columnName = primaryKeys.getString("COLUMN_NAME");
+		            if(!getTypeofColumnNameFromColumnList(list,columnName).equalsIgnoreCase("int")) {
+		            	return false;
+		            }
+
+		        	boolean isAutoIncrement = isColumnAutoIncrement(connection, tableName, columnName);
+
+		            if (isAutoIncrement) {
+		                return true;
+		            }
+		        }
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        
+		
+        return false;
+
+	}
+
+	  public  boolean isColumnAutoIncrement(Connection connection, String tableName, String columnName) {
+	        String query = "SELECT * FROM " + tableName + " LIMIT 1";
+	         ResultSet resultSet;
+			try {
+				resultSet = connection.createStatement().executeQuery(query);
+				ResultSetMetaData metaData = resultSet.getMetaData();
+	            int columnIndex = 1; // ResultSet column index is 1-based
+
+	            while (columnIndex <= metaData.getColumnCount()) {
+	                if (columnName.equals(metaData.getColumnName(columnIndex))) {
+	                    return metaData.isAutoIncrement(columnIndex);
+	                }
+	                columnIndex++;
+	            }
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	            
+	        return false;
+	    }
+		public String getTypeofColumnNameFromColumnList(List<List<Object>> list, String columnName) {
+			for (List<Object> pair : list) {
+	            if (pair.size() == 2 && pair.get(0) instanceof String && pair.get(0).equals(columnName)) {
+	                // Match found, return the datatype
+	                try {
+						try {
+							return (String) pair.get(1);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	            }
+	        }		
+			return null;
+		}
+	    public boolean checkifTableNameExisted(String tableName) {
+	    	List<String> tableList = this.getTableList(SharedVariableHolder.database);
+	    		
+	    	for( String str : tableList) {
+	    		if(tableName.equalsIgnoreCase(str)) {
+	        		return true;
+	        	}
+	    	}
+	    	return false;
+	    }
 }
