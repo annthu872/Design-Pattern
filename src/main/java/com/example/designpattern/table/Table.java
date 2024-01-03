@@ -160,7 +160,7 @@ public class Table implements Serializable {
 	                    field.setAccessible(true);
 	                    jakarta.persistence.Id annotation = field.getAnnotation(jakarta.persistence.Id.class);
 	                    if (annotation != null) {
-	                        return "Can not change value of " + column.getClassName(); 
+	                        return "Can not change value of " + column.getColumnName(); 
 	                    }
 	                } catch (NoSuchFieldException e) {
 	                    e.printStackTrace();
