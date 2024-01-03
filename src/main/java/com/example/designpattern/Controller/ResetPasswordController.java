@@ -18,8 +18,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class ResetPasswordController implements Initializable {
-
-
     @FXML
     private Button btnBack;
 
@@ -28,6 +26,7 @@ public class ResetPasswordController implements Initializable {
 
     @FXML
     private TextField txtUsername;
+
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {

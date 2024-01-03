@@ -190,7 +190,41 @@ public class Authentication {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+			String sql = "SELECT * FROM "+this.userstableName;
+			createTableStatement = new StringBuilder("");
+			createTableStatement.append( "INSERT INTO "+ this.resetPasswordTableName+ " ("+this.primaryKeyName+" , "+this.questionResetPasswordColumnName+" ,"+this.answerResetPasswordColumnName+" ) VALUES   ") ;
+			 System.out.println(sql);
+			Statement st;
+			Boolean insertExistedUser = false;
+			try {
+				st = this.conn.connection.createStatement();
+		        ResultSet rs = st.executeQuery(sql);
+		        System.out.println("checkSignUpAccountExist: "+ rs);
+		        String id = "";
+		        String username = "";
+		        while(rs.next()) {
+		        	insertExistedUser = true;
+		        	username = rs.getString(this.usernameColumnName);
+		        	id = this.getAccountId(username);
+		        	createTableStatement.append("(" +id +",'',''),");
+		        }
+		        createTableStatement.deleteCharAt(createTableStatement.length() - 1);
+		        createTableStatement.append(";");
+		        System.out.println(createTableStatement.toString());
+		        if(insertExistedUser) {
+		        	try {
+						stmt = this.conn.connection.createStatement();
+				        stmt.execute(createTableStatement.toString());
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		        }
+		        
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 	
 	public static String javaTypeToSqlType(Class<?> javaType) {
@@ -359,7 +393,7 @@ public class Authentication {
 	}
 	public boolean checkResetPasswordAnswerCorrect(String username, String answer) {
 		String id = this.getAccountId(username);
-		String sql = "SELECT * FROM ResetPasswordTable Where id ="+ id +";";
+		String sql = "SELECT * FROM "+ this.resetPasswordTableName +" Where " +this.primaryKeyName+ " ="+ id +";";
 		 System.out.println(sql);
 		Statement st;
 		try {
@@ -379,7 +413,7 @@ public class Authentication {
 		return false;
 	}
 	public boolean resetPassword(String username, String password) {
-		String sql = "Update "+this.userstableName+ " set password = '"+ password +"' Where id = "+ getAccountId(username)+ ";";
+		String sql = "Update "+this.userstableName+ " set "+this.passwordColumnName+" = '"+ password +"' Where "+ this.primaryKeyName +" = "+ getAccountId(username)+ ";";
 		 System.out.println(sql);
 			Statement st;
 			try {
