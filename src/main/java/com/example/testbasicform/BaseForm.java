@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.example.designpattern.DatabaseConnection;
 import com.example.tablehandler.TableController;
@@ -174,10 +175,77 @@ public class BaseForm<T> {
 		execute(sql);
 	}
 	
-	public void update(String setClause, String condition) {		
-		String sql = "UPDATE " + tableName + " SET " + setClause + " WHERE " + condition;
-		execute(sql);
+	public void update(ArrayList<String> oldValue, ArrayList<String> newValue) {		
+	    StringBuilder setClauseBuilder = new StringBuilder();
+	    StringBuilder conditionBuilder = new StringBuilder();
+	    
+	    List<Integer> differentIndices = new ArrayList<>();
+	    for (int i = 0; i < oldValue.size(); i++) {
+	        String oldval = oldValue.get(i);
+	        String newval = newValue.get(i);
+
+	        if (!oldval.equals(newval)) {
+	            differentIndices.add(i);
+	        }
+	    }
+
+	    for (int index : differentIndices) {
+	        String columnName = getColumnNames().get(index);
+	        String newValueStr = newValue.get(index);
+
+	        try {
+	            Field field = clazz.getDeclaredField(columnName);
+	            Class<?> fieldType = field.getType();
+
+	            if (fieldType == String.class || fieldType == Timestamp.class) {
+	                setClauseBuilder.append(columnName).append(" = '").append(newValueStr).append("'");
+	            } else {
+	                setClauseBuilder.append(columnName).append(" = ").append(newValueStr);
+	            }
+
+	            setClauseBuilder.append(", ");
+	        } catch (NoSuchFieldException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    if (setClauseBuilder.length() > 0) {
+	        // Remove the last comma and space
+	        setClauseBuilder.setLength(setClauseBuilder.length() - 2);
+	    }
+
+	    for (int i = 0; i < oldValue.size(); i++) {
+	        if (!differentIndices.contains(i)) {
+	            String columnName = getColumnNames().get(i);
+	            String oldValueStr = oldValue.get(i);
+
+	            try {
+	                Field field = clazz.getDeclaredField(columnName);
+	                Class<?> fieldType = field.getType();
+
+	                if (fieldType == int.class || fieldType == boolean.class || fieldType == double.class) {
+	                    conditionBuilder.append(columnName).append(" = ").append(oldValueStr);
+	                } else {
+	                    conditionBuilder.append(columnName).append(" = '").append(oldValueStr).append("'");
+	                }
+
+	                conditionBuilder.append(" AND ");
+	            } catch (NoSuchFieldException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }
+	    
+	    if (conditionBuilder.length() > 0) {
+	        // Remove the last AND and spaces
+	    	conditionBuilder.setLength(conditionBuilder.length() - 5);
+	    }
+
+	    String sql = "UPDATE " + tableName + " SET " + setClauseBuilder.toString() + " WHERE " + conditionBuilder.toString() + ";";
+	    System.out.println(sql);
+	    execute(sql);
 	}
+
 	
 	public T parseResultSetToObject(ResultSet rs) throws SQLException {
         try {
