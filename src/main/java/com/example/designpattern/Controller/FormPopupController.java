@@ -125,7 +125,8 @@ public class FormPopupController implements Initializable {
 			    	if (!table.getTableName().equals(curForm.getTableName())) continue;
 		            isValid = table.validateUpdate(bf.getClazz(), oldFieldValues, newFieldValues);
 		            if (isValid) {
-		            	System.out.println(table.createSQLUpdateStatement(oldFieldValues, newFieldValues));
+		            	System.out.println(table.createSQLSetClause(oldFieldValues, newFieldValues));
+		            	System.out.println(table.createSQLWhereClause(oldFieldValues, newFieldValues));
 		            	
 		            }
 		        }
