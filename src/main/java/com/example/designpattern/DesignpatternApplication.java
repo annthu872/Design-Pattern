@@ -28,8 +28,8 @@ public class DesignpatternApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseUserTableInDatabase.fxml"));
-			ChooseUserTableController controller = new ChooseUserTableController();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/DatabaseConnection.fxml"));
+			DatabaseConnectionController controller = new DatabaseConnectionController(new Authentication());
 			loader.setController(controller);
             Parent root = loader.load();
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
@@ -49,6 +49,7 @@ public class DesignpatternApplication extends Application {
 		SpringApplication.run(DesignpatternApplication.class, args);
 		launch(args);
 		
+//		System.out.println(DatabaseConnection.getInstance().checkTableIntandAutoIncrementPrimaryKey("aaaaaaaaaa"));
 		/*DatabaseConnection con = DatabaseConnection.getInstance();
         List<Table> tables = con.getTablesWithColumns();
         FileGenerator gen = new FileGenerator("C:\\Users\\duong\\OneDrive\\Máy tính\\New folder");

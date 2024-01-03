@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.example.designpattern.Default.Authentication;
+import com.example.designpattern.Default.IAuthentication;
 import com.example.designpattern.decorator.HeadingUIUnit;
 import com.example.designpattern.decorator.TableDetailButton;
 import com.example.designpattern.decorator.TableDetailUIUnit;
@@ -45,13 +46,18 @@ public class SignUpController implements Initializable {
     @FXML
     private TextField txtUsername;
 
+	private IAuthentication auth;
+	public SignUpController(IAuthentication auth){
+		this.auth = auth;
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		btnBack.setOnAction(e->{
 			Parent root;
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
-				SignInController controller = new SignInController();
+				SignInController controller = new SignInController(auth);
 				loader.setController(controller);
 				root = loader.load();
 				Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
@@ -78,7 +84,6 @@ public class SignUpController implements Initializable {
 				noti.display();
 				return;
 			}
-			Authentication auth = Authentication.getInstance();
 			if(!auth.checkUsernameExist(txtUsername.getText())) {
 				if(auth.createAccount(txtUsername.getText(), txtPassword.getText(), txtQuestion.getText(), txtAnswer.getText()))
 				try {
@@ -95,7 +100,7 @@ public class SignUpController implements Initializable {
 //					stage.setScene(scene);
 					Parent root;
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
-					SignInController controller = new SignInController();
+					SignInController controller = new SignInController(auth);
 					loader.setController(controller);
 					root = loader.load();
 					Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());

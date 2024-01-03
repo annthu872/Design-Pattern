@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.example.designpattern.DesignpatternApplication;
+import com.example.designpattern.Default.IAuthentication;
 import com.example.testbasicform.BaseForm;
 
 import javafx.fxml.FXMLLoader;
@@ -52,12 +53,12 @@ public class PopupWindow {
 			e.printStackTrace();
 		}
     }
-    public static void displaySetupTableForm() {
+    public static void displaySetupTableForm(IAuthentication auth) {
 		Stage popupStage = new Stage();
         popupStage.initModality(Modality.APPLICATION_MODAL);
         Parent root;
 		try {
-			ChangeAuthenticationTableController controller = new ChangeAuthenticationTableController(popupStage);
+			ChangeAuthenticationTableController controller = new ChangeAuthenticationTableController(popupStage, auth);
 			FXMLLoader loader = new FXMLLoader(DesignpatternApplication.class.getResource("/screen/UpdateForm.fxml"));
 			loader.setController(controller);
 			root = loader.load();
