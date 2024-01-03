@@ -249,6 +249,16 @@ public class Table implements Serializable {
         }
         return tableString.toString();
     }
+	
+	public int getPrimaryKeyColumnIndex(String columnName) {
+	    for (int i = 0; i < columnList.size(); i++) {
+	        if (columnList.get(i).getColumnName().equals(columnName) && columnList.get(i).isPrimaryKey()) {
+	            return i;
+	        }
+	    }
+	    return -1;
+	}
+	
 	public List<String> getPrimaryKeyColumnNames() {
 	    List<String> primaryKeyColumns = new ArrayList<>();
 	    for (Column column : columnList) {
@@ -258,4 +268,49 @@ public class Table implements Serializable {
 	    }
 	    return primaryKeyColumns;
 	}
+	
+	public String createSQLUpdateStatement(List<String> oldValues, List<String> newValues) {
+	    StringBuilder sqlStatement = new StringBuilder("UPDATE " + tableName + " SET ");
+
+	    for (int i = 0; i < columnList.size(); i++) {
+	        Column column = columnList.get(i);
+	        String columnName = column.getColumnName();
+	        String oldValue = oldValues.get(i);
+	        String newValue = newValues.get(i);
+
+	        // Check if the value has changed
+	        if (!oldValue.equals(newValue)) {
+	            sqlStatement.append(columnName).append(" = ");
+
+	            if (column.getClassName().equals("String") || column.getClassName().equals("Timestamp")) {
+	                sqlStatement.append("'").append(newValue).append("'");
+	            } else {
+	                sqlStatement.append(newValue);
+	            }
+
+	            if (i < columnList.size() - 1) {
+	                sqlStatement.append(", ");
+	            }
+	        }
+	    }
+
+	    List<String> primaryKeyColumns = getPrimaryKeyColumnNames();
+	    sqlStatement.append(" WHERE ");
+	    for (int i = 0; i < primaryKeyColumns.size(); i++) {
+	        String primaryKeyColumn = primaryKeyColumns.get(i);
+	        sqlStatement.append(primaryKeyColumn).append(" = ");
+
+	        String oldValue = oldValues.get(getPrimaryKeyColumnIndex(primaryKeyColumn));
+	        sqlStatement.append("'").append(oldValue).append("'");
+
+	        if (i < primaryKeyColumns.size() - 1) {
+	            sqlStatement.append(" AND ");
+	        }
+	    }
+
+	    sqlStatement.append(";");
+
+	    return sqlStatement.toString();
+	}
+
 }
