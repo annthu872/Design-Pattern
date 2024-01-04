@@ -5,7 +5,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-import com.example.designpattern.DatabaseConnection;
 import com.example.designpattern.DesignpatternApplication;
 import com.example.designpattern.Default.Authentication;
 import com.example.designpattern.Default.IAuthentication;

@@ -12,7 +12,6 @@ import com.example.designpattern.DatabaseConnection;
 import com.example.designpattern.DesignpatternApplication;
 import com.example.designpattern.table.Table;
 import com.example.tablehandler.TableController;
-import com.example.tablehandler.TableGenFromDB;
 import com.example.testbasicform.BaseForm;
 
 import javafx.scene.*;

@@ -72,8 +72,8 @@ public class Table implements Serializable {
         return methodBuilder.toString();
     }
 
-	public String generateEntityClass() {
-		StringBuilder classBuilder = new StringBuilder("package com.example.testbasicform;\n\n");
+	public String generateEntityClass(String entityLocation) {
+		StringBuilder classBuilder = new StringBuilder("package " + convertToPackage(entityLocation) + ";\n\n");
 		classBuilder.append(generateImports());
 
         classBuilder.append("public class " + tableName + " {\n\n");
@@ -108,10 +108,11 @@ public class Table implements Serializable {
 	    return classBuilder.toString();
 	}
 	
-	public String generateFormClass() {
-        StringBuilder formClass = new StringBuilder("package form;\n\n");
-
-        formClass.append("import entity." + tableName + ";\n\n");
+	public String generateFormClass(String entityLocation, String formLocation) {
+        StringBuilder formClass = new StringBuilder("package " + convertToPackage(formLocation) + ";\n\n");
+        
+        if (!entityLocation.equals(formLocation))
+        	formClass.append("import " + convertToPackage(formLocation) + "." + tableName + ";\n\n");
         
         formClass.append("public class ")
                 .append(tableName)
@@ -249,13 +250,11 @@ public class Table implements Serializable {
         }
         return tableString.toString();
     }
-	public List<String> getPrimaryKeyColumnNames() {
-	    List<String> primaryKeyColumns = new ArrayList<>();
-	    for (Column column : columnList) {
-	        if (column.isPrimaryKey()) {
-	            primaryKeyColumns.add(column.getColumnName());
-	        }
+	
+	private String convertToPackage(String location) {
+	    if (location.startsWith("/src/main/java/")) {
+	        location = location.substring("/src/main/java/".length());
 	    }
-	    return primaryKeyColumns;
+	    return location.replace('/', '.');
 	}
 }

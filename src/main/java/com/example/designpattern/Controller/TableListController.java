@@ -1,27 +1,20 @@
 package com.example.designpattern.Controller;
-import java.io.IOException;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.fxml.FXMLLoader;
-import com.example.designpattern.decorator.IScreenUnit;
-import com.example.tablehandler.TableController;
-import com.example.tablehandler.TableGenFromDB;
-import com.example.testbasicform.BaseForm;
-import com.example.testbasicform.PersonForm;
-import com.example.testbasicform.film_categoryForm;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import com.example.tablehandler.TableController;
+import com.example.testbasicform.BaseForm;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
-import javafx.scene.Node;
 import javafx.scene.control.Button; 
-import javafx.scene.layout.AnchorPane;
+
 public class TableListController implements Initializable {
 
     @FXML
