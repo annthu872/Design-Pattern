@@ -93,6 +93,10 @@ public class DatabaseConnection {
 			e.printStackTrace();
 		}	
 	}
+	public boolean isConnect() {
+		ensureConnection();
+		return connection != null;
+	}
 	public List<String> getTableList(String databaseName) {
 		ensureConnection();
 	    List<String> tableList = new ArrayList<>();

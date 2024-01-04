@@ -30,7 +30,6 @@ public class SetupTableColumnNameController implements Initializable{
 	@FXML
     private ComboBox<String>CBPrimaryColumnName;
 
-
     @FXML
     private CheckBox CBoxSupportResetPassword;
 
