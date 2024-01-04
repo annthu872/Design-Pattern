@@ -5,6 +5,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import com.example.designpattern.DatabaseConnection;
 import com.example.designpattern.DesignpatternApplication;
 import com.example.designpattern.Default.Authentication;
 import com.example.designpattern.Default.IAuthentication;
@@ -15,7 +16,9 @@ import com.example.designpattern.notification.WarningNotification;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -124,8 +127,16 @@ public class ChangeAuthenticationTableController implements Initializable {
 						try {
 							auth.createDefaultUserTableToDatabase(User.class);
 							//gen code
-							
-						} catch (SQLException e1) {
+							FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseGeneratedProjectLocation.fxml"));
+							ChooseGeneratedProjectLocationController controller = new ChooseGeneratedProjectLocationController();
+			     			loader.setController(controller);
+			     			Parent root = loader.load();
+			     			Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
+			     			Scene scene = new Scene(root);
+			     			String css = this.getClass().getResource("/css/style.css").toExternalForm();
+			     			scene.getStylesheets().add(css);
+			     			stage.setScene(scene);
+						} catch (SQLException | IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}

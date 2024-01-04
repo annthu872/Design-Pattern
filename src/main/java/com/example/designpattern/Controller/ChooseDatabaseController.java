@@ -36,7 +36,7 @@ public class ChooseDatabaseController {
         databaseCombobox.getItems().addAll(schemaList);
 
         btnConfirm.setOnAction(e -> {
-            SharedVariableHolder.password = databaseCombobox.getValue();
+            SharedVariableHolder.database = databaseCombobox.getValue();
      		try {
      			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseUserTableInDatabase.fxml"));
     			ChooseUserTableController controller = new ChooseUserTableController(new Authentication());

@@ -61,13 +61,6 @@ public class DesignpatternApplication extends Application {
 		launch(args);
 		
 //		System.out.println(DatabaseConnection.getInstance().checkTableIntandAutoIncrementPrimaryKey("aaaaaaaaaa"));
-		/*DatabaseConnection con = DatabaseConnection.getInstance();
-        List<Table> tables = con.getTablesWithColumns();
-        FileGenerator gen = new FileGenerator(
-        		System.getProperty("user.dir"), 
-        		"C:\\Users\\duong\\OneDrive\\Máy tính\\New folder");
-        gen.generateAll(tables);
-        con.close();*/
 	}
 	
 }
