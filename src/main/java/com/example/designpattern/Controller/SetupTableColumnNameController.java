@@ -103,23 +103,21 @@ public class SetupTableColumnNameController implements Initializable{
 					auth.setResetPasswordTable(this.txtResetPasswordTableName.getText());
 					}
 				auth.createResetPasswordTable();
-				Parent root = null;
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
-				SignInController controller = new SignInController(auth);
-				loader.setController(controller);
+				//gen code
 				try {
-					root = loader.load();
+					FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseGeneratedProjectLocation.fxml"));
+					ChooseGeneratedProjectLocationController controller = new ChooseGeneratedProjectLocationController();
+	     			loader.setController(controller);
+	     			Parent root = loader.load();
+	     			Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
+	     			Scene scene = new Scene(root);
+	     			String css = this.getClass().getResource("/css/style.css").toExternalForm();
+	     			scene.getStylesheets().add(css);
+	     			stage.setScene(scene);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
-				Scene scene = new Scene(root);
-				String css = this.getClass().getResource("/css/style.css").toExternalForm();
-				scene.getStylesheets().add(css);
-				stage.setScene(scene);
-				
-				//gen code
 			}
 		});
 

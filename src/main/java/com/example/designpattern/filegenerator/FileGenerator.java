@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.designpattern.SharedVariableHolder;
 import com.example.designpattern.table.Table;
 
 public class FileGenerator {
@@ -14,15 +15,10 @@ public class FileGenerator {
 	
 	String mainLocation = "/src/main/java/com/example/designpattern/DesignpatternApplication.java";
 	String dbConnectionLocation = "/src/main/java/com/example/designpattern/DatabaseConnection.java";
-	String sharedVariableHolderLocation = "/src/main/java/com/example/designpattern/SharedVariableHolder.java";
-	
-	String tableLocation = "/src/main/java/com/example/designpattern/table";
-	String columnLocation = "/src/main/java/com/example/designpattern/column";
+	String sharedVariableHolderLocation = "/src/main/resources/template/dbVariable.txt";
 	
 	String controllerLocation = "/src/main/java/com/example/designpattern/Controller";
 	List<String> controllerList = new ArrayList<>();
-	
-	String notificationLocation = "/src/main/java/com/example/designpattern/notification";
 	
 	String decoratorLocation = "/src/main/java/com/example/designpattern/decorator";
 	List<String> decoratorList = new ArrayList<>();
@@ -32,10 +28,6 @@ public class FileGenerator {
 	String formLocation = "/src/main/java/com/example/testbasicform";
 	String entityLocation = "/src/main/java/com/example/testbasicform";
 	String baseFormLocation = "/src/main/java/com/example/testbasicform/BaseForm.java";
-	
-	String styleLocation = "/src/main/resources/css";
-	String imagesLocation = "/src/main/resources/images";
-	String fxmlLocation = "/src/main/resources/screen";
 	
 	public FileGenerator(String projectOriginalLocation, String projectDestinationLocation) {
 		this.projectOriginalLocation = projectOriginalLocation;
@@ -56,20 +48,26 @@ public class FileGenerator {
 	public void generateAll(List<Table> tables) {
 		generatePomXml();
 		generateMainFile();
-		copyTableAndColumnFiles();
+		copyFilesFromLocation("/src/main/java/com/example/designpattern/table");
+		copyFilesFromLocation("/src/main/java/com/example/designpattern/column");
 		generateEntityFiles(tables);
 		generateFormFiles(tables);
-		copyScreenResources();
-		copyFilesFromLocation(styleLocation);
-		copyFilesFromLocation(imagesLocation);
+		copyFilesFromLocation("/src/main/resources/css");
+		copyFilesFromLocation("/src/main/resources/images");
+		copyFilesFromLocation("/src/main/resources/screen");
 		generateControllerFiles();
-		generateNotificationFiles();
+		copyFilesFromLocation("/src/main/java/com/example/designpattern/notification");
 		generateDecoratorFiles();
 		generateTableHandlerFile();
 		copyFilesFromLocation("/src/main/java/com/example/designpattern/Default");
 	}
 	
 	public void generatePomXml() {
+		String destinationPath = projectDestinationLocation + "/pom.xml";
+        File destinationDir = new File(destinationPath);
+        if (!destinationDir.exists()) {
+        	destinationDir.mkdirs();
+        }
         try {
         	String originalPomPath = projectOriginalLocation + "/src/main/resources/template/pom.txt";
             Files.copy(Paths.get(originalPomPath), Paths.get(projectDestinationLocation + "/pom.xml"), StandardCopyOption.REPLACE_EXISTING);
@@ -127,28 +125,6 @@ public class FileGenerator {
             }
         }
     }
-
-    public void copyScreenResources() {
-        String screenPath = projectDestinationLocation + fxmlLocation;
-        File screenDir = new File(screenPath);
-        if (!screenDir.exists()) {
-            screenDir.mkdirs();
-        }
-
-        try {
-            List<Path> files = Files.walk(Paths.get(projectOriginalLocation + fxmlLocation))
-                    .filter(Files::isRegularFile)
-                    .collect(Collectors.toList());
-
-            for (Path file : files) {
-                String fileName = file.getFileName().toString();
-                Files.copy(file, Paths.get(screenPath + "/" + fileName), StandardCopyOption.REPLACE_EXISTING);
-                System.out.println("Copied: " + screenPath + "/" + fileName);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     
     public void generateControllerFiles() {
         String controllerPath = projectDestinationLocation + controllerLocation;
@@ -164,28 +140,6 @@ public class FileGenerator {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    public void generateNotificationFiles() {
-        String notificationPath = projectDestinationLocation + notificationLocation;
-        File notificationDir = new File(notificationPath);
-        if (!notificationDir.exists()) {
-            notificationDir.mkdirs();
-        }
-
-        try {
-            List<Path> files = Files.walk(Paths.get(projectOriginalLocation + notificationLocation))
-                    .filter(Files::isRegularFile)
-                    .collect(Collectors.toList());
-
-            for (Path file : files) {
-                String fileName = file.getFileName().toString();
-                Files.copy(file, Paths.get(notificationPath + "/" + fileName), StandardCopyOption.REPLACE_EXISTING);
-                System.out.println("Copied: " + notificationPath + "/" + fileName);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -237,22 +191,47 @@ public class FileGenerator {
 
     private void copyDBConnectionAndSharedVariableHolder() {
         String dbConnectionPath = projectDestinationLocation + dbConnectionLocation;
-        String sharedVariableHolderPath = projectDestinationLocation + sharedVariableHolderLocation;
 
         try {
-            Files.copy(Paths.get(projectOriginalLocation + dbConnectionLocation), Paths.get(dbConnectionPath), StandardCopyOption.REPLACE_EXISTING);
-            Files.copy(Paths.get(projectOriginalLocation + sharedVariableHolderLocation), Paths.get(sharedVariableHolderPath), StandardCopyOption.REPLACE_EXISTING);
-
+            Files.copy(
+            		Paths.get(projectOriginalLocation + dbConnectionLocation), 
+            		Paths.get(dbConnectionPath), 
+            		StandardCopyOption.REPLACE_EXISTING);
             System.out.println("Copied DB connection file: " + dbConnectionPath);
-            System.out.println("Copied Shared Variable Holder file: " + sharedVariableHolderPath);
+            System.out.println(SharedVariableHolder.database + " " +
+            		SharedVariableHolder.url + " " +
+            		SharedVariableHolder.user + " " +
+            		SharedVariableHolder.password);
+            generateSharedVariableHolder(
+            		SharedVariableHolder.database, 
+            		SharedVariableHolder.url, 
+            		SharedVariableHolder.user, 
+            		SharedVariableHolder.password);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+    
+    public void generateSharedVariableHolder(String database, String url, String user, String password) {
+        String sharedVariableHolderTemplatePath = projectOriginalLocation + sharedVariableHolderLocation;
+        String sharedVariableHolderPath = projectDestinationLocation + "/src/main/java/com/example/designpattern/SharedVariableHolder.java";
 
-    public void copyTableAndColumnFiles() {
-        copyFilesFromLocation(tableLocation);
-        copyFilesFromLocation(columnLocation);
+        try (BufferedReader reader = new BufferedReader(new FileReader(sharedVariableHolderTemplatePath));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(sharedVariableHolderPath))) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.replace("<DATABASE>", database)
+                           .replace("<URL>", url)
+                           .replace("<USERNAME>", user)
+                           .replace("<PASSWORD>", password);
+                writer.write(line + "\n");
+            }
+
+            System.out.println("Generated Shared Variable Holder file: " + sharedVariableHolderPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void copyFilesFromLocation(String sourceLocation) {

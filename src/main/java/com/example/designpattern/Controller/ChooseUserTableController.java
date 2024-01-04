@@ -88,7 +88,21 @@ public class ChooseUserTableController{
 					e1.printStackTrace();
 				}
         	}
-//gen code
+        	//gen code
+        	try {
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseGeneratedProjectLocation.fxml"));
+				ChooseGeneratedProjectLocationController controller = new ChooseGeneratedProjectLocationController();
+     			loader.setController(controller);
+     			Parent root = loader.load();
+     			Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
+     			Scene scene = new Scene(root);
+     			String css = this.getClass().getResource("/css/style.css").toExternalForm();
+     			scene.getStylesheets().add(css);
+     			stage.setScene(scene);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
         });
     }
 
