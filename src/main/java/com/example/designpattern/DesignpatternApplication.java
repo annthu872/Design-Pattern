@@ -28,8 +28,8 @@ public class DesignpatternApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseUserTableInDatabase.fxml"));
-			ChooseUserTableController controller = new ChooseUserTableController();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/DatabaseConnection.fxml"));
+			DatabaseConnectionController controller = new DatabaseConnectionController();
 			loader.setController(controller);
             Parent root = loader.load();
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
@@ -39,6 +39,17 @@ public class DesignpatternApplication extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);
 			primaryStage.show();
+//			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseUserTableInDatabase.fxml"));
+//			ChooseUserTableController controller = new ChooseUserTableController();
+//			loader.setController(controller);
+//            Parent root = loader.load();
+//			String css = this.getClass().getResource("/css/style.css").toExternalForm();
+//			Scene scene = new Scene(root);
+//			scene.getStylesheets().add(css);
+//
+//			primaryStage.setScene(scene);
+//			primaryStage.setResizable(false);
+//			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -49,7 +60,8 @@ public class DesignpatternApplication extends Application {
 //		SpringApplication.run(DesignpatternApplication.class, args);
 //		launch(args);
 		
-		DatabaseConnection con = DatabaseConnection.getInstance();
+//		System.out.println(DatabaseConnection.getInstance().checkTableIntandAutoIncrementPrimaryKey("aaaaaaaaaa"));
+		/*DatabaseConnection con = DatabaseConnection.getInstance();
         List<Table> tables = con.getTablesWithColumns();
         FileGenerator gen = new FileGenerator(
         		System.getProperty("user.dir"), 
