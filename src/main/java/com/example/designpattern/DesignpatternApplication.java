@@ -57,8 +57,8 @@ public class DesignpatternApplication extends Application {
 
 	
 	public static void main(String[] args) {
-//		SpringApplication.run(DesignpatternApplication.class, args);
-//		launch(args);
+		SpringApplication.run(DesignpatternApplication.class, args);
+		launch(args);
 		
 //		System.out.println(DatabaseConnection.getInstance().checkTableIntandAutoIncrementPrimaryKey("aaaaaaaaaa"));
 		/*DatabaseConnection con = DatabaseConnection.getInstance();
@@ -67,7 +67,7 @@ public class DesignpatternApplication extends Application {
         		System.getProperty("user.dir"), 
         		"C:\\Users\\duong\\OneDrive\\Máy tính\\New folder");
         gen.generateAll(tables);
-        con.close();
+        con.close();*/
 	}
 	
 }
