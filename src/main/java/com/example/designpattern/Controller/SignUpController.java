@@ -6,6 +6,10 @@ import java.util.ResourceBundle;
 
 import com.example.designpattern.Default.Authentication;
 import com.example.designpattern.Default.IAuthentication;
+import com.example.designpattern.authenticationScreenInterface.IoCContainer;
+import com.example.designpattern.authenticationScreenInterface.SignInControllerInterface;
+import com.example.designpattern.authenticationScreenInterface.SignUpControllerInterface;
+
 import com.example.designpattern.decorator.HeadingUIUnit;
 import com.example.designpattern.decorator.TableDetailButton;
 import com.example.designpattern.decorator.TableDetailUIUnit;
@@ -26,7 +30,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class SignUpController implements Initializable {
+public class SignUpController implements SignUpControllerInterface {
 
     @FXML
     private Button btnBack;
@@ -45,11 +49,10 @@ public class SignUpController implements Initializable {
 
     @FXML
     private TextField txtUsername;
+    
+    private SignInControllerInterface signInController;
 
 	private IAuthentication auth;
-	public SignUpController(IAuthentication auth){
-		this.auth = auth;
-	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -57,8 +60,8 @@ public class SignUpController implements Initializable {
 			Parent root;
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
-				SignInController controller = new SignInController(auth);
-				loader.setController(controller);
+				SignInControllerInterface latestSignInController = IoCContainer.resolve(SignInControllerInterface.class);
+                loader.setController(latestSignInController);
 				root = loader.load();
 				Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
 				Scene scene = new Scene(root);
@@ -91,17 +94,10 @@ public class SignUpController implements Initializable {
 					noti.setMessage("Sign Up Successful, now Sign In to Join");
 					noti.setNotiType(new InformationNotification());
 					noti.display();
-					
-//					Parent root = new HeadingUIUnit(new TableListUIUnit( new TableDetailButton(new TableDetailUIUnit()))).getUI();
-//					Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
-//					Scene scene = new Scene(root);
-//					String css = this.getClass().getResource("/css/style.css").toExternalForm();
-//					scene.getStylesheets().add(css);
-//					stage.setScene(scene);
 					Parent root;
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
-					SignInController controller = new SignInController(auth);
-					loader.setController(controller);
+					System.out.println(signInController.getClass());
+					loader.setController(signInController);
 					root = loader.load();
 					Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
 					Scene scene = new Scene(root);
@@ -131,5 +127,15 @@ public class SignUpController implements Initializable {
 
 		});		
 	}
+
+	@Override
+	public void setSignInController(SignInControllerInterface signInController) {
+		// TODO Auto-generated method stub
+		this.signInController = signInController;
+	}
+	@Override
+    public void setAuthentication(IAuthentication auth) {
+    	this.auth = auth;
+    }
 
 }

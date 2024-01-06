@@ -45,7 +45,8 @@ public class DatabaseConnectionController {
         	 Parent root;
      		try {
      			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseUserTableInDatabase.fxml"));
-    			ChooseUserTableController controller = new ChooseUserTableController(auth);
+    			ChooseUserTableController controller = new ChooseUserTableController();
+    			controller.setAuthentication(auth);
      			loader.setController(controller);
      			root = loader.load();
 //     			root = FXMLLoader.load(getClass().getResource("/screen/SignIn.fxml"));

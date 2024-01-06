@@ -9,6 +9,7 @@ import com.example.designpattern.SharedVariableHolder;
 import com.example.designpattern.Default.Authentication;
 import com.example.designpattern.Default.IAuthentication;
 import com.example.designpattern.Default.User;
+import com.example.designpattern.authenticationScreenInterface.SignInControllerInterface;
 import com.example.designpattern.notification.Notification;
 import com.example.designpattern.notification.WarningNotification;
 
@@ -33,7 +34,14 @@ public class ChooseUserTableController{
     private ComboBox<String> comboBox;
     DatabaseConnection connection = DatabaseConnection.getInstance();
     IAuthentication auth;
-    public ChooseUserTableController(IAuthentication auth){
+    SignInControllerInterface signInController;
+    public ChooseUserTableController() {
+		
+	}
+    public void setSignInController(SignInControllerInterface signInController) {
+    	this.signInController = signInController;
+    }
+	public void setAuthentication(IAuthentication auth) {
     	this.auth = auth;
     }
     @FXML
@@ -60,7 +68,8 @@ public class ChooseUserTableController{
                 Parent root;
             	try {
     				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SetupTableColumnName.fxml"));
-    				SetupTableColumnNameController controller = new SetupTableColumnNameController(selectedTable, auth);
+    				SetupTableColumnNameController controller = new SetupTableColumnNameController(selectedTable);
+    				controller.setAuthentication(auth);
     				loader.setController(controller);
     				root = loader.load();
     				Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
@@ -81,8 +90,22 @@ public class ChooseUserTableController{
         		new PopupWindow().displaySetupTableForm(auth);
         	}
         	else {
+        		Parent root;
             	try {
 					auth.createDefaultUserTableToDatabase(User.class);
+					FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
+					loader.setController(signInController);
+					try {
+						root = loader.load();
+						Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
+						Scene scene = new Scene(root);
+						String css = this.getClass().getResource("/css/style.css").toExternalForm();
+						scene.getStylesheets().add(css);
+						stage.setScene(scene);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

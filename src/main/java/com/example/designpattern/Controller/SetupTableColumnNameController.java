@@ -9,6 +9,7 @@ import com.example.designpattern.DatabaseConnection;
 import com.example.designpattern.SharedVariableHolder;
 import com.example.designpattern.Default.Authentication;
 import com.example.designpattern.Default.IAuthentication;
+import com.example.designpattern.authenticationScreenInterface.SignInControllerInterface;
 import com.example.designpattern.notification.Notification;
 import com.example.designpattern.notification.WarningNotification;
 
@@ -50,14 +51,18 @@ public class SetupTableColumnNameController implements Initializable{
     
     @FXML
     private HBox NamedResetPasswordPane;
+    
+    private SignInControllerInterface signInController;
 	DatabaseConnection connection = DatabaseConnection.getInstance();
 
     private String userTableName = "";
     private boolean changeResetPasswordTableName = false;
     private IAuthentication auth;
-	public SetupTableColumnNameController(String selectedTable,IAuthentication auth) {
+    public void setAuthentication(IAuthentication auth) {
+    	this.auth = auth;
+    }
+	public SetupTableColumnNameController(String selectedTable) {
 		this.userTableName = selectedTable;
-		this.auth = auth;
 	}
 
 	@Override
@@ -106,8 +111,7 @@ public class SetupTableColumnNameController implements Initializable{
 				auth.createResetPasswordTable();
 				Parent root = null;
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
-				SignInController controller = new SignInController(auth);
-				loader.setController(controller);
+				loader.setController(signInController);
 				try {
 					root = loader.load();
 				} catch (IOException e1) {
@@ -128,7 +132,8 @@ public class SetupTableColumnNameController implements Initializable{
 			Parent root;
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseUserTableInDatabase.fxml"));
-				ChooseUserTableController controller = new ChooseUserTableController(auth);
+				ChooseUserTableController controller = new ChooseUserTableController();
+				controller.setAuthentication(auth);
 				loader.setController(controller);
 				root = loader.load();
 //				root = FXMLLoader.load(getClass().getResource("/screen/SignIn.fxml"));
@@ -176,6 +181,11 @@ public class SetupTableColumnNameController implements Initializable{
 
         return namesWithDatatype;
     }
+	
+	public void setSignInController(SignInControllerInterface signInController) {
+		// TODO Auto-generated method stub
+		this.signInController = signInController;
+	}
 	
 
 }

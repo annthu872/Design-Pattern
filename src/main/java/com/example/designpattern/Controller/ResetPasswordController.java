@@ -6,6 +6,9 @@ import java.util.ResourceBundle;
 
 import com.example.designpattern.Default.Authentication;
 import com.example.designpattern.Default.IAuthentication;
+import com.example.designpattern.authenticationScreenInterface.ResetPassword1ControllerInterface;
+import com.example.designpattern.authenticationScreenInterface.ResetPassword2ControllerInterface;
+import com.example.designpattern.authenticationScreenInterface.SignInControllerInterface;
 import com.example.designpattern.notification.*;
 
 import javafx.fxml.FXML;
@@ -18,7 +21,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class ResetPasswordController implements Initializable {
+public class ResetPasswordController implements ResetPassword1ControllerInterface {
     @FXML
     private Button btnBack;
 
@@ -28,7 +31,10 @@ public class ResetPasswordController implements Initializable {
     @FXML
     private TextField txtUsername;
     IAuthentication auth;
-    public ResetPasswordController(IAuthentication auth) {
+    private SignInControllerInterface signInController;
+    private ResetPassword2ControllerInterface rsPassController;
+    @Override
+    public void setAuthentication(IAuthentication auth) {
     	this.auth = auth;
     }
 	@Override
@@ -37,10 +43,8 @@ public class ResetPasswordController implements Initializable {
 			Parent root;
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
-				SignInController controller = new SignInController(auth);
-				loader.setController(controller);
+				loader.setController(signInController);
 				root = loader.load();
-//				root = FXMLLoader.load(getClass().getResource("/screen/SignIn.fxml"));
 				Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
 				Scene scene = new Scene(root);
 				String css = this.getClass().getResource("/css/style.css").toExternalForm();
@@ -59,11 +63,9 @@ public class ResetPasswordController implements Initializable {
 				Parent root;
 				try {
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ResetPassword2.fxml"));
-					ResetPasswordController2 controller = new ResetPasswordController2(txtUsername.getText(),auth);
-					loader.setController(controller);
+					rsPassController.setUsername(txtUsername.getText());
+					loader.setController(rsPassController);
 					root = loader.load();
-
-//					root = FXMLLoader.load(getClass().getResource("/screen/SignIn.fxml"));
 					Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
 					Scene scene = new Scene(root);
 					String css = this.getClass().getResource("/css/style.css").toExternalForm();
@@ -81,6 +83,16 @@ public class ResetPasswordController implements Initializable {
 				noti.display();
 			}
 		});				
+	}
+	@Override
+	public void setSignInController(SignInControllerInterface signInController) {
+		this.signInController = signInController;
+		
+	}
+	@Override
+	public void setResetPassword2Controller(ResetPassword2ControllerInterface rsPassController) {
+		// TODO Auto-generated method stub
+		this.rsPassController = rsPassController;
 	}
 
 }

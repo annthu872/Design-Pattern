@@ -19,26 +19,53 @@ import com.example.designpattern.filegenerator.FileGenerator;
 import com.example.designpattern.table.Table;
 import com.example.tablehandler.TableGenFromDB;
 import com.example.designpattern.Default.*;
+import com.example.designpattern.authenticationScreenInterface.IoCContainer;
+import com.example.designpattern.authenticationScreenInterface.ResetPassword1ControllerInterface;
+import com.example.designpattern.authenticationScreenInterface.ResetPassword2ControllerInterface;
+import com.example.designpattern.authenticationScreenInterface.SignInControllerInterface;
+import com.example.designpattern.authenticationScreenInterface.SignUpControllerInterface;
 
 
 
 
 public class DesignpatternApplication extends Application {
+	private final IoCContainer container = new IoCContainer();
 	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/DatabaseConnection.fxml"));
-			DatabaseConnectionController controller = new DatabaseConnectionController(new Authentication());
+			container.register(SignInControllerInterface.class, SignInController.class);
+			container.register(SignUpControllerInterface.class, SignUpController.class);
+			container.register(ResetPassword1ControllerInterface.class, ResetPasswordController.class);
+			container.register(ResetPassword2ControllerInterface.class, ResetPasswordController2.class);
+			container.register(IAuthentication.class, Authentication.class);
+
+	        SignInControllerInterface signInController = IoCContainer.resolve(SignInControllerInterface.class);
+	        SignUpControllerInterface signUpController = IoCContainer.resolve(SignUpControllerInterface.class);
+	        ResetPassword1ControllerInterface resetPassword1Controller = IoCContainer.resolve(ResetPassword1ControllerInterface.class);
+	        ResetPassword2ControllerInterface resetPassword2Controller = IoCContainer.resolve(ResetPassword2ControllerInterface.class);
+			
+			
+			/*FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseUserTableInDatabase.fxml"));
+			ChooseUserTableController controller = new ChooseUserTableController();
+			controller.setAuthentication(auth);
+			controller.setSignInController(signInController);
 			loader.setController(controller);
             Parent root = loader.load();
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
 			Scene scene = new Scene(root);
-			scene.getStylesheets().add(css);
+			scene.getStylesheets().add(css);*/
 
-			primaryStage.setScene(scene);
-			primaryStage.setResizable(false);
-			primaryStage.show();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
+            loader.setController(signInController);
+            Parent root = loader.load();
+            String css = this.getClass().getResource("/css/style.css").toExternalForm();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(css);
+
+            primaryStage.setScene(scene);
+            primaryStage.setResizable(false);
+            primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
