@@ -126,6 +126,7 @@ public class ChangeAuthenticationTableController implements Initializable {
 						auth.setResetPasswordTable(this.forgotPasswordTextField.getText());
 						try {
 							auth.createDefaultUserTableToDatabase(User.class);
+							this.stage.close();
 							//gen code
 							FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseGeneratedProjectLocation.fxml"));
 							ChooseGeneratedProjectLocationController controller = new ChooseGeneratedProjectLocationController();
