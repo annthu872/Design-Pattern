@@ -19,9 +19,9 @@ public class TableUIUnit implements IScreenUnit {
 		TableController table = TableController.getInstance();
 		loader.setController(table);
 		mScreen.getChildren().add(loader.load());
-		film_textForm f = new film_textForm();
+		/*film_textForm f = new film_textForm();
 		f.read(table);
-		/*table.setcolumnNames(f.getColumnNames());
+		table.setcolumnNames(f.getColumnNames());
 		table.setTableData(f.getTableData());
 		table.getData();*/
 		return mScreen;
