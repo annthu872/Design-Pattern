@@ -131,11 +131,16 @@ public class ChangeAuthenticationTableController implements Initializable {
 							ChooseGeneratedProjectLocationController controller = new ChooseGeneratedProjectLocationController();
 			     			loader.setController(controller);
 			     			Parent root = loader.load();
-			     			Stage stage = new Stage();
+			     			Stage newStage = new Stage();
 			     			Scene scene = new Scene(root);
 			     			String css = this.getClass().getResource("/css/style.css").toExternalForm();
 			     			scene.getStylesheets().add(css);
-			     			stage.setScene(scene);
+			     			newStage.setScene(scene);
+			     			Stage currentStage = (Stage)(((Node)e.getSource()).getScene().getWindow());
+			     			currentStage.close();
+
+			     			// Show the new stage
+			     			newStage.show();
 						} catch (SQLException | IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
