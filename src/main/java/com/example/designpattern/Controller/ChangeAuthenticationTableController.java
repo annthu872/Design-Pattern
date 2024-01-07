@@ -126,13 +126,12 @@ public class ChangeAuthenticationTableController implements Initializable {
 						auth.setResetPasswordTable(this.forgotPasswordTextField.getText());
 						try {
 							auth.createDefaultUserTableToDatabase(User.class);
-							this.stage.close();
 							//gen code
 							FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseGeneratedProjectLocation.fxml"));
 							ChooseGeneratedProjectLocationController controller = new ChooseGeneratedProjectLocationController();
 			     			loader.setController(controller);
 			     			Parent root = loader.load();
-			     			Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
+			     			Stage stage = new Stage();
 			     			Scene scene = new Scene(root);
 			     			String css = this.getClass().getResource("/css/style.css").toExternalForm();
 			     			scene.getStylesheets().add(css);
