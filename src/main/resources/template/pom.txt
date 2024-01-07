@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.2.0</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.example</groupId>
+	<artifactId>designpattern</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>designpattern</name>
+	<description>Demo project for Spring Boot</description>
+	<properties>
+		<java.version>17</java.version>
+		    <myproject.root>${basedir}</myproject.root>
+
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+	        <groupId>org.openjfx</groupId>
+	        <artifactId>javafx-controls</artifactId>
+	        <version>21</version>
+	    </dependency>
+
+		<dependency>
+	        <groupId>org.openjfx</groupId>
+	        <artifactId>javafx-fxml</artifactId>
+	        <version>21</version>
+	    </dependency>
+	    
+	    <dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>3.13.0</version>
+		</dependency>
+		
+		<dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+        </dependency>
+		
+		<dependency>
+		    <groupId>org.jetbrains</groupId>
+		    <artifactId>annotations</artifactId>
+		    <version>16.0.2</version>
+		</dependency>
+
+
+	    <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml -->
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-compiler-plugin</artifactId>
+	            <version>3.8.0</version>
+	            <configuration>
+	                <source>1.8</source>
+	                <target>1.8</target>
+	            </configuration>
+			</plugin>
+			<plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-dependency-plugin</artifactId>
+	            <version>3.2.0</version> <!-- Use a compatible version -->
+	            <executions>
+	                <execution>
+	                    <id>download-javafx</id>
+	                    <phase>initialize</phase>
+	                    <goals>
+	                        <goal>copy</goal>
+	                    </goals>
+	                    <configuration>
+	                        <artifactItems>
+	                            <artifactItem>
+	                                <groupId>org.openjfx</groupId>
+	                                <artifactId>javafx-controls</artifactId>
+	                                <version>21</version>
+	                                <outputDirectory>${project.build.directory}/javafx-libs</outputDirectory>
+	                                <destFileName>javafx-controls.jar</destFileName>
+	                            </artifactItem>
+	                            <!-- Include other JavaFX modules similarly -->
+	                        </artifactItems>
+	                    </configuration>
+	                </execution>
+	            </executions>
+	        </plugin>
+	        <plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-surefire-plugin</artifactId>
+	            <version>3.0.0-M5</version> <!-- Use a compatible version -->
+	            <executions>
+	                <execution>
+	                    <phase>test</phase>
+	                    <configuration>
+	                        <argLine>--module-path ${project.build.directory}/javafx-libs --add-modules javafx.controls,javafx.graphics,javafx.fxml</argLine>
+	                    </configuration>
+	                </execution>
+	            </executions>
+	        </plugin>
+		</plugins>
+	</build>
+</project>

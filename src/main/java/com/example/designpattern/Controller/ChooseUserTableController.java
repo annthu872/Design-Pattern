@@ -7,6 +7,7 @@ import java.util.List;
 import com.example.designpattern.DatabaseConnection;
 import com.example.designpattern.SharedVariableHolder;
 import com.example.designpattern.Default.Authentication;
+import com.example.designpattern.Default.IAuthentication;
 import com.example.designpattern.Default.User;
 import com.example.designpattern.notification.Notification;
 import com.example.designpattern.notification.WarningNotification;
@@ -20,7 +21,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 
-public class ChooseUserTableController {
+public class ChooseUserTableController{
 
     @FXML
     private Button btnConfirm;
@@ -30,11 +31,14 @@ public class ChooseUserTableController {
 
     @FXML
     private ComboBox<String> comboBox;
+    DatabaseConnection connection = DatabaseConnection.getInstance();
+    IAuthentication auth;
+    public ChooseUserTableController(IAuthentication auth){
+    	this.auth = auth;
+    }
     @FXML
     private void initialize() {
-    	Authentication a = Authentication.getInstance();
-        DatabaseConnection con = DatabaseConnection.getInstance();
-        List<String> tableList = con.getTableList(SharedVariableHolder.database);
+        List<String> tableList = connection.getTableList(SharedVariableHolder.database);
         comboBox.getItems().addAll(tableList);
         System.out.println(tableList);
 		Notification noti = new Notification();
@@ -42,8 +46,13 @@ public class ChooseUserTableController {
         btnConfirm.setOnAction(e -> {
         	String selectedTable = comboBox.getValue();
             System.out.println("Table: "+selectedTable);
-            if(		DatabaseConnection.getInstance().getPrimaryKeyColumnNamesByTable(selectedTable).size() != 1) {
+            if(		connection.getPrimaryKeyColumnNamesByTable(selectedTable).size() != 1) {
             	noti.setMessage("Table for reset authentication name must be have only 1 primary key column, Please choose another table ");
+				noti.setNotiType(new WarningNotification());
+				noti.display();
+            }
+            else if (!connection.checkTableIntandAutoIncrementPrimaryKey(selectedTable)) {
+            	noti.setMessage("Table for reset authentication primary key must be int value and auto_incresement");
 				noti.setNotiType(new WarningNotification());
 				noti.display();
             }
@@ -51,7 +60,7 @@ public class ChooseUserTableController {
                 Parent root;
             	try {
     				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SetupTableColumnName.fxml"));
-    				SetupTableColumnNameController controller = new SetupTableColumnNameController(selectedTable);
+    				SetupTableColumnNameController controller = new SetupTableColumnNameController(selectedTable, auth);
     				loader.setController(controller);
     				root = loader.load();
     				Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
@@ -68,18 +77,32 @@ public class ChooseUserTableController {
         });
         btnDefault.setOnAction(e->{
         	
-        	if(a.checkifUserTableNameExisted()||a.checkifResetPassTableNameExisted()) {
-        		new PopupWindow().displaySetupTableForm();
+        	if(connection.checkifTableNameExisted("users")||connection.checkifTableNameExisted("resetpassword")) {
+        		new PopupWindow().displaySetupTableForm(auth);
         	}
         	else {
             	try {
-					a.createDefaultUserTableToDatabase(User.class);
+					auth.createDefaultUserTableToDatabase(User.class);
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
         	}
-//gen code
+        	//gen code
+        	try {
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseGeneratedProjectLocation.fxml"));
+				ChooseGeneratedProjectLocationController controller = new ChooseGeneratedProjectLocationController();
+     			loader.setController(controller);
+     			Parent root = loader.load();
+     			Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
+     			Scene scene = new Scene(root);
+     			String css = this.getClass().getResource("/css/style.css").toExternalForm();
+     			scene.getStylesheets().add(css);
+     			stage.setScene(scene);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
         });
     }
 

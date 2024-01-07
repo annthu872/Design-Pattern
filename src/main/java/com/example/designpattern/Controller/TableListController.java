@@ -1,27 +1,20 @@
 package com.example.designpattern.Controller;
-import java.io.IOException;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.fxml.FXMLLoader;
-import com.example.designpattern.decorator.IScreenUnit;
-import com.example.tablehandler.TableController;
-import com.example.tablehandler.TableGenFromDB;
-import com.example.testbasicform.BaseForm;
-import com.example.testbasicform.PersonForm;
-import com.example.testbasicform.film_categoryForm;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import com.example.tablehandler.TableController;
+import com.example.testbasicform.BaseForm;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
-import javafx.scene.Node;
 import javafx.scene.control.Button; 
-import javafx.scene.layout.AnchorPane;
+
 public class TableListController implements Initializable {
 
     @FXML
@@ -40,8 +33,27 @@ public class TableListController implements Initializable {
 			Button button = new Button();
 			button.setText(tableList.get(i));
 			button.getStyleClass().add("table-button");
-			if( i != choosenTablePos)
+			if( i != choosenTablePos) {
 				button.getStyleClass().add("table-button-not-choosen");
+				try {
+                    // Load the class
+					String temp = tableList.get(i);
+	                String formClassNameTemp = temp + "Form";
+                    Class<?> formClass = Class.forName("com.example.testbasicform." + formClassNameTemp);
+
+                    // Create an instance of the class
+                    Constructor<?> constructor = formClass.getConstructor();
+                    BaseForm<?> formInstance = (BaseForm<?>) constructor.newInstance();
+                    formInstance.read(TableController.getInstance());
+                    // Now you can use the created formInstance as needed
+                    // For example, call methods or perform actions related to the form
+
+                } catch (ClassNotFoundException | NoSuchMethodException | SecurityException
+                        | InstantiationException | IllegalAccessException | IllegalArgumentException
+                        | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+			}
 			else 
 				button.getStyleClass().add("table-button-choosen");
 			tableListButton.add(button);

@@ -3,7 +3,6 @@ package com.example.designpattern.decorator;
 import java.io.IOException;
 
 import com.example.tablehandler.TableController;
-import com.example.tablehandler.TableUIHandle;
 import com.example.testbasicform.film_textForm;
 
 import javafx.fxml.FXMLLoader;

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import com.example.designpattern.DatabaseConnection;
 import com.example.designpattern.SharedVariableHolder;
 import com.example.designpattern.Default.Authentication;
+import com.example.designpattern.Default.IAuthentication;
 import com.example.designpattern.notification.Notification;
 import com.example.designpattern.notification.WarningNotification;
 
@@ -29,7 +30,6 @@ public class SetupTableColumnNameController implements Initializable{
 	@FXML
     private ComboBox<String>CBPrimaryColumnName;
 
-
     @FXML
     private CheckBox CBoxSupportResetPassword;
 
@@ -49,23 +49,25 @@ public class SetupTableColumnNameController implements Initializable{
     
     @FXML
     private HBox NamedResetPasswordPane;
-    
+	DatabaseConnection connection = DatabaseConnection.getInstance();
+
     private String userTableName = "";
     private boolean changeResetPasswordTableName = false;
-    private Authentication auth = Authentication.getInstance();
-	public SetupTableColumnNameController(String selectedTable) {
+    private IAuthentication auth;
+	public SetupTableColumnNameController(String selectedTable,IAuthentication auth) {
 		this.userTableName = selectedTable;
+		this.auth = auth;
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		List<List<Object>> list = DatabaseConnection.getInstance().getColumnNamesAndTypes(SharedVariableHolder.database, userTableName);
-		String priamryKeyname = DatabaseConnection.getInstance().getPrimaryKeyColumnNamesByTable(userTableName).get(0);
+		List<List<Object>> list =connection.getColumnNamesAndTypes(SharedVariableHolder.database, userTableName);
+		String priamryKeyname = connection.getPrimaryKeyColumnNamesByTable(userTableName).get(0);
 		Notification noti = new Notification();
 //		noti.setMessage("Username is not Existed");
 //		noti.setNotiType(new WarningNotification());
 //		noti.display();
-		changeResetPasswordTableName = auth.checkifResetPassTableNameExisted(); 
+		changeResetPasswordTableName = connection.checkifTableNameExisted("users"); 
 		if(!changeResetPasswordTableName) {
 			NamedResetPasswordPane.setVisible(false);
 		}
@@ -85,7 +87,7 @@ public class SetupTableColumnNameController implements Initializable{
 				noti.setNotiType(new WarningNotification());
 				noti.display();
 			}
-			else if(changeResetPasswordTableName&& auth.checkifResetPassTableNameExisted(this.txtResetPasswordTableName.getText())) {
+			else if(changeResetPasswordTableName&& connection.checkifTableNameExisted(this.txtResetPasswordTableName.getText())) {
 				noti.setMessage("This reset password table's name already existed in database, please choose another one ");
 				noti.setNotiType(new WarningNotification());
 				noti.display();
@@ -101,23 +103,21 @@ public class SetupTableColumnNameController implements Initializable{
 					auth.setResetPasswordTable(this.txtResetPasswordTableName.getText());
 					}
 				auth.createResetPasswordTable();
-				Parent root = null;
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
-				SignInController controller = new SignInController();
-				loader.setController(controller);
+				//gen code
 				try {
-					root = loader.load();
+					FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseGeneratedProjectLocation.fxml"));
+					ChooseGeneratedProjectLocationController controller = new ChooseGeneratedProjectLocationController();
+	     			loader.setController(controller);
+	     			Parent root = loader.load();
+	     			Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
+	     			Scene scene = new Scene(root);
+	     			String css = this.getClass().getResource("/css/style.css").toExternalForm();
+	     			scene.getStylesheets().add(css);
+	     			stage.setScene(scene);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
-				Scene scene = new Scene(root);
-				String css = this.getClass().getResource("/css/style.css").toExternalForm();
-				scene.getStylesheets().add(css);
-				stage.setScene(scene);
-				
-				//gen code
 			}
 		});
 
@@ -125,7 +125,7 @@ public class SetupTableColumnNameController implements Initializable{
 			Parent root;
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseUserTableInDatabase.fxml"));
-				ChooseUserTableController controller = new ChooseUserTableController();
+				ChooseUserTableController controller = new ChooseUserTableController(auth);
 				loader.setController(controller);
 				root = loader.load();
 //				root = FXMLLoader.load(getClass().getResource("/screen/SignIn.fxml"));

@@ -3,23 +3,22 @@ package com.example.designpattern.Controller;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import com.example.designpattern.DatabaseConnection;
 import com.example.designpattern.DesignpatternApplication;
 import com.example.designpattern.Default.Authentication;
+import com.example.designpattern.Default.IAuthentication;
 import com.example.designpattern.Default.User;
 import com.example.designpattern.notification.Notification;
 import com.example.designpattern.notification.WarningNotification;
-import com.example.designpattern.table.Table;
-import com.example.tablehandler.TableGenFromDB;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -43,16 +42,19 @@ public class ChangeAuthenticationTableController implements Initializable {
     private TextField forgotPasswordTextField;
     private boolean tfusertable = false;
     private boolean tfresetpasswordtable = false;
-    
-    public ChangeAuthenticationTableController(Stage stage) {
+	DatabaseConnection connection = DatabaseConnection.getInstance();
+    IAuthentication auth;
+    public ChangeAuthenticationTableController(Stage stage, IAuthentication auth) {
         this.stage = stage;
+        this.auth = auth;
     }
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		addingPane.getChildren().clear();
-		Authentication a = Authentication.getInstance();
-		tfusertable = a.checkifUserTableNameExisted();
-		tfresetpasswordtable = a.checkifResetPassTableNameExisted();
+		
+		tfusertable = connection.checkifTableNameExisted("users");
+		tfresetpasswordtable = connection.checkifTableNameExisted("ResetPassword");
+		
 		System.out.println("tfusertable"+ tfusertable);
 		System.out.println("tfresetpasswordtable"+ tfresetpasswordtable);
 
@@ -104,7 +106,7 @@ public class ChangeAuthenticationTableController implements Initializable {
 						noti.setNotiType(new WarningNotification());
 						noti.display();
 					}
-					else if(a.checkifUserTableNameExisted(this.userTableTextField.getText())) {
+					else if(connection.checkifTableNameExisted(this.userTableTextField.getText())) {
 						noti.setMessage("This authentication name already existed, please change another name ");
 						noti.setNotiType(new WarningNotification());
 						noti.display();
@@ -114,19 +116,27 @@ public class ChangeAuthenticationTableController implements Initializable {
 						noti.setNotiType(new WarningNotification());
 						noti.display();
 					}
-					else if(a.checkifResetPassTableNameExisted(this.forgotPasswordTextField.getText())) {
+					else if(connection.checkifTableNameExisted(this.forgotPasswordTextField.getText())) {
 						noti.setMessage("This resetpassword name already existed, please change another name ");
 						noti.setNotiType(new WarningNotification());
 						noti.display();
 					}
 					else {
-						a.setTableName(this.userTableTextField.getText());
-						a.setResetPasswordTable(this.forgotPasswordTextField.getText());
+						auth.setTableName(this.userTableTextField.getText());
+						auth.setResetPasswordTable(this.forgotPasswordTextField.getText());
 						try {
-							a.createDefaultUserTableToDatabase(User.class);
+							auth.createDefaultUserTableToDatabase(User.class);
 							//gen code
-							
-						} catch (SQLException e1) {
+							FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseGeneratedProjectLocation.fxml"));
+							ChooseGeneratedProjectLocationController controller = new ChooseGeneratedProjectLocationController();
+			     			loader.setController(controller);
+			     			Parent root = loader.load();
+			     			Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
+			     			Scene scene = new Scene(root);
+			     			String css = this.getClass().getResource("/css/style.css").toExternalForm();
+			     			scene.getStylesheets().add(css);
+			     			stage.setScene(scene);
+						} catch (SQLException | IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
@@ -139,15 +149,15 @@ public class ChangeAuthenticationTableController implements Initializable {
 						noti.setNotiType(new WarningNotification());
 						noti.display();
 					}
-					else if(a.checkifUserTableNameExisted(this.userTableTextField.getText())) {
+					else if(connection.checkifTableNameExisted(this.userTableTextField.getText())) {
 						noti.setMessage("This authentication name already existed, please change another name ");
 						noti.setNotiType(new WarningNotification());
 						noti.display();
 					}
 					else {
-						a.setTableName(this.userTableTextField.getText());
+						auth.setTableName(this.userTableTextField.getText());
 						try {
-							a.createDefaultUserTableToDatabase(User.class);
+							auth.createDefaultUserTableToDatabase(User.class);
 						} catch (SQLException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -161,15 +171,15 @@ public class ChangeAuthenticationTableController implements Initializable {
 						noti.setNotiType(new WarningNotification());
 						noti.display();
 					}
-					else if(a.checkifResetPassTableNameExisted(this.forgotPasswordTextField.getText())) {
+					else if(connection.checkifTableNameExisted(this.forgotPasswordTextField.getText())) {
 						noti.setMessage("This resetpassword name already existed, please change another name ");
 						noti.setNotiType(new WarningNotification());
 						noti.display();
 					}
 					else {
-						a.setResetPasswordTable(this.forgotPasswordTextField.getText());
+						auth.setResetPasswordTable(this.forgotPasswordTextField.getText());
 						try {
-							a.createDefaultUserTableToDatabase(User.class);
+							auth.createDefaultUserTableToDatabase(User.class);
 						} catch (SQLException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();

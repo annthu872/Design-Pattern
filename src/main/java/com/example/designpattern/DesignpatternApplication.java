@@ -27,9 +27,10 @@ public class DesignpatternApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			DatabaseConnection con = DatabaseConnection.getInstance();
-			
-			Parent root = new HeadingUIUnit(new TableListUIUnit( new TableUIUnit())).getUI();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/DatabaseConnection.fxml"));
+			DatabaseConnectionController controller = new DatabaseConnectionController();
+			loader.setController(controller);
+      Parent root = loader.load();
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(css);
@@ -37,8 +38,6 @@ public class DesignpatternApplication extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);
 			primaryStage.show();
-			
-			
 //			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseUserTableInDatabase.fxml"));
 //			ChooseUserTableController controller = new ChooseUserTableController();
 //			loader.setController(controller);
@@ -60,12 +59,7 @@ public class DesignpatternApplication extends Application {
 		SpringApplication.run(DesignpatternApplication.class, args);
 		launch(args);
 		
-		/*DatabaseConnection con = DatabaseConnection.getInstance();
-        List<Table> tables = con.getTablesWithColumns();
-        FileGenerator gen = new FileGenerator("C:\\Users\\duong\\OneDrive\\Máy tính\\New folder");
-        gen.generateAll(System.getProperty("user.dir"), tables);
-        con.close();*/
-
+//		System.out.println(DatabaseConnection.getInstance().checkTableIntandAutoIncrementPrimaryKey("aaaaaaaaaa"));
 	}
 	
 }

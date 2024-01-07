@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.example.designpattern.Default.Authentication;
+import com.example.designpattern.Default.IAuthentication;
 import com.example.designpattern.decorator.*;
 import com.example.designpattern.notification.InformationNotification;
 import com.example.designpattern.notification.Notification;
@@ -37,7 +38,11 @@ public class SignInController implements Initializable {
 
     @FXML
     private TextField txtUsername;
-
+    private IAuthentication auth;
+    
+    public SignInController(IAuthentication auth) {
+    	this.auth = auth;
+    }
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -45,7 +50,7 @@ public class SignInController implements Initializable {
 			Parent root;
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ResetPassword.fxml"));
-				ResetPasswordController controller = new ResetPasswordController();
+				ResetPasswordController controller = new ResetPasswordController(auth);
 				loader.setController(controller);
 				root = loader.load();
 				Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
@@ -62,7 +67,7 @@ public class SignInController implements Initializable {
 			Parent root;
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignUp.fxml"));
-				SignUpController controller = new SignUpController();
+				SignUpController controller = new SignUpController(auth);
 				loader.setController(controller);
 				root = loader.load();
 				Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
@@ -82,7 +87,6 @@ public class SignInController implements Initializable {
 			System.out.println("txtPassword:"+txtPassword.getText());
 			Notification noti = new Notification();
 
-			Authentication auth = Authentication.getInstance();
 			if(auth.checkSignIn(txtUsername.getText(), txtPassword.getText())) {
 				try {
 					//chuyển screen
