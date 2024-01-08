@@ -19,9 +19,7 @@ import com.example.designpattern.table.Table;
 import com.example.tablehandler.TableGenFromDB;
 import com.example.designpattern.Default.*;
 
-
 @SpringBootApplication
-
 public class DesignpatternApplication extends Application {
 	
 	@Override
