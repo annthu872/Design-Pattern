@@ -161,7 +161,7 @@ public class Table implements Serializable {
 	                    field.setAccessible(true);
 	                    jakarta.persistence.Id annotation = field.getAnnotation(jakarta.persistence.Id.class);
 	                    if (annotation != null) {
-	                        return "Can not change value of " + column.getClassName(); 
+	                        return "Can not change value of " + column.getColumnName(); 
 	                    }
 	                } catch (NoSuchFieldException e) {
 	                    e.printStackTrace();
@@ -217,6 +217,23 @@ public class Table implements Serializable {
 	}
 	
 	public boolean validateUpdate(Class object, List<String> oldValues, List<String> newValues) {
+		boolean changesFound = false;
+
+	    for (int i = 0; i < oldValues.size(); i++) {
+	        if (!oldValues.get(i).equals(newValues.get(i))) {
+	            changesFound = true;
+	            break;
+	        }
+	    }
+	    
+	    if (!changesFound) {
+	        Notification noti = new Notification();
+	        noti.setMessage("No changes detected.");
+	        noti.setNotiType(new InformationNotification());
+	        noti.display();
+	        return false;
+	    }
+		
 		String messageValidateTypeAndNotNull = validateTypeAndNotNull(newValues);
 		if(!messageValidateTypeAndNotNull.equals("")) {
 			Notification noti = new Notification();
@@ -236,7 +253,7 @@ public class Table implements Serializable {
 		}
 		
 		Notification noti = new Notification();
-        noti.setMessage("Add success!");
+        noti.setMessage("Update success!");
         noti.setNotiType(new InformationNotification());
         noti.display();
 
@@ -250,11 +267,82 @@ public class Table implements Serializable {
         }
         return tableString.toString();
     }
+
+	public int getPrimaryKeyColumnIndex(String columnName) {
+	    for (int i = 0; i < columnList.size(); i++) {
+	        if (columnList.get(i).getColumnName().equals(columnName) && columnList.get(i).isPrimaryKey()) {
+	            return i;
+	        }
+	    }
+	    return -1;
+	}
 	
+	public List<String> getPrimaryKeyColumnNames() {
+	    List<String> primaryKeyColumns = new ArrayList<>();
+	    for (Column column : columnList) {
+	        if (column.isPrimaryKey()) {
+	            primaryKeyColumns.add(column.getColumnName());
+	        }
+      }
+      return primaryKeyColumns;
+  }
+
 	private String convertToPackage(String location) {
 	    if (location.startsWith("/src/main/java/")) {
 	        location = location.substring("/src/main/java/".length());
 	    }
 	    return location.replace('/', '.');
 	}
+	
+	public String createSQLSetClause(List<String> oldValues, List<String> newValues) {
+	    StringBuilder sqlClause = new StringBuilder("");
+
+	    boolean atLeastOneSet = false; // Flag to check if at least one field was set
+
+	    for (int i = 0; i < columnList.size(); i++) {
+	        Column column = columnList.get(i);
+	        String columnName = column.getColumnName();
+	        String oldValue = oldValues.get(i);
+	        String newValue = newValues.get(i);
+
+	        if (!oldValue.equals(newValue)) {
+	            if (atLeastOneSet) {
+	                sqlClause.append(", ");
+	            }
+
+	            sqlClause.append(columnName).append(" = ");
+
+	            if (column.getClassName().equals("String") || column.getClassName().equals("Timestamp")) {
+	                sqlClause.append("'").append(newValue).append("'");
+	            } else {
+	                sqlClause.append(newValue);
+	            }
+
+	            atLeastOneSet = true;
+	        }
+	    }
+
+	    return sqlClause.toString();
+	}
+
+	
+	public String createSQLWhereClause(List<String> oldValues, List<String> newValues) {
+	    StringBuilder sqlClause = new StringBuilder("");
+
+	    List<String> primaryKeyColumns = getPrimaryKeyColumnNames();
+	    for (int i = 0; i < primaryKeyColumns.size(); i++) {
+	        String primaryKeyColumn = primaryKeyColumns.get(i);
+	        sqlClause.append(primaryKeyColumn).append(" = ");
+
+	        String oldValue = oldValues.get(getPrimaryKeyColumnIndex(primaryKeyColumn));
+	        sqlClause.append("'").append(oldValue).append("'");
+
+	        if (i < primaryKeyColumns.size() - 1) {
+	        	sqlClause.append(" AND ");
+	        }
+	    }
+
+	    return sqlClause.toString();
+	}
+
 }

@@ -2,6 +2,10 @@ package com.example.designpattern.column;
 
 import org.apache.commons.lang3.text.WordUtils;
 
+import java.util.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;;
+
 public class Column {
 	protected String className;
     protected String columnName;
@@ -88,6 +92,16 @@ public class Column {
                 } catch (NumberFormatException e) {
                     return "Invalid Float value for column: " + columnName;
                 }
+                break;
+            case "Timestamp":
+            	String timestampString = value;
+            	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+            	try {
+            	    Date parsedDate = dateFormat.parse(timestampString);
+            	    Timestamp timestamp = new Timestamp(parsedDate.getTime());
+            	} catch (Exception e) {
+            		return "Invalid Timestamp value for column: " + columnName;
+            	}
                 break;
             default:
                 break;

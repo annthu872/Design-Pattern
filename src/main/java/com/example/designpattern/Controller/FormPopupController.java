@@ -109,17 +109,11 @@ public class FormPopupController implements Initializable {
 		}
 		if (btnUpdate != null) {
 		    btnUpdate.setOnAction(e -> {
-		    	String input = "1, ACADEMY, A Epic Drama of a Feminist And a Mad Scientist who must Battle a Teacher in The Canadian Rockies";
-		    	String[] splitValues = input.split(", ");
-		        ArrayList<String> oldFieldValues = new ArrayList<>(Arrays.asList(splitValues));
+		        ArrayList<String> oldFieldValues = new ArrayList<>(this.data);
 		        ArrayList<String> newFieldValues = new ArrayList<>();
 		        for (TextField textField : textfieldList) {
 		            newFieldValues.add(textField.getText());
 		        }
-		        System.out.println("------------------------");
-		        System.out.println(oldFieldValues);
-		        System.out.println(newFieldValues);
-
 		
 		        DatabaseConnection con = DatabaseConnection.getInstance();
 		        List<Table> tables = con.getTablesWithColumns();
@@ -130,7 +124,8 @@ public class FormPopupController implements Initializable {
 			    	if (!table.getTableName().equals(curForm.getTableName())) continue;
 		            isValid = table.validateUpdate(bf.getClazz(), oldFieldValues, newFieldValues);
 		            if (isValid) {
-
+		            	bf.update(oldFieldValues, newFieldValues);
+		            	TableController.getInstance().editRow(newFieldValues);
 		            }
 		        }
 

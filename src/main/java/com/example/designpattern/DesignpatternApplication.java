@@ -14,7 +14,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.example.designpattern.Controller.*;
 import com.example.designpattern.decorator.*;
-import com.example.designpattern.decorator.TableDetailButton;
 import com.example.designpattern.filegenerator.FileGenerator;
 import com.example.designpattern.table.Table;
 import com.example.tablehandler.TableGenFromDB;
@@ -29,7 +28,7 @@ public class DesignpatternApplication extends Application {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/DatabaseConnection.fxml"));
 			DatabaseConnectionController controller = new DatabaseConnectionController();
 			loader.setController(controller);
-            Parent root = loader.load();
+      Parent root = loader.load();
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(css);

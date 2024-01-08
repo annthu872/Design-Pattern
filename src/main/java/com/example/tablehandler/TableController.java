@@ -7,7 +7,10 @@ import java.util.ResourceBundle;
 import com.example.designpattern.Controller.PopupWindow;
 import com.example.testbasicform.BaseForm;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -22,7 +25,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 public class TableController implements Initializable {
-	
     private BaseForm<?> currentForm;
     public BaseForm<?> getForm(){
     	return currentForm;
@@ -43,29 +45,29 @@ public class TableController implements Initializable {
     private Button btnEdit;
     
     @FXML
-    private TableView<ObservableList<String>> myTable;    
+    private TableView<ObservableList<String>> myTable;
     private ArrayList<String> rowData;
-    //private ArrayList<String> columnNames = new ArrayList<String>();
-    //private ObservableList<ObservableList<String>> tabledata = FXCollections.observableArrayList();
-    
+
     public ArrayList<String> getFieldname() {
     	return rowData;
     }
-   /* public ArrayList<String> getColumnNames() {
-    	return columnNames;
-    }
-    public void setcolumnNames(ArrayList<String> col) {
-    	columnNames = col;
-    }
-    public void setTableData(ObservableList<ObservableList<String>> dt) {
-    	tabledata = dt;
-    }
-    public ObservableList<ObservableList<String>> getTableData() {
-    	return tabledata;
-    }*/
+    
     public void addRow(ArrayList<String> newData) {
         ObservableList<String> newRow = FXCollections.observableArrayList(newData);
-        myTable.getItems().add(newRow);
+        currentForm.getTableData().add(newRow);
+    }
+    
+    public void editRow(ArrayList<String> newData) {
+        ObservableList<String> selectedRowData = myTable.getSelectionModel().getSelectedItem();
+
+        if (selectedRowData != null) {
+            int index = myTable.getItems().indexOf(selectedRowData);
+            ObservableList<String> rowToEdit = FXCollections.observableArrayList(newData);
+            myTable.getItems().set(index, rowToEdit);
+        } else {
+            // Handle case when no row is selected
+            System.out.println("No row selected for editing.");
+        }
     }
     
     private static TableController instance;
@@ -95,9 +97,7 @@ public class TableController implements Initializable {
         	buildColumn(colName);
         }
         
-        for (ObservableList<String> row : currentForm.getTableData()) {
-            myTable.getItems().add(row);
-        }
+        myTable.setItems(currentForm.getTableData());
         
         if(currentForm.getTableData()!=null) {
             myTable.setOnMouseClicked((MouseEvent event) -> {
@@ -106,6 +106,8 @@ public class TableController implements Initializable {
                 rowData = new ArrayList<>(cellData);
             });
         }
+        
+        
         
         myTable.setRowFactory(tv -> {
             TableRow<ObservableList<String>> row = new TableRow<>();
@@ -122,20 +124,29 @@ public class TableController implements Initializable {
                     MenuItem menuItem1 = new MenuItem("Add");
                     MenuItem menuItem2 = new MenuItem("Update");
                     MenuItem menuItem3 = new MenuItem("Delete");
-                    menu.getItems().addAll(menuItem1, menuItem2, menuItem3);
+                    MenuItem menuItem4 = new MenuItem("Refresh");
+                    menu.getItems().addAll(menuItem1, menuItem2, menuItem3, menuItem4);
                     
                     menuItem1.setOnAction(e -> {
                         PopupWindow.display(currentForm);
                     });
                     
                     menuItem2.setOnAction(e ->{
-                    	PopupWindow.display(currentForm,this.getFieldname());
+                    	if(currentForm.getTableData()!=null) {
+                    		PopupWindow.display(currentForm,this.getFieldname());
+                    	}
                     });
                     
                     menuItem3.setOnAction(e ->{
                     	ObservableList<String> selectedItem = myTable.getSelectionModel().getSelectedItem();
-            			myTable.getItems().remove(selectedItem);
-            			currentForm.delete(rowData);	
+                    	if (selectedItem != null) {
+                    		currentForm.getTableData().remove(selectedItem);
+                			currentForm.delete(rowData);	
+                    	}
+                    });
+                    
+                    menuItem4.setOnAction(e->{
+                    	currentForm.read(instance);
                     });
 
                     if (menu != null) {
@@ -158,7 +169,6 @@ public class TableController implements Initializable {
 		btnEdit.setOnAction(e -> PopupWindow.display(currentForm,this.getFieldname()));
 		btnDelete.setOnAction(e ->{
 			ObservableList<String> selectedItem = myTable.getSelectionModel().getSelectedItem();
-			myTable.getItems().remove(selectedItem);
 			currentForm.getTableData().remove(selectedItem);
 			currentForm.delete(rowData);	
 		});
