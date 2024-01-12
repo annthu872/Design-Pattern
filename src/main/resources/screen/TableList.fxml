@@ -46,7 +46,7 @@
                   </VBox>
                </top>
                <center>
-                  <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="510.0" maxWidth="270.0" BorderPane.alignment="CENTER">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="530.0" maxWidth="270.0" BorderPane.alignment="CENTER">
                      <content>
                         <VBox fx:id="tablelistpane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                
