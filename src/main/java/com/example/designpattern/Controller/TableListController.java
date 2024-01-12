@@ -29,30 +29,32 @@ public class TableListController implements Initializable {
     private Object jobType;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		try {
+            // Load the class
+			String temp = tableList.get(0);
+            String formClassNameTemp = temp + "Form";
+            Class<?> formClass = Class.forName("com.example.userform." + formClassNameTemp);
+
+            // Create an instance of the class
+            Constructor<?> constructor = formClass.getConstructor();
+            BaseForm<?> formInstance = (BaseForm<?>) constructor.newInstance();
+            formInstance.read(TableController.getInstance());
+            System.out.println("it work");
+            // Now you can use the created formInstance as needed
+            // For example, call methods or perform actions related to the form
+
+        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException
+                | InstantiationException | IllegalAccessException | IllegalArgumentException
+                | InvocationTargetException e) {
+            e.printStackTrace();
+        }
 		for ( int i =0; i< tableList.size(); i++) {
 			Button button = new Button();
 			button.setText(tableList.get(i));
 			button.getStyleClass().add("table-button");
 			if( i != choosenTablePos) {
 				button.getStyleClass().add("table-button-not-choosen");
-				try {
-                    // Load the class
-					String temp = tableList.get(i);
-	                String formClassNameTemp = temp + "Form";
-                    Class<?> formClass = Class.forName("com.example.testbasicform." + formClassNameTemp);
 
-                    // Create an instance of the class
-                    Constructor<?> constructor = formClass.getConstructor();
-                    BaseForm<?> formInstance = (BaseForm<?>) constructor.newInstance();
-                    formInstance.read(TableController.getInstance());
-                    // Now you can use the created formInstance as needed
-                    // For example, call methods or perform actions related to the form
-
-                } catch (ClassNotFoundException | NoSuchMethodException | SecurityException
-                        | InstantiationException | IllegalAccessException | IllegalArgumentException
-                        | InvocationTargetException e) {
-                    e.printStackTrace();
-                }
 			}
 			else 
 				button.getStyleClass().add("table-button-choosen");
@@ -90,25 +92,4 @@ public class TableListController implements Initializable {
 		}
 	}
 	
-//	public List<String> getTables(){
-//		List<String> tableList = new ArrayList<>();
-//		tableList.add("Cao Nguyên");
-//		tableList.add("Nguyễn Duy");
-//		tableList.add("TRương toàn thịnh");
-//		tableList.add("Thư");
-//		tableList.add("Thảo");
-//		tableList.add("Cao Nguyên 1");
-//		tableList.add("Nguyễn Duy 2");
-//		tableList.add("TRương toàn thịnh 3");
-//		tableList.add("Thư 4");
-//		tableList.add("Thảo 5");
-//		tableList.add("Cao Nguyên 2");
-//		tableList.add("Nguyễn Duy 12");
-//		tableList.add("TRương toàn thịnh TRương toàn thịnh");
-//		tableList.add("Thư 1231");
-//		tableList.add("Thảo 532");
-//
-//		return tableList;
-//	}
-
 }
