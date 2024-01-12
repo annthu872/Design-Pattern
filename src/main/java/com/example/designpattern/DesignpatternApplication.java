@@ -36,17 +36,6 @@ public class DesignpatternApplication extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);
 			primaryStage.show();
-//			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseUserTableInDatabase.fxml"));
-//			ChooseUserTableController controller = new ChooseUserTableController();
-//			loader.setController(controller);
-//            Parent root = loader.load();
-//			String css = this.getClass().getResource("/css/style.css").toExternalForm();
-//			Scene scene = new Scene(root);
-//			scene.getStylesheets().add(css);
-//
-//			primaryStage.setScene(scene);
-//			primaryStage.setResizable(false);
-//			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -56,8 +45,6 @@ public class DesignpatternApplication extends Application {
 	public static void main(String[] args) {
 		SpringApplication.run(DesignpatternApplication.class, args);
 		launch(args);
-		
-//		System.out.println(DatabaseConnection.getInstance().checkTableIntandAutoIncrementPrimaryKey("aaaaaaaaaa"));
 	}
 	
 }

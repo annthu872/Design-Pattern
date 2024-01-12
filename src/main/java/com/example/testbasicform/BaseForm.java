@@ -101,17 +101,22 @@ public class BaseForm<T> {
         return tableData;
     }
     
-    public void execute(String sql) {
+    boolean execute(String sql) {
         try {
             Statement stmt = conn.createStatement();
             int affectedRows = stmt.executeUpdate(sql);
             System.out.println("Affected rows: " + affectedRows);
+            if(affectedRows > 0) {
+            	return true;
+            }
+            else return false;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
     
-	public void add(ArrayList<String> values) {
+	public boolean add(ArrayList<String> values) {
 		StringBuilder sql = new StringBuilder("INSERT INTO " + tableName + " (");
 		for (String columnName : columnNames) {
             sql.append(columnName).append(", ");
@@ -141,10 +146,10 @@ public class BaseForm<T> {
 
         sql.append(")");
         System.out.println(sql.toString());
-        execute(sql.toString());
+        return execute(sql.toString());
 	}
     
-	public void delete(ArrayList<String> rowData) {
+	public boolean delete(ArrayList<String> rowData) {
 	    StringBuilder conditionBuilder = new StringBuilder();
 	    for (int i = 0; i < columnNames.size(); i++) {
 	        String columnName = columnNames.get(i);
@@ -172,10 +177,10 @@ public class BaseForm<T> {
 	    String condition = conditionBuilder.toString();
 	    String sql = "DELETE FROM " + tableName + " WHERE " + condition;
         System.out.println(sql);
-		execute(sql);
+		return execute(sql);
 	}
 	
-	public void update(ArrayList<String> oldValue, ArrayList<String> newValue) {		
+	public boolean update(ArrayList<String> oldValue, ArrayList<String> newValue) {		
 	    StringBuilder setClauseBuilder = new StringBuilder();
 	    StringBuilder conditionBuilder = new StringBuilder();
 	    
@@ -243,7 +248,7 @@ public class BaseForm<T> {
 
 	    String sql = "UPDATE " + tableName + " SET " + setClauseBuilder.toString() + " WHERE " + conditionBuilder.toString() + ";";
 	    System.out.println(sql);
-	    execute(sql);
+	    return execute(sql);
 	}
 
 	

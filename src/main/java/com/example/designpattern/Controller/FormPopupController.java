@@ -10,6 +10,8 @@ import java.util.ResourceBundle;
 
 import com.example.designpattern.DatabaseConnection;
 import com.example.designpattern.DesignpatternApplication;
+import com.example.designpattern.notification.ErrorNotification;
+import com.example.designpattern.notification.Notification;
 import com.example.designpattern.table.Table;
 import com.example.tablehandler.TableController;
 import com.example.testbasicform.BaseForm;
@@ -94,10 +96,16 @@ public class FormPopupController implements Initializable {
 			    	if (!table.getTableName().equals(curForm.getTableName())) continue;
 			    	 isValid = table.validateAdd(curForm.getColumnNames(), curForm.getTableData(), fieldValues);
 			        if (isValid) {
-//			        	con.addRowToTable(TableGenFromDB.getInstance().getTableName(), fieldValues);
-			        	bf.add(fieldValues);
-			        	TableController.getInstance().addRow(fieldValues);
-//			        	bf.read(TableController.getInstance());
+			        	boolean rs = bf.add(fieldValues);
+			        	if(rs) {
+			        		TableController.getInstance().addRow(fieldValues);
+			        	}
+			        	else {
+			        		Notification noti = new Notification();
+					        noti.setMessage("There might be some error, we can't add this new data.");
+					        noti.setNotiType(new ErrorNotification());
+					        noti.display();
+			        	}
 			            break;
 			        }
 			    }
@@ -124,8 +132,16 @@ public class FormPopupController implements Initializable {
 			    	if (!table.getTableName().equals(curForm.getTableName())) continue;
 		            isValid = table.validateUpdate(bf.getClazz(), oldFieldValues, newFieldValues);
 		            if (isValid) {
-		            	bf.update(oldFieldValues, newFieldValues);
-		            	TableController.getInstance().editRow(newFieldValues);
+		            	boolean rs = bf.update(oldFieldValues, newFieldValues);
+		            	if(rs) {
+		            		TableController.getInstance().editRow(newFieldValues);
+			        	}
+			        	else {
+			        		Notification noti = new Notification();
+					        noti.setMessage("There might be some error, we can't update this new data.");
+					        noti.setNotiType(new ErrorNotification());
+					        noti.display();
+			        	}
 		            }
 		        }
 

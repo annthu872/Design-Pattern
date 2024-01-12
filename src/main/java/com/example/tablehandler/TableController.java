@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import com.example.designpattern.Controller.PopupWindow;
+import com.example.designpattern.notification.ErrorNotification;
+import com.example.designpattern.notification.InformationNotification;
+import com.example.designpattern.notification.Notification;
 import com.example.testbasicform.BaseForm;
 
 import javafx.beans.property.ObjectProperty;
@@ -140,8 +143,16 @@ public class TableController implements Initializable {
                     menuItem3.setOnAction(e ->{
                     	ObservableList<String> selectedItem = myTable.getSelectionModel().getSelectedItem();
                     	if (selectedItem != null) {
-                    		currentForm.getTableData().remove(selectedItem);
-                			currentForm.delete(rowData);	
+                			boolean res = currentForm.delete(rowData);
+                			if(res) {
+                				currentForm.getTableData().remove(selectedItem);
+                			}
+                			else {
+                				Notification noti = new Notification();
+                		        noti.setMessage("There might be some error, we can't delete this row.");
+                		        noti.setNotiType(new ErrorNotification());
+                		        noti.display();
+                			}
                     	}
                     });
                     
@@ -168,9 +179,17 @@ public class TableController implements Initializable {
 		btnAdd.setOnAction(e -> PopupWindow.display(currentForm));
 		btnEdit.setOnAction(e -> PopupWindow.display(currentForm,this.getFieldname()));
 		btnDelete.setOnAction(e ->{
-			ObservableList<String> selectedItem = myTable.getSelectionModel().getSelectedItem();
-			currentForm.getTableData().remove(selectedItem);
-			currentForm.delete(rowData);	
+			boolean res = currentForm.delete(rowData);
+			if(res) {
+				ObservableList<String> selectedItem = myTable.getSelectionModel().getSelectedItem();
+				currentForm.getTableData().remove(selectedItem);
+			}
+			else {
+				Notification noti = new Notification();
+		        noti.setMessage("There might be some error, we can't delete this row.");
+		        noti.setNotiType(new ErrorNotification());
+		        noti.display();
+			}
 		});
 	}
 }
