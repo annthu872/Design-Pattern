@@ -21,6 +21,8 @@ import com.example.designpattern.DatabaseConnection;
 import com.example.designpattern.SharedVariableHolder;
 import com.example.designpattern.Default.Authentication;
 import com.example.designpattern.filegenerator.FileGenerator;
+import com.example.designpattern.notification.InformationNotification;
+import com.example.designpattern.notification.Notification;
 import com.example.designpattern.table.Table;
 
 public class ChooseGeneratedProjectLocationController {
@@ -71,6 +73,14 @@ public class ChooseGeneratedProjectLocationController {
             		selectedLocation);
             gen.generateAll(tables);
             con.close();
+
+    		Notification noti = new Notification();
+            noti.setMessage("Finish generate!");
+            noti.setNotiType(new InformationNotification());
+            noti.display();
+            
+            Stage stage = (Stage) btnConfirm.getScene().getWindow();
+            stage.close();
         } else {
             System.out.println("Please select a file location.");
 
