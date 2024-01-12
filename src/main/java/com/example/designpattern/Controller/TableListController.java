@@ -72,7 +72,7 @@ public class TableListController implements Initializable {
 
                 try {
                     // Load the class
-                    Class<?> formClass = Class.forName("com.example.testbasicform." + formClassName);
+                    Class<?> formClass = Class.forName("com.example.userform." + formClassName);
 
                     // Create an instance of the class
                     Constructor<?> constructor = formClass.getConstructor();

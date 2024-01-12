@@ -108,11 +108,13 @@ public class Table implements Serializable {
 	    return classBuilder.toString();
 	}
 	
-	public String generateFormClass(String entityLocation, String formLocation) {
+	public String generateFormClass(String entityLocation, String formLocation, String baseFormLocation) {
         StringBuilder formClass = new StringBuilder("package " + convertToPackage(formLocation) + ";\n\n");
         
+        if (baseFormLocation != null)
+        	formClass.append("import " + convertToPackage(baseFormLocation) + ";\n\n");
         if (!entityLocation.equals(formLocation))
-        	formClass.append("import " + convertToPackage(formLocation) + "." + tableName + ";\n\n");
+        	formClass.append("import " + convertToPackage(entityLocation) + "." + tableName + ";\n\n");
         
         formClass.append("public class ")
                 .append(tableName)
