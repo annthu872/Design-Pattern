@@ -111,6 +111,42 @@ public class TableController implements Initializable {
         }
         
         
+        ContextMenu menu = new ContextMenu();
+        MenuItem menuItem1 = new MenuItem("Add");
+        MenuItem menuItem2 = new MenuItem("Update");
+        MenuItem menuItem3 = new MenuItem("Delete");
+        MenuItem menuItem4 = new MenuItem("Refresh");
+        menu.getItems().addAll(menuItem1, menuItem2, menuItem3, menuItem4);
+        
+        menuItem1.setOnAction(e -> {
+            PopupWindow.display(currentForm);
+        });
+        
+        menuItem2.setOnAction(e ->{
+        	if(currentForm.getTableData()!=null) {
+        		PopupWindow.display(currentForm,this.getFieldname());
+        	}
+        });
+        
+        menuItem3.setOnAction(e ->{
+        	ObservableList<String> selectedItem = myTable.getSelectionModel().getSelectedItem();
+        	if (selectedItem != null) {
+    			boolean res = currentForm.delete(rowData);
+    			if(res) {
+    				currentForm.getTableData().remove(selectedItem);
+    			}
+    			else {
+    				Notification noti = new Notification();
+    		        noti.setMessage("There might be some error, we can't delete this row.");
+    		        noti.setNotiType(new ErrorNotification());
+    		        noti.display();
+    			}
+        	}
+        });
+        
+        menuItem4.setOnAction(e->{
+        	currentForm.read(instance);
+        });
         
         myTable.setRowFactory(tv -> {
             TableRow<ObservableList<String>> row = new TableRow<>();
@@ -122,43 +158,12 @@ public class TableController implements Initializable {
                     PopupWindow.display(currentForm,this.getFieldname());
                 }
                 
+                
             row.setOnContextMenuRequested(revent -> {
-                    ContextMenu menu = new ContextMenu();
-                    MenuItem menuItem1 = new MenuItem("Add");
-                    MenuItem menuItem2 = new MenuItem("Update");
-                    MenuItem menuItem3 = new MenuItem("Delete");
-                    MenuItem menuItem4 = new MenuItem("Refresh");
-                    menu.getItems().addAll(menuItem1, menuItem2, menuItem3, menuItem4);
+		        	if (menu.isShowing()) {
+		                menu.hide();
+		            }
                     
-                    menuItem1.setOnAction(e -> {
-                        PopupWindow.display(currentForm);
-                    });
-                    
-                    menuItem2.setOnAction(e ->{
-                    	if(currentForm.getTableData()!=null) {
-                    		PopupWindow.display(currentForm,this.getFieldname());
-                    	}
-                    });
-                    
-                    menuItem3.setOnAction(e ->{
-                    	ObservableList<String> selectedItem = myTable.getSelectionModel().getSelectedItem();
-                    	if (selectedItem != null) {
-                			boolean res = currentForm.delete(rowData);
-                			if(res) {
-                				currentForm.getTableData().remove(selectedItem);
-                			}
-                			else {
-                				Notification noti = new Notification();
-                		        noti.setMessage("There might be some error, we can't delete this row.");
-                		        noti.setNotiType(new ErrorNotification());
-                		        noti.display();
-                			}
-                    	}
-                    });
-                    
-                    menuItem4.setOnAction(e->{
-                    	currentForm.read(instance);
-                    });
 
                     if (menu != null) {
                         System.out.println("Hello");
