@@ -108,13 +108,4 @@ public class Column {
         }
         return "";
     }
-    
-    public String toString() {
-        StringBuilder columnString = new StringBuilder("Column Name: " + columnName + "\n");
-        columnString.append("Class Name: ").append(className).append("\n");
-        columnString.append("Is Auto Increment: ").append(isAutoIncrement).append("\n");
-        columnString.append("Is Nullable: ").append(isNullable).append("\n");
-        columnString.append("Is Primary Key: ").append(isPrimaryKey).append("\n");
-        return columnString.toString();
-    }
 }
