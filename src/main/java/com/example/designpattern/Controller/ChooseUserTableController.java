@@ -78,7 +78,7 @@ public class ChooseUserTableController{
         btnDefault.setOnAction(e->{
         	
         	if(connection.checkifTableNameExisted("users")||connection.checkifTableNameExisted("resetpassword")) {
-        		new PopupWindow().displaySetupTableForm(auth);
+        		new PopupWindow().displaySetupTableForm(auth,(Stage)(((Node)e.getSource()).getScene().getWindow()));
         	}
         	else {
             	try {

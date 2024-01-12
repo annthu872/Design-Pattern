@@ -25,9 +25,9 @@ public class FileGenerator {
 	
 	String tableHandlerLocation = "/src/main/java/com/example/tablehandler/TableController.java";
 	
-	String formLocation = "/src/main/java/com/example/testbasicform";
-	String entityLocation = "/src/main/java/com/example/testbasicform";
-	String baseFormLocation = "/src/main/java/com/example/testbasicform/BaseForm.java";
+	String formLocation = "/src/main/java/com/example/userform";
+	String entityLocation = "/src/main/java/com/example/userclass";
+	String baseFormLocation = "/src/main/java/com/example/baseform/BaseForm";
 	
 	public FileGenerator(String projectOriginalLocation, String projectDestinationLocation) {
 		this.projectOriginalLocation = projectOriginalLocation;
@@ -35,8 +35,6 @@ public class FileGenerator {
 		
 		controllerList.add("TableListController.java");
 		controllerList.add("FormPopupController.java");
-		controllerList.add("PopupWindow.java");
-		controllerList.add("ChangeAuthenticationTableController.java");
 		
 		decoratorList.add("TableUIUnit.java");
 		decoratorList.add("IScreenUnit.java");
@@ -60,6 +58,7 @@ public class FileGenerator {
 		generateDecoratorFiles();
 		generateTableHandlerFile();
 		copyFilesFromLocation("/src/main/java/com/example/designpattern/Default");
+		copyFilesFromLocation("/src/main/java/com/example/registry");
 	}
 	
 	public void generatePomXml() {
@@ -85,7 +84,7 @@ public class FileGenerator {
         }
 
         for (Table table : tables) {
-            String javaClassContent = table.generateEntityClass(formLocation);
+            String javaClassContent = table.generateEntityClass(entityLocation);
             String fileName = table.getTableName() + ".java";
             String filePath = entityPath + "/" + fileName;
 
@@ -100,20 +99,24 @@ public class FileGenerator {
 
     public void generateFormFiles(List<Table> tables) {
         String formPath = projectDestinationLocation + formLocation;
+        File baseFormDir = new File(projectDestinationLocation + "/src/main/java/com/example/baseform");
+        if (!baseFormDir.exists()) {
+        	baseFormDir.mkdirs();
+        }
         File formDir = new File(formPath);
         if (!formDir.exists()) {
             formDir.mkdirs();
         }
 
         try {
-            Files.copy(Paths.get(projectOriginalLocation + baseFormLocation), Paths.get(formPath + "/BaseForm.java"), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(Paths.get(projectOriginalLocation + baseFormLocation + ".java"), Paths.get(projectDestinationLocation + baseFormLocation + ".java"), StandardCopyOption.REPLACE_EXISTING);
             System.out.println("Generated: " + formPath + "/BaseForm.java");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         for (Table table : tables) {
-            String formClassContent = table.generateFormClass(entityLocation, formLocation);
+            String formClassContent = table.generateFormClass(entityLocation, formLocation, baseFormLocation);
             String fileName = table.getTableName() + "Form.java";
             String filePath = formPath + "/" + fileName;
 
@@ -140,6 +143,13 @@ public class FileGenerator {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+        
+        try {
+            Files.copy(Paths.get(projectOriginalLocation + "/src/main/resources/template/PopupWindow.txt"), Paths.get(controllerPath + "/PopupWindow.java"), StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("Generated: " + controllerPath + "/PopupWindow.java");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

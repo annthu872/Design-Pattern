@@ -49,7 +49,8 @@ public class DatabaseConnectionController {
         btnConfirm.setOnAction(e -> {
         	SharedVariableHolder.url = urlProperty.get();
             SharedVariableHolder.user = usernameProperty.get();
-            SharedVariableHolder.password = passwordProperty.get();
+            if (passwordProperty.get() != null)
+            	SharedVariableHolder.password = passwordProperty.get();
             if (!checkConnection()) alertConnection();
      		try {
      			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseDatabase.fxml"));

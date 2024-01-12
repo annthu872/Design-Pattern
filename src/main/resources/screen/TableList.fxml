@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -25,7 +24,7 @@
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Text>
-                              <Label text="LabelLabelLabelLabelLabelLabelLabel">
+                              <Label fx:id="txtSchemaName" text="LabelLabelLabelLabelLabelLabelLabel">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -47,7 +46,7 @@
                   </VBox>
                </top>
                <center>
-                  <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="490.0" maxWidth="270.0" BorderPane.alignment="CENTER">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="530.0" maxWidth="270.0" BorderPane.alignment="CENTER">
                      <content>
                         <VBox fx:id="tablelistpane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                
@@ -58,16 +57,6 @@
                      </BorderPane.margin>
                   </ScrollPane>
                </center>
-               <bottom>
-                  <Button id="button-primary" maxHeight="40.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="button-primary" text="Add new table" textAlignment="CENTER" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                     <BorderPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
-                     </BorderPane.margin>
-                  </Button>
-               </bottom>
             </BorderPane>
          </children>
       </AnchorPane>
