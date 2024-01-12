@@ -53,12 +53,12 @@ public class PopupWindow {
 			e.printStackTrace();
 		}
     }
-    public static void displaySetupTableForm(IAuthentication auth) {
+    public static void displaySetupTableForm(IAuthentication auth, Stage currentStage) {
 		Stage popupStage = new Stage();
         popupStage.initModality(Modality.APPLICATION_MODAL);
         Parent root;
 		try {
-			ChangeAuthenticationTableController controller = new ChangeAuthenticationTableController(popupStage, auth);
+			ChangeAuthenticationTableController controller = new ChangeAuthenticationTableController(popupStage,currentStage, auth);
 			FXMLLoader loader = new FXMLLoader(DesignpatternApplication.class.getResource("/screen/UpdateForm.fxml"));
 			loader.setController(controller);
 			root = loader.load();

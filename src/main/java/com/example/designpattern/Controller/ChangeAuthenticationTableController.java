@@ -42,11 +42,13 @@ public class ChangeAuthenticationTableController implements Initializable {
     private TextField forgotPasswordTextField;
     private boolean tfusertable = false;
     private boolean tfresetpasswordtable = false;
+    private Stage currentStage;
 	DatabaseConnection connection = DatabaseConnection.getInstance();
     IAuthentication auth;
-    public ChangeAuthenticationTableController(Stage stage, IAuthentication auth) {
+    public ChangeAuthenticationTableController(Stage stage,Stage currentStage, IAuthentication auth) {
         this.stage = stage;
         this.auth = auth;
+        this.currentStage = currentStage;
     }
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -136,11 +138,8 @@ public class ChangeAuthenticationTableController implements Initializable {
 			     			String css = this.getClass().getResource("/css/style.css").toExternalForm();
 			     			scene.getStylesheets().add(css);
 			     			newStage.setScene(scene);
-			     			Stage currentStage = (Stage)(((Node)e.getSource()).getScene().getWindow());
-			     			currentStage.close();
-
-			     			// Show the new stage
-			     			newStage.show();
+//			     			Stage currentStage = (Stage)(((Node)e.getSource()).getScene().getWindow());
+			     			currentStage.setScene(scene);
 						} catch (SQLException | IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
