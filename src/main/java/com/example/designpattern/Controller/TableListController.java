@@ -8,18 +8,21 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import com.example.baseform.BaseForm;
+import com.example.designpattern.SharedVariableHolder;
 import com.example.tablehandler.TableController;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
-import javafx.scene.control.Button; 
+import javafx.scene.control.Button;
+import javafx.scene.control.Label; 
 
 public class TableListController implements Initializable {
 
     @FXML
     private VBox tablelistpane;
-    
+    @FXML
+    private Label txtSchemaName;
     private int choosenTablePos = 0;
     private List<String> tableList;
     public TableListController(List<String> tableList) {
@@ -29,6 +32,7 @@ public class TableListController implements Initializable {
     private Object jobType;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+        txtSchemaName.setText(SharedVariableHolder.database);
 		try {
             // Load the class
 			String temp = tableList.get(0);

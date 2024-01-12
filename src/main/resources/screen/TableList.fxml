@@ -24,7 +24,7 @@
                                     <Font name="System Bold" size="18.0" />
                                  </font>
                               </Text>
-                              <Label text="LabelLabelLabelLabelLabelLabelLabel">
+                              <Label fx:id="txtSchemaName" text="LabelLabelLabelLabelLabelLabelLabel">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -46,7 +46,7 @@
                   </VBox>
                </top>
                <center>
-                  <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="490.0" maxWidth="270.0" BorderPane.alignment="CENTER">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="510.0" maxWidth="270.0" BorderPane.alignment="CENTER">
                      <content>
                         <VBox fx:id="tablelistpane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                
