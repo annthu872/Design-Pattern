@@ -84,7 +84,45 @@
 	                <target>1.8</target>
 	            </configuration>
 			</plugin>
+			<plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-dependency-plugin</artifactId>
+	            <version>3.2.0</version> <!-- Use a compatible version -->
+	            <executions>
+	                <execution>
+	                    <id>download-javafx</id>
+	                    <phase>initialize</phase>
+	                    <goals>
+	                        <goal>copy</goal>
+	                    </goals>
+	                    <configuration>
+	                        <artifactItems>
+	                            <artifactItem>
+	                                <groupId>org.openjfx</groupId>
+	                                <artifactId>javafx-controls</artifactId>
+	                                <version>21</version>
+	                                <outputDirectory>${project.build.directory}/javafx-libs</outputDirectory>
+	                                <destFileName>javafx-controls.jar</destFileName>
+	                            </artifactItem>
+	                            <!-- Include other JavaFX modules similarly -->
+	                        </artifactItems>
+	                    </configuration>
+	                </execution>
+	            </executions>
+	        </plugin>
+	        <plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-surefire-plugin</artifactId>
+	            <version>3.0.0-M5</version> <!-- Use a compatible version -->
+	            <executions>
+	                <execution>
+	                    <phase>test</phase>
+	                    <configuration>
+	                        <argLine>--module-path ${project.build.directory}/javafx-libs --add-modules javafx.controls,javafx.graphics,javafx.fxml</argLine>
+	                    </configuration>
+	                </execution>
+	            </executions>
+	        </plugin>
 		</plugins>
 	</build>
-
 </project>

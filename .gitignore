@@ -4,6 +4,7 @@
 ### Java ###
 # Compiled class file
 *.class
+com/example/designpattern/SharedVariableHolder.java
 
 # Log file
 *.log

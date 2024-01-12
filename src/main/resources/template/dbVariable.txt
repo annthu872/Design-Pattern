@@ -1,0 +1,9 @@
+package com.example.designpattern;
+
+public class SharedVariableHolder {
+    // Public static variables
+    public static String database = "<DATABASE>";
+    public static String url = "<URL>";
+    public static String user = "<USERNAME>";
+    public static String password = "<PASSWORD>";
+}
