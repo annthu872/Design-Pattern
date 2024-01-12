@@ -31,12 +31,13 @@ public class ChooseDatabaseController {
     @FXML
     private void initialize() {
     	databaseCombobox.valueProperty().bindBidirectional(selectedDatabase);
-    	DatabaseConnection con = DatabaseConnection.getInstance();
-        List<String> schemaList = con.getSchemaList();
+        List<String> schemaList = DatabaseConnection.getInstance().getSchemaList();
         databaseCombobox.getItems().addAll(schemaList);
 
         btnConfirm.setOnAction(e -> {
             SharedVariableHolder.database = databaseCombobox.getValue();
+            DatabaseConnection.getInstance().close();
+            DatabaseConnection newConnection = DatabaseConnection.getInstance();
      		try {
      			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ChooseUserTableInDatabase.fxml"));
     			ChooseUserTableController controller = new ChooseUserTableController(new Authentication());

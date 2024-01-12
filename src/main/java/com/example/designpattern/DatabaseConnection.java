@@ -26,9 +26,9 @@ public class DatabaseConnection {
 	}
 	
 	public static DatabaseConnection getInstance() {
-	    if (instance == null) {
+	    if (instance == null || instance.connection == null || instance.isConnect()) {
 	        synchronized (DatabaseConnection.class) {
-	            if (instance == null) {
+	            if (instance == null || instance.connection == null || instance.isConnect()) {
 	                instance = new DatabaseConnection();
 	                instance.connect();
 	            }
