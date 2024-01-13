@@ -10,6 +10,9 @@ import com.example.designpattern.notification.InformationNotification;
 import com.example.designpattern.notification.Notification;
 import com.example.designpattern.notification.WarningNotification;
 
+import IoCContainer.IoCContainer;
+import IoCContainer.ResetPassword2ControllerInterface;
+import IoCContainer.SignInControllerInterface;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,7 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class ResetPasswordController2 implements Initializable {
+public class ResetPasswordController2 implements ResetPassword2ControllerInterface{
 
 
     @FXML
@@ -42,21 +45,42 @@ public class ResetPasswordController2 implements Initializable {
     private TextField txtUsername;
 
     String username = "";
+    public ResetPasswordController2() {
+        // Default constructor
+    }
     private IAuthentication auth;
-    public ResetPasswordController2(String username, IAuthentication auth) {
+    /*public ResetPasswordController2(String username, IAuthentication auth) {
     	this.username = username;
     	this.auth = auth;
-    }
+    }*/
+    
+	@Override
+	public void setUsername(String username) {
+		// TODO Auto-generated method stub
+		this.username = username;
+	}
+	SignInControllerInterface signInController;
+	@Override
+	public void setSignInController(SignInControllerInterface signInController) {
+		// TODO Auto-generated method stub
+		this.signInController = signInController;
+	}
+	@Override
+	public void setAuthentication(IAuthentication auth) {
+		// TODO Auto-generated method stub
+		this.auth = auth;
+	}
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.txtUsername.setText(username);
     	this.txtAnswer.setPromptText(auth.loadQuestionResetPassword(username));
 		btnBack.setOnAction(e->{
+			System.out.println("Hello");
 			Parent root;
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
-				SignInController controller = new SignInController(auth);
-				loader.setController(controller);
+				//SignInController controller = new SignInController(auth);
+				loader.setController(IoCContainer.resolve(SignInControllerInterface.class));
 				root = loader.load();
 //				root = FXMLLoader.load(getClass().getResource("/screen/SignIn.fxml"));
 				Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
@@ -101,8 +125,8 @@ public class ResetPasswordController2 implements Initializable {
 				Parent root;
 				try {
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
-					SignInController controller = new SignInController(auth);
-					loader.setController(controller);
+					//SignInController controller = new SignInController(auth);
+					loader.setController(IoCContainer.resolve(SignInControllerInterface.class));
 					root = loader.load();
 //					root = FXMLLoader.load(getClass().getResource("/screen/SignIn.fxml"));
 					Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
@@ -117,5 +141,6 @@ public class ResetPasswordController2 implements Initializable {
 			}
 		});				
 	}
+
 
 }
