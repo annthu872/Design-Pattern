@@ -64,7 +64,7 @@ public class ResetPasswordController implements ResetPassword1ControllerInterfac
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
 				//SignInController controller = new SignInController(auth);
-				loader.setController(new SignInController());
+				loader.setController(IoCContainer.resolve(SignInControllerInterface.class));
 				root = loader.load();
 //				root = FXMLLoader.load(getClass().getResource("/screen/SignIn.fxml"));
 				Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
@@ -86,7 +86,9 @@ public class ResetPasswordController implements ResetPassword1ControllerInterfac
 				try {
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/ResetPassword2.fxml"));
 					//ResetPasswordController2 controller = new ResetPasswordController2(txtUsername.getText(),auth);
-					loader.setController(IoCContainer.resolve(ResetPassword2ControllerInterface.class));
+					ResetPassword2ControllerInterface controller = IoCContainer.resolve(ResetPassword2ControllerInterface.class);
+					controller.setUsername(txtUsername.getText());
+					loader.setController(controller);
 					root = loader.load();
 
 //					root = FXMLLoader.load(getClass().getResource("/screen/SignIn.fxml"));

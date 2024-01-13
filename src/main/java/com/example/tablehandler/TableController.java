@@ -29,6 +29,7 @@ import javafx.scene.input.MouseEvent;
 
 public class TableController implements Initializable {
     private BaseForm<?> currentForm;
+    Notification noti = new Notification();
     public BaseForm<?> getForm(){
     	return currentForm;
     }
@@ -136,7 +137,6 @@ public class TableController implements Initializable {
     				currentForm.getTableData().remove(selectedItem);
     			}
     			else {
-    				Notification noti = new Notification();
     		        noti.setMessage("There might be some error, we can't delete this row.");
     		        noti.setNotiType(new ErrorNotification());
     		        noti.display();
@@ -190,7 +190,6 @@ public class TableController implements Initializable {
 				currentForm.getTableData().remove(selectedItem);
 			}
 			else {
-				Notification noti = new Notification();
 		        noti.setMessage("There might be some error, we can't delete this row.");
 		        noti.setNotiType(new ErrorNotification());
 		        noti.display();

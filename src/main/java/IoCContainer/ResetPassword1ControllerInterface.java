@@ -5,7 +5,9 @@ import java.util.ResourceBundle;
 
 import com.example.designpattern.Default.IAuthentication;
 
-public interface ResetPassword1ControllerInterface {
+import javafx.fxml.Initializable;
+
+public interface ResetPassword1ControllerInterface extends Initializable {
 	public void initialize(URL location, ResourceBundle resources);
 	public void setSignInController(SignInControllerInterface signInController);
 	public void setResetPassword2Controller(ResetPassword2ControllerInterface rsPassController);
