@@ -13,6 +13,9 @@ import com.example.designpattern.notification.InformationNotification;
 import com.example.designpattern.notification.Notification;
 import com.example.designpattern.notification.WarningNotification;
 
+import IoCContainer.IoCContainer;
+import IoCContainer.SignInControllerInterface;
+import IoCContainer.SignUpControllerInterface;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -24,7 +27,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class SignUpController implements Initializable {
+public class SignUpController implements SignUpControllerInterface {
 
     @FXML
     private Button btnBack;
@@ -45,9 +48,24 @@ public class SignUpController implements Initializable {
     private TextField txtUsername;
 
 	private IAuthentication auth;
-	public SignUpController(IAuthentication auth){
+	private SignInControllerInterface signInController;
+	public SignUpController() {
+        // Default constructor
+    }
+	@Override
+	public void setSignInController(SignInControllerInterface signInController) {
+		// TODO Auto-generated method stub
+		this.signInController = signInController;
+	}
+
+	@Override
+	public void setAuthentication(IAuthentication auth) {
+		// TODO Auto-generated method stub
 		this.auth = auth;
 	}
+	/*public SignUpController(IAuthentication auth){
+		this.auth = auth;
+	}*/
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -55,8 +73,8 @@ public class SignUpController implements Initializable {
 			Parent root;
 			try {
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
-				SignInController controller = new SignInController(auth);
-				loader.setController(controller);
+				//SignInController controller = new SignInController(auth);
+				loader.setController(IoCContainer.resolve(SignInControllerInterface.class));
 				root = loader.load();
 				Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
 				Scene scene = new Scene(root);
@@ -91,8 +109,8 @@ public class SignUpController implements Initializable {
 					noti.display();
 					Parent root;
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
-					SignInController controller = new SignInController(auth);
-					loader.setController(controller);
+					//SignInController controller = new SignInController(auth);
+					loader.setController(IoCContainer.resolve(SignInControllerInterface.class));
 					root = loader.load();
 					Stage stage = (Stage)(((Node)e.getSource()).getScene().getWindow());
 					Scene scene = new Scene(root);
@@ -122,5 +140,7 @@ public class SignUpController implements Initializable {
 
 		});		
 	}
+
+
 
 }
