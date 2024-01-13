@@ -59,9 +59,7 @@ public class FileGenerator {
 		generateDecoratorFiles();
 		generateTableHandlerFile();
 		copyFilesFromLocation("/src/main/java/com/example/registry");
-		generateAuthentication("/src/main/java/com/example/designpattern/Default", 
-				Authentication.userstableName, 
-				Authentication.resetPasswordTableName);
+		generateAuthentication("/src/main/java/com/example/designpattern/Default");
 	}
 	
 	public void generatePomXml() {
@@ -268,7 +266,7 @@ public class FileGenerator {
         }
     }
 
-    private void generateAuthentication(String authenticationLocation, String userTableName, String resetPasswordTableName) {
+    private void generateAuthentication(String authenticationLocation) {
         String destinationPath = projectDestinationLocation + authenticationLocation;
         File destinationDir = new File(destinationPath);
         if (!destinationDir.exists()) {
@@ -287,8 +285,10 @@ public class FileGenerator {
                     String templateContent = Files.readString(Paths.get(projectOriginalLocation + "/src/main/resources/template/Authentication.txt"));
 
                     // Replace placeholders with actual values
-                    templateContent = templateContent.replace("<USERS>", userTableName)
-                            .replace("<RESETPASSWORD>", resetPasswordTableName);
+                    templateContent = templateContent.replace("<USERS>", Authentication.userstableName)
+                            .replace("<RESETPASSWORD>", Authentication.resetPasswordTableName)
+                            .replace("<USERNAME>", Authentication.usernameColumnName)
+                            .replace("<PASSWORD>", Authentication.passwordColumnName);
 
                     // Write the modified content to the destination file
                     try (BufferedWriter writer = new BufferedWriter(new FileWriter(destinationPath + "/" + fileName))) {

@@ -24,8 +24,8 @@ public class Authentication implements IAuthentication {
 	public static  String userstableName = "<USERS>";
 
 	public static String resetPasswordTableName = "<RESETPASSWORD>";
-	private String usernameColumnName="username";
-	private String passwordColumnName = "password";
+	public static String usernameColumnName="<USERNAME>";
+	public static String passwordColumnName = "<PASSWORD>";
 //	private String activeColummnName = "active";
 	private String primaryKeyName = "id";
 	private String questionResetPasswordColumnName = "question";

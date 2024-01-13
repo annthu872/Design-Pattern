@@ -22,10 +22,10 @@ public class Authentication implements IAuthentication {
 		this.resetPasswordTableName = resetPasswordTable;
 	}
 	public static  String userstableName = "users";
-
 	public static String resetPasswordTableName = "ResetPassword";
-	private String usernameColumnName="username";
-	private String passwordColumnName = "password";
+	
+	public static String usernameColumnName="username";
+	public static String passwordColumnName = "password";
 //	private String activeColummnName = "active";
 	private String primaryKeyName = "id";
 	private String questionResetPasswordColumnName = "question";
