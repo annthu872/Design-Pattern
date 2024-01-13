@@ -60,6 +60,7 @@ public class FileGenerator {
 		generateTableHandlerFile();
 		copyFilesFromLocation("/src/main/java/com/example/registry");
 		generateAuthentication("/src/main/java/com/example/designpattern/Default");
+		copyFilesFromLocation("/src/main/java/IoCContainer");
 	}
 	
 	public void generatePomXml() {
