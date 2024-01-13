@@ -7,7 +7,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import com.example.designpattern.Controller.*;
 import com.example.designpattern.Default.Authentication;
 import com.example.designpattern.Default.IAuthentication;
 import com.example.registry.ResetPasswordController;
@@ -35,10 +34,6 @@ public class DesignpatternApplication extends Application {
 
 
 	        SignInControllerInterface signInController = IoCContainer.resolve(SignInControllerInterface.class);
-	        SignUpControllerInterface signUpController = IoCContainer.resolve(SignUpControllerInterface.class);
-	        ResetPassword1ControllerInterface resetPassword1Controller = IoCContainer.resolve(ResetPassword1ControllerInterface.class);
-	        ResetPassword2ControllerInterface resetPassword2Controller = IoCContainer.resolve(ResetPassword2ControllerInterface.class);
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/SignIn.fxml"));
             loader.setController(signInController);
             Parent root = loader.load();
