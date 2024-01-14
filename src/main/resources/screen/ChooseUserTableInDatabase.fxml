@@ -29,11 +29,6 @@
                               <Font name="Arial" size="60.0" />
                            </font>
                         </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="normal-label" text="Reset your password and rejoin us!">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Text>
                      </children>
                   </VBox>
                </top>
