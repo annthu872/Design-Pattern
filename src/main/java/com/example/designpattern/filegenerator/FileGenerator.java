@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import com.example.designpattern.SharedVariableHolder;
 import com.example.designpattern.table.Table;
+import com.example.designpattern.Default.Authentication;
 
 public class FileGenerator {
 	String projectOriginalLocation;
@@ -57,8 +58,9 @@ public class FileGenerator {
 		copyFilesFromLocation("/src/main/java/com/example/designpattern/notification");
 		generateDecoratorFiles();
 		generateTableHandlerFile();
-		copyFilesFromLocation("/src/main/java/com/example/designpattern/Default");
 		copyFilesFromLocation("/src/main/java/com/example/registry");
+		generateAuthentication("/src/main/java/com/example/designpattern/Default");
+		copyFilesFromLocation("/src/main/java/IoCContainer");
 	}
 	
 	public void generatePomXml() {
@@ -265,4 +267,44 @@ public class FileGenerator {
         }
     }
 
+    private void generateAuthentication(String authenticationLocation) {
+        String destinationPath = projectDestinationLocation + authenticationLocation;
+        File destinationDir = new File(destinationPath);
+        if (!destinationDir.exists()) {
+            destinationDir.mkdirs();
+        }
+        try {
+            List<Path> files = Files.walk(Paths.get(projectOriginalLocation + authenticationLocation))
+                    .filter(Files::isRegularFile)
+                    .collect(Collectors.toList());
+
+            for (Path file : files) {
+                String fileName = file.getFileName().toString();
+
+                if (fileName.equals("Authentication.java")) {
+                    // Read the template content
+                    String templateContent = Files.readString(Paths.get(projectOriginalLocation + "/src/main/resources/template/Authentication.txt"));
+
+                    // Replace placeholders with actual values
+                    templateContent = templateContent.replace("<USERS>", Authentication.userstableName)
+                            .replace("<RESETPASSWORD>", Authentication.resetPasswordTableName)
+                            .replace("<USERNAME>", Authentication.usernameColumnName)
+                            .replace("<PASSWORD>", Authentication.passwordColumnName);
+
+                    // Write the modified content to the destination file
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(destinationPath + "/" + fileName))) {
+                        writer.write(templateContent);
+                        System.out.println("Generated and templated: " + destinationPath + "/" + fileName);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Files.copy(file, Paths.get(destinationPath + "/" + fileName), StandardCopyOption.REPLACE_EXISTING);
+                    System.out.println("Copied: " + destinationPath + "/" + fileName);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

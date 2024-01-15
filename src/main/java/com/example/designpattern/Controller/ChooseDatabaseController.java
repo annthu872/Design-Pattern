@@ -17,6 +17,8 @@ import java.util.List;
 import com.example.designpattern.DatabaseConnection;
 import com.example.designpattern.SharedVariableHolder;
 import com.example.designpattern.Default.Authentication;
+import com.example.designpattern.notification.ErrorNotification;
+import com.example.designpattern.notification.Notification;
 
 public class ChooseDatabaseController {
 
@@ -35,6 +37,10 @@ public class ChooseDatabaseController {
         databaseCombobox.getItems().addAll(schemaList);
 
         btnConfirm.setOnAction(e -> {
+        	if (databaseCombobox.getValue() == null || databaseCombobox.getValue().isEmpty()) {
+                alert();
+                return;
+            }
             SharedVariableHolder.database = databaseCombobox.getValue();
             DatabaseConnection.getInstance().close();
             DatabaseConnection newConnection = DatabaseConnection.getInstance();
@@ -53,5 +59,13 @@ public class ChooseDatabaseController {
      			e1.printStackTrace();
      		}
         });
+    }
+    
+    @FXML
+    private void alert() {
+    	Notification noti = new Notification();
+        noti.setMessage("Please choose database!");
+        noti.setNotiType(new ErrorNotification());
+        noti.display();
     }
 }

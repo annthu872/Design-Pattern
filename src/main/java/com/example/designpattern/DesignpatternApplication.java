@@ -18,7 +18,7 @@ public class DesignpatternApplication extends Application {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/screen/DatabaseConnection.fxml"));
 			DatabaseConnectionController controller = new DatabaseConnectionController();
 			loader.setController(controller);
-      Parent root = loader.load();
+			Parent root = loader.load();
 			String css = this.getClass().getResource("/css/style.css").toExternalForm();
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(css);

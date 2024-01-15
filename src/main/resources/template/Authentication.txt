@@ -21,11 +21,11 @@ public class Authentication implements IAuthentication {
 	public void setResetPasswordTable(String resetPasswordTable) {
 		this.resetPasswordTableName = resetPasswordTable;
 	}
-	public static  String userstableName = "users";
-	public static String resetPasswordTableName = "ResetPassword";
-	
-	public static String usernameColumnName="username";
-	public static String passwordColumnName = "password";
+	public static  String userstableName = "<USERS>";
+
+	public static String resetPasswordTableName = "<RESETPASSWORD>";
+	public static String usernameColumnName="<USERNAME>";
+	public static String passwordColumnName = "<PASSWORD>";
 //	private String activeColummnName = "active";
 	private String primaryKeyName = "id";
 	private String questionResetPasswordColumnName = "question";

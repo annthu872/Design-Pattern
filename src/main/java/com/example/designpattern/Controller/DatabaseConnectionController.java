@@ -47,8 +47,10 @@ public class DatabaseConnectionController {
         urlProperty.set(SharedVariableHolder.url);
 
         btnConfirm.setOnAction(e -> {
-        	SharedVariableHolder.url = urlProperty.get();
-            SharedVariableHolder.user = usernameProperty.get();
+        	if (urlProperty.get() != null)
+        		SharedVariableHolder.url = urlProperty.get();
+        	if (usernameProperty.get() != null)
+        		SharedVariableHolder.user = usernameProperty.get();
             if (passwordProperty.get() != null)
             	SharedVariableHolder.password = passwordProperty.get();
             if (!checkConnection()) alertConnection();
